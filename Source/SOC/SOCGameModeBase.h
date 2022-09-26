@@ -13,5 +13,6 @@ UCLASS()
 class SOC_API ASOCGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+public:
+	void FuncVehicle();
 };

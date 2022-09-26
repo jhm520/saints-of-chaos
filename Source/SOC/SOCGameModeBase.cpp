@@ -3,3 +3,6 @@
 
 #include "SOCGameModeBase.h"
 
+void ASOCGameModeBase::FuncVehicle()
+{
+}
