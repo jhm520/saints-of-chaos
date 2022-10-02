@@ -11,6 +11,10 @@
 			"AdditionalDependencies": [
 				"Engine"
 			]
+		},
+		{
+			"Name": "SOCAI",
+			"Type": "Runtime"
 		}
 	],
 	"Plugins": [

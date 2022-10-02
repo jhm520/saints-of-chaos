@@ -2,18 +2,18 @@
 
 using UnrealBuildTool;
 
-public class SOC : ModuleRules
+public class SOCAI : ModuleRules
 {
-	public SOC(ReadOnlyTargetRules Target) : base(Target)
+	public SOCAI(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Sockets", "WhatsMyPublicIP", "SOCAI"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine"});
 
 		//Plugins
-        PublicDependencyModuleNames.AddRange(new string[] { "ALSXT", "ALS" });
+        PublicDependencyModuleNames.AddRange(new string[] { });
 
-        PrivateDependencyModuleNames.AddRange(new string[] {  });
+        PrivateDependencyModuleNames.AddRange(new string[] {  "Core", "CoreUObject", "Engine" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
