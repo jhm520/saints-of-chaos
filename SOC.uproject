@@ -14,7 +14,12 @@
 		},
 		{
 			"Name": "SOCAI",
-			"Type": "Runtime"
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"AIModule",
+				"CoreUObject"
+			]
 		}
 	],
 	"Plugins": [

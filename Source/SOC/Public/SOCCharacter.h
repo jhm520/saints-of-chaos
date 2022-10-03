@@ -13,5 +13,7 @@ UCLASS()
 class SOC_API ASOCCharacter : public AALSXTCharacter
 {
 	GENERATED_BODY()
+public:
+	void SetupGameplayTags();
 	
 };

@@ -14,5 +14,6 @@ class SOC_API ASOCGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 public:
+	//func vehicle func vehicle func vehicle func vehicle func vehicle func vehicle func vehicle func vehicle 
 	void FuncVehicle();
 };

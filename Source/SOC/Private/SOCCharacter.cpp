@@ -3,3 +3,22 @@
 
 #include "SOCCharacter.h"
 
+#include "SOCAIGameplayTags.h"
+
+void ASOCCharacter::SetupGameplayTags()
+{
+	// const TArray<FGameplayTag> FindEnemy = {
+	// 	SOCAIBehaviorTags::FindEnemy,
+	// 	SOCAIBehaviorTags::CallForBackup,
+	// 	SOCAIBehaviorTags::MoveToAllies,
+	// 	SOCAIBehaviorTags::RaiseAlarm,
+	// 	SOCAIBehaviorTags::EngageEnemy,
+	// 	SOCAIBehaviorTags::MoveToCombatRange,
+	// 	SOCAIBehaviorTags::CallForBackup,
+	// 	SOCAIBehaviorTags::CallForBackup,
+	// 	SOCAIBehaviorTags::CallForBackup,
+	// 	SOCAIBehaviorTags::CallForBackup,
+	//
+	// };
+	// FGameplayTagContainer FindEnemyContainer = FGameplayTagContainer::CreateFromArray(GameplayTagArray);
+}
