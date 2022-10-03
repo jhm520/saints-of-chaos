@@ -4,6 +4,7 @@
 #include "SOCAIController.h"
 #include "GameplayTags.h"
 #include "SOCAIBehavior.h"
+#include "SOCAIBehaviorManager.h"
 
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)
 {
@@ -14,7 +15,7 @@ void ASOCAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TryCreateMainBehavior();
+	TryCreateBehaviorManager();
 
 	SetBehaviorState(SOCAIBehaviorTags::Idle);
 }
@@ -23,7 +24,7 @@ void ASOCAIController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	TryDestroyMainBehavior();
+	TryDestroyBehaviorManager();
 }
 
 bool ASOCAIController::SetBehaviorState(const FGameplayTag& InBehaviorTag)
@@ -40,24 +41,24 @@ bool ASOCAIController::SetBehaviorState(const FGameplayTag& InBehaviorTag)
 	return true;
 }
 
-bool ASOCAIController::TryCreateMainBehavior()
+bool ASOCAIController::TryCreateBehaviorManager()
 {
 	if (GetLocalRole() != ROLE_Authority)
 	{
 		return false;
 	}
 	
-	if (MainBehavior)
+	if (GetBehaviorManager())
 	{
 		return false;
 	}
 
-	MainBehavior = NewObject<USOCAIBehavior>(this, MainBehaviorClass, FName(TEXT("Main Behavior")));
+	BehaviorManager = GetWorld()->SpawnActor<ASOCAIBehaviorManager>(BehaviorManagerClass);
 
 	return true;
 }
 
-bool ASOCAIController::TryDestroyMainBehavior()
+bool ASOCAIController::TryDestroyBehaviorManager()
 {
 	if (GetLocalRole() != ROLE_Authority)
 	{
@@ -75,7 +76,7 @@ bool ASOCAIController::TryDestroyMainBehavior()
 		}
 	}
 	//didn't find a controller other than this one, destroy
-	MainBehavior->ConditionalBeginDestroy();
+	GetBehaviorManager()->Destroy();
 	return true;
 
 }

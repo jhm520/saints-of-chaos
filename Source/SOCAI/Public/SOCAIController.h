@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "SOCAIDataAsset.h"
 #include "SOCAIGameplayTags.h"
 #include "SOCAIController.generated.h"
 
@@ -11,6 +12,9 @@
  * 
  */
 class USOCAIBehavior;
+class USOCAIDataAsset;
+class ASOCAIBehaviorManager;
+
 UCLASS(Blueprintable)
 class SOCAI_API ASOCAIController : public AAIController
 {
@@ -25,12 +29,12 @@ protected:
 	UPROPERTY(Transient)
 	FGameplayTag CurrentBehaviorState = FGameplayTag::EmptyTag;
 	
-	inline static TObjectPtr<USOCAIBehavior> MainBehavior = nullptr;
+	inline static TObjectPtr<ASOCAIBehaviorManager> BehaviorManager = nullptr;
 
 public:
 	
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	static USOCAIBehavior* GetMainBehavior(){return MainBehavior;};
+	static ASOCAIBehaviorManager* GetBehaviorManager(){return BehaviorManager;};
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -40,12 +44,12 @@ public:
 	bool SetBehaviorState(const FGameplayTag& InBehaviorTag);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	TSubclassOf<USOCAIBehavior> MainBehaviorClass;
+	TSubclassOf<ASOCAIBehaviorManager> BehaviorManagerClass;
 
 	UFUNCTION()
-	bool TryCreateMainBehavior();
+	bool TryCreateBehaviorManager();
 
 	UFUNCTION()
-	bool TryDestroyMainBehavior();
+	bool TryDestroyBehaviorManager();
 	
 };

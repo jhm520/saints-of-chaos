@@ -15,17 +15,33 @@ class SOCAI_API USOCAIBehavior : public UObject
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	FGameplayTag ParentBehaviorTag;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	FGameplayTag BehaviorTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	FGameplayTagContainer ChildBehaviorTags;
+
 public:
 
 	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
 
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	FGameplayTag MainBehaviorTag;
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTag& GetBehaviorTag(){return BehaviorTag;};
 	
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	FGameplayTagContainer BehaviorTags;
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTag& GetParentBehaviorTag(){return ParentBehaviorTag;};
+
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTagContainer& GetChildBehaviorTags(){return ChildBehaviorTags;};
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TSet<TObjectPtr<USOCAIBehavior>> BehaviorSet;
+	TObjectPtr<USOCAIBehavior> ParentBehavior;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet;
 	
 };

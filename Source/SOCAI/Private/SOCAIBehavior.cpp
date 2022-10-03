@@ -5,7 +5,7 @@
 
 USOCAIBehavior::USOCAIBehavior(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	for (const FGameplayTag& Tag : BehaviorTags)
+	for (const FGameplayTag& Tag : ChildBehaviorTags)
 	{
 		
 	}
