@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ALSXTCharacter.h"
+#include "GameFramework/Character.h"
 #include "SOCCharacter.generated.h"
 
 /**
  * 
  */
+//Base class for characters
 UCLASS()
-class SOC_API ASOCCharacter : public AALSXTCharacter
+class SOC_API ASOCCharacter : public ACharacter
 {
 	GENERATED_BODY()
 public:

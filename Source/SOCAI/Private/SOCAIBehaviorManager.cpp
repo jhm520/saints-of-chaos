@@ -8,7 +8,6 @@
 
 void ASOCAIBehaviorManager::BeginPlay()
 {
-	Super::BeginPlay();
 
 	TArray<FGameplayTag> BehaviorTags;
 
@@ -24,6 +23,7 @@ void ASOCAIBehaviorManager::BeginPlay()
 		}
 	}
 	
+	Super::BeginPlay();
 }
 
 void ASOCAIBehaviorManager::EndPlay(const EEndPlayReason::Type EndPlayReason)

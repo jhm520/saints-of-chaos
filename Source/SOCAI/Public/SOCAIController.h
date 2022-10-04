@@ -28,13 +28,14 @@ protected:
 
 	UPROPERTY(Transient)
 	FGameplayTag CurrentBehaviorState = FGameplayTag::EmptyTag;
-	
-	inline static TObjectPtr<ASOCAIBehaviorManager> BehaviorManager = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	TObjectPtr<ASOCAIBehaviorManager> BehaviorManager = nullptr;
 
 public:
 	
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	static ASOCAIBehaviorManager* GetBehaviorManager(){return BehaviorManager;};
+	ASOCAIBehaviorManager* GetBehaviorManager(){return BehaviorManager;};
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -48,8 +49,5 @@ public:
 
 	UFUNCTION()
 	bool TryCreateBehaviorManager();
-
-	UFUNCTION()
-	bool TryDestroyBehaviorManager();
 	
 };

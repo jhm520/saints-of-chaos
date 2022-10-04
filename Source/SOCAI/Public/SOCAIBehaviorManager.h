@@ -18,7 +18,7 @@ class SOCAI_API ASOCAIBehaviorManager : public AInfo
 	GENERATED_BODY()
 public:
 
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TArray<TSubclassOf<USOCAIBehavior>> BehaviorClassArray;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")

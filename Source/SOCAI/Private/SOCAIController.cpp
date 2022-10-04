@@ -5,6 +5,7 @@
 #include "GameplayTags.h"
 #include "SOCAIBehavior.h"
 #include "SOCAIBehaviorManager.h"
+#include "Kismet/GameplayStatics.h"
 
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)
 {
@@ -23,8 +24,6 @@ void ASOCAIController::BeginPlay()
 void ASOCAIController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-
-	TryDestroyBehaviorManager();
 }
 
 bool ASOCAIController::SetBehaviorState(const FGameplayTag& InBehaviorTag)
@@ -53,30 +52,17 @@ bool ASOCAIController::TryCreateBehaviorManager()
 		return false;
 	}
 
-	BehaviorManager = GetWorld()->SpawnActor<ASOCAIBehaviorManager>(BehaviorManagerClass);
+	TArray<AActor*> BehaviorManagers;
+	UGameplayStatics::GetAllActorsOfClass(this, ASOCAIBehaviorManager::StaticClass(),BehaviorManagers);
 
-	return true;
-}
-
-bool ASOCAIController::TryDestroyBehaviorManager()
-{
-	if (GetLocalRole() != ROLE_Authority)
+	if (BehaviorManagers.Num() > 0)
 	{
-		return false;
+		BehaviorManager = Cast<ASOCAIBehaviorManager>(BehaviorManagers[0]);
+	}
+	else
+	{
+		BehaviorManager = GetWorld()->SpawnActor<ASOCAIBehaviorManager>(BehaviorManagerClass);
 	}
 
-	for(FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
-	{
-		ASOCAIController* Controller = Cast<ASOCAIController>(Iterator->Get());
-
-		//Found a controller other than this one
-		if (Controller != this)
-		{
-			return false;
-		}
-	}
-	//didn't find a controller other than this one, destroy
-	GetBehaviorManager()->Destroy();
 	return true;
-
 }
