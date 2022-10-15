@@ -3,7 +3,7 @@
 
 #include "SOCCharacter.h"
 
-#include "SOCAIGameplayTags.h"
+#include "SOCAI/SOCAIGameplayTags.h"
 
 void ASOCCharacter::SetupGameplayTags()
 {
