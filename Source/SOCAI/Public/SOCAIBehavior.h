@@ -7,6 +7,24 @@
 #include "SOCAIGameplayTags.h"
 #include "SOCAIBehavior.generated.h"
 
+//struct to represent an AIController's current action
+USTRUCT(BlueprintType)
+struct SOCAI_API FSOCAIAction
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	FGameplayTag ActionTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
+	FVector TargetLocation{ForceInit};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
+	TObjectPtr<AActor> TargetActor;
+};
+
 /**
  * 
  */
@@ -33,6 +51,10 @@ protected:
 	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet = {};
 
 public:
+
+	//Decide the action that this controller should be engaging in at this time
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "AI|Behavior")
+	bool CalculateCurrentControllerAction(const ASOCAIController* InController, FSOCAIAction& OutAction) const;
 
 	UFUNCTION()
 	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};

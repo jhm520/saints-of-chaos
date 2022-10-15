@@ -27,3 +27,8 @@ namespace SOCAIBehaviorTags
 	SOCAI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(DoTask)
 
 }
+
+namespace SOCAIActionTags
+{
+	SOCAI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Idle)
+}

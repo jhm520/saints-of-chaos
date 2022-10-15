@@ -25,3 +25,9 @@ namespace SOCAIBehaviorTags
 	UE_DEFINE_GAMEPLAY_TAG(DoTask,						TEXT("SOCAI.Behavior.FollowSchedule.DoTask"))
 	
 }
+
+namespace SOCAIActionTags
+{
+	UE_DEFINE_GAMEPLAY_TAG(Idle,						TEXT("SOCAI.Action.Idle"))
+
+}

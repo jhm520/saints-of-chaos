@@ -26,6 +26,11 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 		return;
 	}
 
+	FSOCAIAction CurrentActionStruct;
+	bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct);
+
+	
+
 }
 
 void ASOCAIController::BeginPlay()
