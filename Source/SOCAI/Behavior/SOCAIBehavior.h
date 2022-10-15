@@ -16,10 +16,10 @@ struct SOCAI_API FSOCAIAction
 public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	FGameplayTag ActionTag = FGameplayTag::EmptyTag;
+	FGameplayTag ActionTag = SOCAIActionTags::None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	FGameplayTag BehaviorTag = FGameplayTag::EmptyTag;
+	FGameplayTag BehaviorTag = SOCAIBehaviorTags::None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
 	FVector TargetLocation{ForceInit};
@@ -51,9 +51,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TObjectPtr<USOCAIBehavior> ParentBehavior = nullptr;;
-
+	
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet = {};
+	TMap<FGameplayTag, TObjectPtr<USOCAIBehavior>> ChildBehaviorMap;
 
 public:
 
@@ -67,6 +67,9 @@ public:
 	UFUNCTION()
 	void AddChildBehavior(USOCAIBehavior* InChildBehavior);
 
+	UFUNCTION()
+	USOCAIBehavior* GetChildBehavior(const FGameplayTag& InBehaviorTag) const;
+
 	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
@@ -76,6 +79,6 @@ public:
 	const FGameplayTag& GetParentBehaviorTag(){return ParentBehaviorTag;};
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTagContainer& GetChildBehaviorTags(){return ChildBehaviorTags;};
+	const FGameplayTagContainer& GetChildBehaviorTags() const{return ChildBehaviorTags;};
 	
 };

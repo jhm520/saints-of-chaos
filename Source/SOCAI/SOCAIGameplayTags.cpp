@@ -3,6 +3,7 @@
 namespace SOCAIBehaviorTags
 {
 	UE_DEFINE_GAMEPLAY_TAG(Behavior,					TEXT("SOCAI.Behavior"))
+	UE_DEFINE_GAMEPLAY_TAG(None,						TEXT("SOCAI.Behavior.None"))
 	UE_DEFINE_GAMEPLAY_TAG(Idle,						TEXT("SOCAI.Behavior.Idle"))
 	UE_DEFINE_GAMEPLAY_TAG(FindEnemy,					TEXT("SOCAI.Behavior.FindEnemy"))
 	UE_DEFINE_GAMEPLAY_TAG(CallForBackup,				TEXT("SOCAI.Behavior.FindEnemy.CallForBackup"))
@@ -28,6 +29,7 @@ namespace SOCAIBehaviorTags
 
 namespace SOCAIActionTags
 {
+	UE_DEFINE_GAMEPLAY_TAG(None,						TEXT("SOCAI.Action.None"))
 	UE_DEFINE_GAMEPLAY_TAG(Idle,						TEXT("SOCAI.Action.Idle"))
 
 }

@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "SOCAI/Data/SOCAIDataAsset.h"
 #include "../SOCAIGameplayTags.h"
+#include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAIController.generated.h"
 
 /**
@@ -36,6 +37,9 @@ protected:
 	TObjectPtr<USOCAIBehavior> CurrentBehavior = nullptr;
 
 	virtual void TickUpdateBehavior(const float DeltaSeconds);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "AI|Behavior")
+	void DoAction(const FSOCAIAction& InAction);
 	
 public:
 	

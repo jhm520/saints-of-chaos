@@ -26,11 +26,24 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 		return;
 	}
 
+	//Have the current behavior object figure out what this controller is supposed to do at this moment
 	FSOCAIAction CurrentActionStruct;
 	const bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct);
 
-	
+	//do the action
+	DoAction(CurrentActionStruct);
+}
 
+void ASOCAIController::DoAction_Implementation(const FSOCAIAction& InAction)
+{
+	//trigger a behavior state change if the action says we're supposed to
+	if (InAction.BehaviorTag != SOCAIBehaviorTags::None)
+	{
+		SetBehaviorState(InAction.BehaviorTag);
+	}
+
+	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
+	
 }
 
 void ASOCAIController::BeginPlay()
@@ -39,8 +52,7 @@ void ASOCAIController::BeginPlay()
 
 	TryCreateBehaviorManager();
 
-	SetBehaviorState(SOCAIBehaviorTags::Idle);
-	SetBehaviorState(SOCAIBehaviorTags::FollowSchedule);
+	SetBehaviorState(SOCAIBehaviorTags::Behavior);
 
 }
 
