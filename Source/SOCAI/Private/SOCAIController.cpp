@@ -19,9 +19,9 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 		return;
 	}
 	
-	const USOCAIBehavior* CurrentBehavior = GetCurrentBehavior();
+	const USOCAIBehavior* LocalCurrentBehavior = GetCurrentBehavior();
 
-	if (!IsValid(CurrentBehavior))
+	if (!IsValid(LocalCurrentBehavior))
 	{
 		return;
 	}
@@ -71,9 +71,9 @@ bool ASOCAIController::SetBehaviorState(const FGameplayTag& InBehaviorTag)
 
 USOCAIBehavior* ASOCAIController::GetBehavior(const FGameplayTag& InBehaviorTag)
 {
-	ASOCAIBehaviorManager* BehaviorManager = GetBehaviorManager();
+	ASOCAIBehaviorManager* LocalBehaviorManager = GetBehaviorManager();
 	
-	if (!IsValid(BehaviorManager))
+	if (!IsValid(LocalBehaviorManager))
 	{
 		return nullptr;
 	}
