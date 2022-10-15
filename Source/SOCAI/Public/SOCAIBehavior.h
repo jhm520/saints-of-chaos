@@ -27,12 +27,18 @@ protected:
 	FGameplayTagContainer ChildBehaviorTags;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TObjectPtr<USOCAIBehavior> ParentBehavior;
+	TObjectPtr<USOCAIBehavior> ParentBehavior = nullptr;;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet;
+	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet = {};
 
 public:
+
+	UFUNCTION()
+	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};
+
+	UFUNCTION()
+	void AddChildBehavior(USOCAIBehavior* InChildBehavior);
 
 	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
 

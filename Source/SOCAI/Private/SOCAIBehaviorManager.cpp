@@ -46,6 +46,39 @@ void ASOCAIBehaviorManager::BeginPlay()
 			BehaviorMap.Add(BehaviorClass.GetDefaultObject()->GetBehaviorTag(), NewBehavior);
 		}
 	}
+
+	//Setup the behavior linked tree by linking all the behavior objects with Parents and Children
+
+	TArray<TObjectPtr<USOCAIBehavior>> BehaviorArray;
+	BehaviorMap.GenerateValueArray(BehaviorArray);
+
+	for (TObjectPtr<USOCAIBehavior> Behavior : BehaviorArray)
+	{
+		if (!IsValid(Behavior))
+		{
+			continue;
+		}
+
+		USOCAIBehavior* ParentBehavior = GetBehavior(Behavior->GetParentBehaviorTag());
+
+		if (ParentBehavior)
+		{
+			Behavior->SetParentBehavior(ParentBehavior);
+		}
+
+		for (const FGameplayTag& ChildBehaviorTag : Behavior->GetChildBehaviorTags())
+		{
+			USOCAIBehavior* ChildBehavior = GetBehavior(ChildBehaviorTag);
+
+			if (!ChildBehavior)
+			{
+				continue;
+			}
+
+			Behavior->AddChildBehavior(ChildBehavior);
+		}
+	}
+	
 	
 	Super::BeginPlay();
 }
