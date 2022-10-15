@@ -27,11 +27,14 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 	}
 
 	//Have the current behavior object figure out what this controller is supposed to do at this moment
-	FSOCAIAction CurrentActionStruct;
+	FSOCAIAction CurrentActionStruct = FSOCAIAction();
 	const bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct);
 
 	//do the action
-	DoAction(CurrentActionStruct);
+	if (bSuccess)
+	{
+		DoAction(CurrentActionStruct);
+	}
 }
 
 void ASOCAIController::DoAction_Implementation(const FSOCAIAction& InAction)

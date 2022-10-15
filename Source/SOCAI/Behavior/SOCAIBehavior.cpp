@@ -5,10 +5,6 @@
 
 bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCAIController* InController, FSOCAIAction& OutAction, const FSOCAIAction& InParentAction) const
 {
-	//Set default values
-	OutAction = FSOCAIAction();
-
-
 	//if we passed in a ParentAction with a specified behavior tag, decide the action on that behavior instead
 	if (GetChildBehaviorTags().HasTag(InParentAction.BehaviorTag))
 	{
