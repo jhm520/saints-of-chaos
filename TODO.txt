@@ -1,1 +1,1 @@
-TODO: Use movement component and character acceleration replication from Lyra starter game
+TODO: Implement AI behavior nodes. Start with FindEnemy
