@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "SOCAIGameplayTags.h"
+#include "../SOCAIGameplayTags.h"
 #include "SOCAIBehavior.generated.h"
 
 //struct to represent an AIController's current action

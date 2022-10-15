@@ -3,8 +3,8 @@
 
 #include "SOCAIController.h"
 #include "GameplayTags.h"
-#include "SOCAIBehavior.h"
-#include "SOCAIBehaviorManager.h"
+#include "SOCAI/Behavior/SOCAIBehavior.h"
+#include "SOCAI/Behavior/SOCAIBehaviorManager.h"
 #include "Kismet/GameplayStatics.h"
 
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)

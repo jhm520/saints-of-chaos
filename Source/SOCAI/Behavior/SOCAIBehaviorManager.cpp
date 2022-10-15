@@ -4,7 +4,7 @@
 #include "SOCAIBehaviorManager.h"
 
 #include "SOCAIBehavior.h"
-#include "SOCAIDataAsset.h"
+#include "SOCAI/Data/SOCAIDataAsset.h"
 
 ASOCAIBehaviorManager::ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer)
 {

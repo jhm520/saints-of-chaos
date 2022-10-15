@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "SOCAIDataAsset.h"
-#include "SOCAIGameplayTags.h"
+#include "SOCAI/Data/SOCAIDataAsset.h"
+#include "../SOCAIGameplayTags.h"
 #include "SOCAIController.generated.h"
 
 /**
