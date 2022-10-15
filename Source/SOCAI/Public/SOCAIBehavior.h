@@ -16,13 +16,18 @@ struct SOCAI_API FSOCAIAction
 public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	FGameplayTag ActionTag;
+	FGameplayTag ActionTag = FGameplayTag::EmptyTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	FGameplayTag BehaviorTag = FGameplayTag::EmptyTag;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
 	FVector TargetLocation{ForceInit};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
-	TObjectPtr<AActor> TargetActor;
+	TObjectPtr<AActor> TargetActor = nullptr;
+
+	FSOCAIAction(){}
 };
 
 /**
@@ -54,7 +59,7 @@ public:
 
 	//Decide the action that this controller should be engaging in at this time
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "AI|Behavior")
-	bool CalculateCurrentControllerAction(const ASOCAIController* InController, FSOCAIAction& OutAction) const;
+	bool CalculateCurrentControllerAction(const ASOCAIController* InController, FSOCAIAction& OutAction, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
 
 	UFUNCTION()
 	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};

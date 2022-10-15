@@ -27,7 +27,7 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 	}
 
 	FSOCAIAction CurrentActionStruct;
-	bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct);
+	const bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct);
 
 	
 

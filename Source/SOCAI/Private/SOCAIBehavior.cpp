@@ -3,11 +3,10 @@
 
 #include "SOCAIBehavior.h"
 
-bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCAIController* InController, FSOCAIAction& OutAction) const
+bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCAIController* InController, FSOCAIAction& OutAction, const FSOCAIAction& InParentAction) const
 {
-	OutAction.ActionTag = SOCAIActionTags::Idle;
-	OutAction.TargetLocation = FVector::ZeroVector;
-	OutAction.TargetActor = nullptr;
+	//Set default values
+	OutAction = FSOCAIAction();
 	
 	return true;
 }
@@ -24,8 +23,5 @@ void USOCAIBehavior::AddChildBehavior(USOCAIBehavior* InChildBehavior)
 
 USOCAIBehavior::USOCAIBehavior(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	for (const FGameplayTag& Tag : ChildBehaviorTags)
-	{
-		
-	}
+	
 }
