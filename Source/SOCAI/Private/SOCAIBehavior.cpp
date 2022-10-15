@@ -3,10 +3,7 @@
 
 #include "SOCAIBehavior.h"
 
-USOCAIBehavior::USOCAIBehavior(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+void USOCAIBehavior::TickUpdate_Implementation(ASOCAIController* InAIController, const float DeltaSeconds)
 {
-	for (const FGameplayTag& Tag : ChildBehaviorTags)
-	{
-		
-	}
+	
 }

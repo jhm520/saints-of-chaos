@@ -6,9 +6,33 @@
 #include "SOCAIBehavior.h"
 #include "SOCAIDataAsset.h"
 
+ASOCAIBehaviorManager::ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer)
+{
+	bAlwaysRelevant = true;
+}
+
+USOCAIBehavior* ASOCAIBehaviorManager::GetBehavior(const FGameplayTag& InBehaviorTag)
+{
+	if (BehaviorMap.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	const TObjectPtr<USOCAIBehavior>* BehaviorPtr = BehaviorMap.Find(InBehaviorTag);
+
+	if (!BehaviorPtr)
+	{
+		return nullptr;
+	}
+
+	return *BehaviorPtr;
+	
+}
+
 void ASOCAIBehaviorManager::BeginPlay()
 {
 
+	//Create all behavior objects
 	TArray<FGameplayTag> BehaviorTags;
 
 	for (TSubclassOf<USOCAIBehavior> BehaviorClass : BehaviorClassArray)

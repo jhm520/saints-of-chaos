@@ -10,6 +10,7 @@
 /**
  * 
  */
+class ASOCAIController;
 UCLASS(Blueprintable, Abstract)
 class SOCAI_API USOCAIBehavior : public UObject
 {
@@ -25,6 +26,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTagContainer ChildBehaviorTags;
 
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	TObjectPtr<USOCAIBehavior> ParentBehavior;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet;
+
 public:
 
 	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
@@ -37,11 +44,5 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	const FGameplayTagContainer& GetChildBehaviorTags(){return ChildBehaviorTags;};
-
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TObjectPtr<USOCAIBehavior> ParentBehavior;
-
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TSet<TObjectPtr<USOCAIBehavior>> ChildBehaviorSet;
 	
 };

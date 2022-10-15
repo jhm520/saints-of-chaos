@@ -32,6 +32,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TObjectPtr<ASOCAIBehaviorManager> BehaviorManager = nullptr;
 
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	TObjectPtr<USOCAIBehavior> CurrentBehavior = nullptr;
+
+	virtual void TickUpdateBehavior(const float DeltaSeconds);
+	
 public:
 	
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
@@ -40,9 +45,20 @@ public:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	virtual void Tick(const float DeltaSeconds) override;
+
 	
 	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
 	bool SetBehaviorState(const FGameplayTag& InBehaviorTag);
+
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTag& GetCurrentBehaviorState() {return CurrentBehaviorState;};
+
+	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
+	USOCAIBehavior* GetBehavior(const FGameplayTag& InBehaviorTag);
+
+	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
+	const USOCAIBehavior* GetCurrentBehavior(){return CurrentBehavior;};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TSubclassOf<ASOCAIBehaviorManager> BehaviorManagerClass;

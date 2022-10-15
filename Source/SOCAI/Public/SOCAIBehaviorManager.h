@@ -17,12 +17,17 @@ class SOCAI_API ASOCAIBehaviorManager : public AInfo
 {
 	GENERATED_BODY()
 public:
+	
+	ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TArray<TSubclassOf<USOCAIBehavior>> BehaviorClassArray;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TMap<FGameplayTag, TObjectPtr<USOCAIBehavior>> BehaviorMap;
+
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	USOCAIBehavior* GetBehavior(const FGameplayTag& InBehaviorTag);
 
 	virtual void BeginPlay() override;
 

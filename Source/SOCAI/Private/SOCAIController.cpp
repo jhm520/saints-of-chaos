@@ -12,6 +12,22 @@ ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)
 	
 }
 
+void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
+{
+	if (GetLocalRole() != ROLE_Authority)
+	{
+		return;
+	}
+	
+	const USOCAIBehavior* CurrentBehavior = GetCurrentBehavior();
+
+	if (!IsValid(CurrentBehavior))
+	{
+		return;
+	}
+
+}
+
 void ASOCAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -19,11 +35,21 @@ void ASOCAIController::BeginPlay()
 	TryCreateBehaviorManager();
 
 	SetBehaviorState(SOCAIBehaviorTags::Idle);
+	SetBehaviorState(SOCAIBehaviorTags::FollowSchedule);
+
 }
 
 void ASOCAIController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+}
+
+void ASOCAIController::Tick(const float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	TickUpdateBehavior(DeltaSeconds);
+	
 }
 
 bool ASOCAIController::SetBehaviorState(const FGameplayTag& InBehaviorTag)
@@ -36,8 +62,23 @@ bool ASOCAIController::SetBehaviorState(const FGameplayTag& InBehaviorTag)
 	const FGameplayTag& PreviousBehaviorState = CurrentBehaviorState;
 
 	CurrentBehaviorState = InBehaviorTag;
+
+	CurrentBehavior = GetBehavior(GetCurrentBehaviorState());
 	
 	return true;
+}
+
+
+USOCAIBehavior* ASOCAIController::GetBehavior(const FGameplayTag& InBehaviorTag)
+{
+	ASOCAIBehaviorManager* BehaviorManager = GetBehaviorManager();
+	
+	if (!IsValid(BehaviorManager))
+	{
+		return nullptr;
+	}
+
+	return BehaviorManager->GetBehavior(InBehaviorTag);
 }
 
 bool ASOCAIController::TryCreateBehaviorManager()
