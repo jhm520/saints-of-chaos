@@ -73,10 +73,10 @@ public:
 	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTag& GetBehaviorTag(){return BehaviorTag;};
+	const FGameplayTag& GetBehaviorTag() const {return BehaviorTag;};
 	
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTag& GetParentBehaviorTag(){return ParentBehaviorTag;};
+	const FGameplayTag& GetParentBehaviorTag() const {return ParentBehaviorTag;};
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	const FGameplayTagContainer& GetChildBehaviorTags() const{return ChildBehaviorTags;};

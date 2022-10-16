@@ -28,7 +28,7 @@ public:
 protected:
 
 	UPROPERTY(Transient)
-	FGameplayTag CurrentBehaviorState = FGameplayTag::EmptyTag;
+	FGameplayTag CurrentBehaviorState = SOCAIBehaviorTags::Behavior;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TObjectPtr<ASOCAIBehaviorManager> BehaviorManager = nullptr;
@@ -40,6 +40,9 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent, Category = "AI|Behavior")
 	void DoAction(const FSOCAIAction& InAction);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	FGameplayTag RootBehaviorState = SOCAIBehaviorTags::Behavior;
 	
 public:
 	
@@ -61,8 +64,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
 	USOCAIBehavior* GetBehavior(const FGameplayTag& InBehaviorTag);
 
-	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	const USOCAIBehavior* GetCurrentBehavior(){return CurrentBehavior;};
+
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTag& GetRootBehaviorState(){return RootBehaviorState;};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TSubclassOf<ASOCAIBehaviorManager> BehaviorManagerClass;

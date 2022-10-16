@@ -35,6 +35,11 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 	{
 		DoAction(CurrentActionStruct);
 	}
+	else
+	{
+		//return to root behavior
+		SetBehaviorState(GetRootBehaviorState());
+	}
 }
 
 void ASOCAIController::DoAction_Implementation(const FSOCAIAction& InAction)
@@ -55,7 +60,7 @@ void ASOCAIController::BeginPlay()
 
 	TryCreateBehaviorManager();
 
-	SetBehaviorState(SOCAIBehaviorTags::Behavior);
+	SetBehaviorState(GetRootBehaviorState());
 
 }
 
