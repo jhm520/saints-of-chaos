@@ -28,7 +28,8 @@ void ASOCAIController::TickUpdateBehavior(const float DeltaSeconds)
 
 	//Have the current behavior object figure out what this controller is supposed to do at this moment
 	FSOCAIAction CurrentActionStruct = FSOCAIAction();
-	const bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct);
+	FGameplayTagContainer BehaviorPath = FGameplayTagContainer::EmptyContainer;
+	const bool bSuccess = LocalCurrentBehavior->CalculateCurrentControllerAction(this,CurrentActionStruct, BehaviorPath);
 
 	//do the action
 	if (bSuccess)

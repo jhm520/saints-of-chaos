@@ -3,9 +3,13 @@
 
 #include "SOCAIBehavior.h"
 
-bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCAIController* InController, FSOCAIAction& OutAction, const FSOCAIAction& InParentAction) const
+bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCAIController* InController, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, GetBehaviorTag().ToString());
+
+	//add the tag to the behavior path, letting the other nodes know that we've traversed this node
+	BehaviorPath.AddTag(GetBehaviorTag());
+	
 	//if we passed in a ParentAction with a specified behavior tag, decide the action on that behavior instead
 	if (GetChildBehaviorTags().HasTag(InParentAction.BehaviorTag))
 	{
@@ -13,7 +17,7 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 
 		if (ChildBehavior)
 		{
-			const bool bChildSuccess = ChildBehavior->CalculateCurrentControllerAction(InController, OutAction, InParentAction);
+			const bool bChildSuccess = ChildBehavior->CalculateCurrentControllerAction(InController, OutAction,BehaviorPath, InParentAction);
 
 			if (bChildSuccess)
 			{
@@ -25,6 +29,12 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 	//Check each of this node's children and check if we should do that action instead
 	for (const FGameplayTag& LocalBehaviorTag : GetChildBehaviorTags())
 	{
+		//Do not traverse nodes that we've already traversed on this path to avoid infinite looping
+		if (BehaviorPath.HasTag(LocalBehaviorTag))
+		{
+			continue;
+		}
+		
 		USOCAIBehavior* ChildBehavior = GetChildBehavior(LocalBehaviorTag);
 
 		if (!ChildBehavior)
@@ -32,7 +42,7 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 			continue;
 		}
 		
-		const bool bChildSuccess = ChildBehavior->CalculateCurrentControllerAction(InController, OutAction, InParentAction);
+		const bool bChildSuccess = ChildBehavior->CalculateCurrentControllerAction(InController, OutAction,BehaviorPath, InParentAction);
 
 		if (bChildSuccess)
 		{

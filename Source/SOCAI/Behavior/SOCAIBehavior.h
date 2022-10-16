@@ -59,7 +59,7 @@ public:
 
 	//Decide the action that this controller should be engaging in at this time
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "AI|Behavior")
-	bool CalculateCurrentControllerAction(const ASOCAIController* InController, FSOCAIAction& OutAction, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
+	bool CalculateCurrentControllerAction(const ASOCAIController* InController, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
 
 	UFUNCTION()
 	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};
