@@ -20,7 +20,7 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 			}
 		}
 	}
-
+	
 	//Check each of this node's children and check if we should do that action instead
 	for (const FGameplayTag& LocalBehaviorTag : GetChildBehaviorTags())
 	{
@@ -37,6 +37,12 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 		{
 			return true;
 		}
+	}
+
+	//If its already decided that we're executing an action, return true
+	if (InParentAction.ActionTag != SOCAIActionTags::None)
+	{
+		return true;
 	}
 	
 	return false;
