@@ -3,7 +3,7 @@
 
 #include "SOCHelperLibrary.h"
 
-#include "SOCGameInstance.h"
+#include "SOC/Engine/SOCGameInstance.h"
 #include "SocketSubsystem.h"
 
 bool USOCHelperLibrary::GetLocalIPAddress(UObject* WorldContextObject, FString& OutIPAddress)
