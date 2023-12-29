@@ -8,7 +8,7 @@ public class SOC : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Sockets", "WhatsMyPublicIP", "SOCAI"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Sockets", "WhatsMyPublicIP", "SOCAI", "GameplayAbilities"});
 
 		//Plugins
         PublicDependencyModuleNames.AddRange(new string[] { });

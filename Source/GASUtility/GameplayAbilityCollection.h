@@ -101,9 +101,6 @@ class GASUTILITY_API UGameplayAbilityCollection : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability Collection")
-	int32 Number;
 	
 	// Abilities that are bound to keys
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability Collection")
