@@ -38,7 +38,7 @@ public class GASUtility : ModuleRules
 			"GameplayTasks"
 		});
 		
-		PublicIncludePaths.Add("GASUtils");
+		PublicIncludePaths.Add("GASUtility");
 		
 		/*
 		* Additional Project Dependencies
