@@ -11,7 +11,7 @@ public class SOC : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Sockets", "WhatsMyPublicIP", "SOCAI"});
 
 		//Plugins
-        PublicDependencyModuleNames.AddRange(new string[] { "ALSXT", "ALS" });
+        PublicDependencyModuleNames.AddRange(new string[] { });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 
