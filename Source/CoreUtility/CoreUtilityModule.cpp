@@ -1,4 +1,4 @@
-#include "CoreUtilsModule.h"
+#include "CoreUtilityModule.h"
 
 #define LOCTEXT_NAMESPACE "CoreUtilityModule"
 

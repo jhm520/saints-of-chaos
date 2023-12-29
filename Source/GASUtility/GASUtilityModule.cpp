@@ -1,4 +1,4 @@
-#include "GASUtilsModule.h"
+#include "GASUtilityModule.h"
 
 #define LOCTEXT_NAMESPACE "GASUtilityModule"
 

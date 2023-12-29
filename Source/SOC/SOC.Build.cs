@@ -12,6 +12,9 @@ public class SOC : ModuleRules
 
 		//Plugins
         PublicDependencyModuleNames.AddRange(new string[] { });
+        
+        //Extra Modules
+        PublicDependencyModuleNames.AddRange(new string[] {"CoreUtility", "GASUtility" });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 
