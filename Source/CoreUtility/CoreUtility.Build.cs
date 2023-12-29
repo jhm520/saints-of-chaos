@@ -40,6 +40,6 @@ public class CoreUtility : ModuleRules
 			"GameplayTasks"
 		});
 		
-		PublicIncludePaths.Add("CoreUtility");
+		//PublicIncludePaths.Add("CoreUtility");
 	}
 }
