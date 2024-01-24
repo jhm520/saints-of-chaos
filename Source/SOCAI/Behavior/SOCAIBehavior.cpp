@@ -3,7 +3,7 @@
 
 #include "SOCAIBehavior.h"
 
-bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCAIController* InController, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
+bool USOCAIBehavior::CalculateCurrentAction_Implementation(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, GetBehaviorTag().ToString());
 
@@ -17,7 +17,7 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 
 		if (ChildBehavior)
 		{
-			const bool bChildSuccess = ChildBehavior->CalculateCurrentControllerAction(InController, OutAction,BehaviorPath, InParentAction);
+			const bool bChildSuccess = ChildBehavior->CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
 
 			if (bChildSuccess)
 			{
@@ -42,7 +42,7 @@ bool USOCAIBehavior::CalculateCurrentControllerAction_Implementation(const ASOCA
 			continue;
 		}
 		
-		const bool bChildSuccess = ChildBehavior->CalculateCurrentControllerAction(InController, OutAction,BehaviorPath, InParentAction);
+		const bool bChildSuccess = ChildBehavior->CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
 
 		if (bChildSuccess)
 		{

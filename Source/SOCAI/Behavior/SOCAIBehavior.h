@@ -33,7 +33,6 @@ public:
 /**
  * 
  */
-class ASOCAIController;
 UCLASS(Blueprintable, Abstract)
 class SOCAI_API USOCAIBehavior : public UObject
 {
@@ -59,7 +58,7 @@ public:
 
 	//Decide the action that this controller should be engaging in at this time
 	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "AI|Behavior")
-	bool CalculateCurrentControllerAction(const ASOCAIController* InController, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
+	bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
 
 	UFUNCTION()
 	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};
