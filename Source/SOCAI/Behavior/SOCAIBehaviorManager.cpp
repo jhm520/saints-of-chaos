@@ -6,10 +6,41 @@
 #include "SOCAIBehavior.h"
 #include "SOCAI/Data/SOCAIDataAsset.h"
 
+#pragma region Framework
 ASOCAIBehaviorManager::ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer)
 {
 	bAlwaysRelevant = true;
 }
+
+void ASOCAIBehaviorManager::BeginPlay()
+{
+	SetupBehaviorTree();
+	
+	Super::BeginPlay();
+}
+
+
+void ASOCAIBehaviorManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	TArray<TObjectPtr<USOCAIBehavior>> Behaviors;
+	BehaviorMap.GenerateValueArray(Behaviors);
+
+	for (USOCAIBehavior* Behavior : Behaviors)
+	{
+		if (!Behavior)
+		{
+			continue;
+		}
+
+		Behavior->ConditionalBeginDestroy();
+	}
+	
+}
+#pragma endregion
+
+#pragma region Behavior
 
 USOCAIBehavior* ASOCAIBehaviorManager::GetBehavior(const FGameplayTag& InBehaviorTag)
 {
@@ -29,9 +60,8 @@ USOCAIBehavior* ASOCAIBehaviorManager::GetBehavior(const FGameplayTag& InBehavio
 	
 }
 
-void ASOCAIBehaviorManager::BeginPlay()
+void ASOCAIBehaviorManager::SetupBehaviorTree()
 {
-
 	//Create all behavior objects
 	TArray<FGameplayTag> BehaviorTags;
 
@@ -78,26 +108,5 @@ void ASOCAIBehaviorManager::BeginPlay()
 			Behavior->AddChildBehavior(ChildBehavior);
 		}
 	}
-	
-	
-	Super::BeginPlay();
 }
-
-void ASOCAIBehaviorManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	Super::EndPlay(EndPlayReason);
-
-	TArray<TObjectPtr<USOCAIBehavior>> Behaviors;
-	BehaviorMap.GenerateValueArray(Behaviors);
-
-	for (USOCAIBehavior* Behavior : Behaviors)
-	{
-		if (!Behavior)
-		{
-			continue;
-		}
-
-		Behavior->ConditionalBeginDestroy();
-	}
-	
-}
+#pragma endregion

@@ -16,9 +16,17 @@ UCLASS(Blueprintable)
 class SOCAI_API ASOCAIBehaviorManager : public AInfo
 {
 	GENERATED_BODY()
+#pragma region Framework
 public:
 	
 	ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer);
+	
+	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+#pragma endregion
+
+#pragma region Behavior
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TArray<TSubclassOf<USOCAIBehavior>> BehaviorClassArray;
@@ -28,9 +36,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	USOCAIBehavior* GetBehavior(const FGameplayTag& InBehaviorTag);
-
-	virtual void BeginPlay() override;
-
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
+	void SetupBehaviorTree();
+
+#pragma endregion
+
 };
