@@ -27,17 +27,18 @@ public:
 #pragma endregion
 
 #pragma region Behavior
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	TArray<TSubclassOf<USOCAIBehavior>> BehaviorClassArray;
-
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TMap<FGameplayTag, TObjectPtr<USOCAIBehavior>> BehaviorMap;
-
+public:
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	USOCAIBehavior* GetBehavior(const FGameplayTag& InBehaviorTag);
 	
 	void SetupBehaviorTree();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TObjectPtr<USOCAIDataAsset> SOCAIDataAsset;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	TMap<FGameplayTag, TObjectPtr<USOCAIBehavior>> BehaviorMap;
 
 #pragma endregion
 

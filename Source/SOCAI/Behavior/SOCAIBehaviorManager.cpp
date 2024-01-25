@@ -62,13 +62,16 @@ USOCAIBehavior* ASOCAIBehaviorManager::GetBehavior(const FGameplayTag& InBehavio
 
 void ASOCAIBehaviorManager::SetupBehaviorTree()
 {
+	if (!SOCAIDataAsset)
+	{
+		return;
+	}
+	
 	//Create all behavior objects
 	TArray<FGameplayTag> BehaviorTags;
 
-	for (TSubclassOf<USOCAIBehavior> BehaviorClass : BehaviorClassArray)
+	for (TSubclassOf<USOCAIBehavior> BehaviorClass : SOCAIDataAsset->GetBehaviorClasses())
 	{
-		BehaviorClass.GetDefaultObject()->GetBehaviorTag();
-		
 		USOCAIBehavior* NewBehavior = NewObject<USOCAIBehavior>(this, BehaviorClass);
 
 		if (NewBehavior)

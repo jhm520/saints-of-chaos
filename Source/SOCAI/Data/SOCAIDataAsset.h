@@ -16,8 +16,15 @@ UCLASS()
 class SOCAI_API USOCAIDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
-public:
+
+	
+protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	TMap<FGameplayTag, TSubclassOf<USOCAIBehavior>> BehaviorClassMap;
+	TArray<TSubclassOf<USOCAIBehavior>> BehaviorClasses;
+
+public:
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	TArray<TSubclassOf<USOCAIBehavior>> GetBehaviorClasses() const {return BehaviorClasses;};
+
 };
