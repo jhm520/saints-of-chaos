@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "SOCCharacter.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAICharacter.generated.h"
 
 //AI Controlled character

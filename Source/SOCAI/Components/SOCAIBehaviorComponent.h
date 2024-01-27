@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "SOCAI/SOCAIGameplayTags.h"
+#include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAIBehaviorComponent.generated.h"
 
 //component for actors that are controlled by the SOCAI system and AI Behaviors
@@ -40,8 +41,7 @@ protected:
 
 	virtual void TickUpdateBehavior(const float DeltaSeconds);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "AI|Behavior")
-	void DoAction(const FSOCAIAction& InAction);
+	virtual void DoAction(const FSOCAIAction& InAction);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag RootBehaviorState = SOCAIBehaviorTags::Behavior;

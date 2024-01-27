@@ -38,6 +38,33 @@ class SOCAI_API USOCAIBehavior : public UObject
 {
 	GENERATED_BODY()
 
+#pragma region Framework
+protected:
+	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
+#pragma endregion
+
+#pragma region Initialization
+public:
+	UFUNCTION()
+	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};
+
+	UFUNCTION()
+	void AddChildBehavior(USOCAIBehavior* InChildBehavior);
+#pragma endregion
+	
+#pragma region Properties
+public:
+	UFUNCTION()
+	USOCAIBehavior* GetChildBehavior(const FGameplayTag& InBehaviorTag) const;
+	
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTag& GetBehaviorTag() const {return BehaviorTag;};
+	
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTag& GetParentBehaviorTag() const {return ParentBehaviorTag;};
+
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const FGameplayTagContainer& GetChildBehaviorTags() const{return ChildBehaviorTags;};
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag ParentBehaviorTag;
@@ -49,35 +76,26 @@ protected:
 	FGameplayTagContainer ChildBehaviorTags;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
-	TObjectPtr<USOCAIBehavior> ParentBehavior = nullptr;;
+	TObjectPtr<USOCAIBehavior> ParentBehavior = nullptr;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TMap<FGameplayTag, TObjectPtr<USOCAIBehavior>> ChildBehaviorMap;
+#pragma endregion
+
+#pragma region Behavior
 
 public:
 
-	//Decide the action that this controller should be engaging in at this time
-	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "AI|Behavior")
-	bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
+	//CalculateCurrentAction: Decide the action that this actor should be engaging in at this time
+	//InActor is the actor we are deciding the action for (an AIController/Character)
+	//OutAction is the action that we have decided on
+	//BehaviorPath is the path of behaviors that we have taken to get to this point
+	//InParentAction is the action that the parent behavior has decided on, used to override behaviors of children
+	virtual bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
 
-	UFUNCTION()
-	void SetParentBehavior(USOCAIBehavior* InParentBehavior){ParentBehavior = InParentBehavior;};
-
-	UFUNCTION()
-	void AddChildBehavior(USOCAIBehavior* InChildBehavior);
-
-	UFUNCTION()
-	USOCAIBehavior* GetChildBehavior(const FGameplayTag& InBehaviorTag) const;
-
-	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
-
-	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTag& GetBehaviorTag() const {return BehaviorTag;};
+	UFUNCTION(BlueprintImplementableEvent, DisplayName="CalculateCurrentAction", Category = "AI|Behavior")
+	bool K2_CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
 	
-	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTag& GetParentBehaviorTag() const {return ParentBehaviorTag;};
+#pragma endregion
 
-	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTagContainer& GetChildBehaviorTags() const{return ChildBehaviorTags;};
-	
 };

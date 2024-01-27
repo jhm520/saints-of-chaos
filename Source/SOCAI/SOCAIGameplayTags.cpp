@@ -31,5 +31,6 @@ namespace SOCAIActionTags
 {
 	UE_DEFINE_GAMEPLAY_TAG(None,						TEXT("SOCAI.Action.None"))
 	UE_DEFINE_GAMEPLAY_TAG(Idle,						TEXT("SOCAI.Action.Idle"))
+	UE_DEFINE_GAMEPLAY_TAG(MoveToLocation,						TEXT("SOCAI.Action.MoveToLocation"))
 
 }

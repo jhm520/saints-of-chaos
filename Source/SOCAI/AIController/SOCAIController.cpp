@@ -28,3 +28,14 @@ void ASOCAIController::Tick(const float DeltaSeconds)
 	
 }
 #pragma endregion
+
+#pragma region Behavior Inteface
+	
+void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
+{
+	if (Action.ActionTag == SOCAIActionTags::MoveToLocation)
+	{
+		MoveToLocation(Action.TargetLocation, 100.0f);
+	}
+}
+#pragma endregion

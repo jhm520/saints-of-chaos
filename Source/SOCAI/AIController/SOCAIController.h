@@ -5,6 +5,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAIController.generated.h"
 #pragma endregion
 
@@ -15,7 +16,7 @@
 class USOCAIBehaviorComponent;
 
 UCLASS(Blueprintable)
-class SOCAI_API ASOCAIController : public AAIController
+class SOCAI_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface
 {
 	GENERATED_BODY()
 	
@@ -32,11 +33,16 @@ public:
 	
 #pragma endregion 
 
-#pragma region Behavior component
+#pragma region Behavior Component
 	//
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Behavior")
 	TObjectPtr<USOCAIBehaviorComponent> BehaviorComponent;
 
-#pragma endregion 
-	
+#pragma endregion
+
+#pragma region Behavior Inteface
+
+	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;
+#pragma endregion
+
 };

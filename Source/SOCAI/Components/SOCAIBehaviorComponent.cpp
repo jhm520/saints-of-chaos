@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAI/Behavior/SOCAIBehaviorManager.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
 
 // Sets default values for this component's properties
@@ -41,7 +42,7 @@ void USOCAIBehaviorComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 	// ...
 }
-
+UE_DISABLE_OPTIMIZATION
 void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 {
 	if (GetOwner()->GetLocalRole() != ROLE_Authority)
@@ -73,7 +74,7 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 	}
 }
 
-void USOCAIBehaviorComponent::DoAction_Implementation(const FSOCAIAction& InAction)
+void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
 {
 	//trigger a behavior state change if the action says we're supposed to
 	if (InAction.BehaviorTag != SOCAIBehaviorTags::None)
@@ -83,6 +84,10 @@ void USOCAIBehaviorComponent::DoAction_Implementation(const FSOCAIAction& InActi
 
 	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
 	
+	if (GetOwner()->Implements<USOCAIBehaviorInterface>())
+	{
+		ISOCAIBehaviorInterface::Execute_DoAIAction(GetOwner(), InAction);
+	}
 }
 
 void USOCAIBehaviorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -145,4 +150,4 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 
 	return true;
 }
-
+UE_ENABLE_OPTIMIZATION

@@ -3,10 +3,8 @@
 
 #include "SOCAIBehavior.h"
 
-bool USOCAIBehavior::CalculateCurrentAction_Implementation(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
+bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, GetBehaviorTag().ToString());
-
 	//add the tag to the behavior path, letting the other nodes know that we've traversed this node
 	BehaviorPath.AddTag(GetBehaviorTag());
 	
@@ -55,8 +53,16 @@ bool USOCAIBehavior::CalculateCurrentAction_Implementation(const AActor* InActor
 	{
 		return true;
 	}
+
+
+	if (OutAction.ActionTag != SOCAIActionTags::None)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, GetBehaviorTag().ToString());
+		return true;
+	}
 	
-	return false;
+	return K2_CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
+
 }
 
 void USOCAIBehavior::AddChildBehavior(USOCAIBehavior* InChildBehavior)
