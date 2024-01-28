@@ -57,7 +57,6 @@ bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction&
 
 	if (OutAction.ActionTag != SOCAIActionTags::None)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, GetBehaviorTag().ToString());
 		return true;
 	}
 	

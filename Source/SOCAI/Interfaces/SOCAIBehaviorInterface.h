@@ -23,6 +23,8 @@ class SOCAI_API ISOCAIBehaviorInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
+	virtual AActor* GetAvatarActor() const = 0;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, Category = "SOCAI", meta=(DisplayName="Do AI Action"))
 	void DoAIAction(const FSOCAIAction& Action);

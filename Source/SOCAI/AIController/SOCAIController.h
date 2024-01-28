@@ -43,6 +43,9 @@ public:
 #pragma region Behavior Inteface
 
 	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;
+
+	virtual AActor* GetAvatarActor() const override {return GetPawn();};
+
 #pragma endregion
 
 };

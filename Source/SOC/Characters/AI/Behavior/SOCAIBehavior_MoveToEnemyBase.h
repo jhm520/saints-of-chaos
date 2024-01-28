@@ -24,6 +24,9 @@ class SOC_API USOCAIBehavior_MoveToEnemyBase : public USOCAIBehavior
 protected:
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	FVector GetEnemyBaseLocation() const;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
+	float DistanceThreshold = 200.0f;
 	
 #pragma endregion
 

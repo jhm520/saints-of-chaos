@@ -2,6 +2,8 @@
 
 #pragma region Include
 #include "SOCAIController.h"
+
+#include "Navigation/PathFollowingComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 #pragma endregion
 
@@ -30,12 +32,18 @@ void ASOCAIController::Tick(const float DeltaSeconds)
 #pragma endregion
 
 #pragma region Behavior Inteface
-	
+UE_DISABLE_OPTIMIZATION
 void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 {
 	if (Action.ActionTag == SOCAIActionTags::MoveToLocation)
 	{
-		MoveToLocation(Action.TargetLocation, 100.0f);
+		const FVector& CurrentMoveDestination = GetPathFollowingComponent()->GetCurrentTargetLocation();
+
+		if (CurrentMoveDestination != Action.TargetLocation)
+		{
+			MoveToLocation(Action.TargetLocation, 100.0f);
+		}
 	}
 }
+UE_ENABLE_OPTIMIZATION
 #pragma endregion

@@ -15,10 +15,10 @@ struct SOCAI_API FSOCAIAction
 	
 public:
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
 	FGameplayTag ActionTag = SOCAIActionTags::None;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
 	FGameplayTag BehaviorTag = SOCAIBehaviorTags::None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
