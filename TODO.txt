@@ -1,2 +1,7 @@
-TODO: Implement FollowSchedule behavior node, or Follow path node
+DONE: Implement FollowSchedule behavior node, or Follow path node
 TODO: Spawn Mobs, have them move to destinations
+TODO: Make a ABuilding class, subclass of APawn.
+	UAbilitySystemComponent
+	UBuildingSubsystem::GetClosestEnemyBuilding()
+
+TODO: AttitudeInterface to determine who is an enemy or friend
