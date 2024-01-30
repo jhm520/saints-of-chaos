@@ -43,7 +43,7 @@ void USOCGameplayAbility_SpawnMob::ActivateAbility(const FGameplayAbilitySpecHan
 /** Returns true if this ability can be activated right now. Has no side effects */
 bool USOCGameplayAbility_SpawnMob::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, OUT FGameplayTagContainer* OptionalRelevantTags) const
 {
-	return true;
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 #pragma endregion
 
