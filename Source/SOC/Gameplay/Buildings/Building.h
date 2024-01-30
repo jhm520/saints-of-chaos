@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "CoreUtility/AutoOwnership/Interfaces/AutoOwnershipInterface.h"
 #include "GameFramework/Pawn.h"
+#include "GameplayTagContainer.h"
 #include "Building.generated.h"
 
 class UGameplayAbilityCollection;
@@ -24,6 +25,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	/** Called when owner changes, does nothing by default but can be overridden */
 	virtual void OnRep_Owner() override;
 
@@ -34,6 +37,26 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+#pragma endregion
+
+#pragma region Spawn Mob
+
+	UPROPERTY()
+	FTimerHandle TimerHandle_SpawnMob;
+	
+	UFUNCTION()
+	void StartSpawningMobs();
+
+	UFUNCTION()
+	void StopSpawningMobs();
+
+	UFUNCTION()
+	void Timer_SpawnMob();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug Commands")
+	TSubclassOf<class UGameplayAbility> MobSpawnAbilityClass;
+
+	static bool GetCooldownRemainingForTag(UAbilitySystemComponent* Target, FGameplayTagContainer InCooldownTags, float& TimeRemaining, float& CooldownDuration);
 #pragma endregion
 
 #pragma region Gameplay Ability System

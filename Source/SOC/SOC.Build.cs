@@ -18,7 +18,8 @@ public class SOC : ModuleRules
 			"WhatsMyPublicIP", 
 			"SOCAI", 
 			"GameplayAbilities", 
-			"GameplayTasks"
+			"GameplayTasks",
+			"GameplayTags"
 		});
 
 		//Plugins

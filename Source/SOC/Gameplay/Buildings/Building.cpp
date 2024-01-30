@@ -2,6 +2,8 @@
 
 
 #include "Building.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"	
 #include "GameplayAbilityCollection.h"
 #include "GameplayAbilitySpecHandle.h"
@@ -29,6 +31,14 @@ void ASOCBuilding::BeginPlay()
 	
 }
 
+void ASOCBuilding::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	StopSpawningMobs();
+	
+	Super::EndPlay(EndPlayReason);
+}
+
+
 void ASOCBuilding::SetOwner( AActor* NewOwner )
 {
 	Super::SetOwner(NewOwner);
@@ -36,6 +46,9 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 	if (NewOwner)
 	{
 		InitAbilitySystem();
+
+		StartSpawningMobs();
+
 	}
 }
 
@@ -44,6 +57,7 @@ void ASOCBuilding::OnRep_Owner()
 	Super::OnRep_Owner();
 	
 	InitAbilitySystem();
+
 }
 
 
@@ -61,7 +75,7 @@ void ASOCBuilding::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-#pragma endregion 
+#pragma endregion
 
  #pragma region Gameplay Abilities
 
@@ -93,6 +107,96 @@ UAbilitySystemComponent* ASOCBuilding::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
+#pragma endregion
+
+#pragma region Spawn Mob
+
+void ASOCBuilding::StartSpawningMobs()
+{
+	if (!GetWorld())
+	{
+		return;
+	}
+
+	Timer_SpawnMob();
+	
+	FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(MobSpawnAbilityClass);
+
+	if (!AbilitySpec)
+	{
+		return;
+	}
+
+	if (!AbilitySpec->Ability)
+	{
+		return;
+	}
+
+	UGameplayEffect* GameplayEffect = AbilitySpec->Ability->GetCooldownGameplayEffect();
+
+	if (!GameplayEffect)
+	{
+		return;
+	}
+
+	float TimeRemaining;
+	float Duration;
+	FGameplayTagContainer TagContainer;
+	GameplayEffect->GetOwnedGameplayTags(TagContainer);
+	
+	GetCooldownRemainingForTag(AbilitySystemComponent, TagContainer, TimeRemaining, Duration);
+	
+	GetWorldTimerManager().SetTimer(TimerHandle_SpawnMob, this, &ASOCBuilding::Timer_SpawnMob, TimeRemaining, true);
+}
+
+bool ASOCBuilding::GetCooldownRemainingForTag(UAbilitySystemComponent* Target, FGameplayTagContainer InCooldownTags, float& TimeRemaining,
+															float& CooldownDuration)
+{
+	if (IsValid(Target) && InCooldownTags.Num() > 0)
+	{
+		TimeRemaining = 0.f;
+		CooldownDuration = 0.f;
+
+		FGameplayEffectQuery const Query = FGameplayEffectQuery::MakeQuery_MatchAnyOwningTags(InCooldownTags);
+		TArray<TPair<float, float>> DurationAndTimeRemaining = Target->GetActiveEffectsTimeRemainingAndDuration(Query);
+		if (DurationAndTimeRemaining.Num() > 0)
+		{
+			int32 BestIdx = 0;
+			float LongestTime = DurationAndTimeRemaining[0].Key;
+			for (int32 Idx = 1; Idx < DurationAndTimeRemaining.Num(); ++Idx)
+			{
+				if (DurationAndTimeRemaining[Idx].Key > LongestTime)
+				{
+					LongestTime = DurationAndTimeRemaining[Idx].Key;
+					BestIdx = Idx;
+				}
+			}
+
+			TimeRemaining = DurationAndTimeRemaining[BestIdx].Key;
+			CooldownDuration = DurationAndTimeRemaining[BestIdx].Value;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void ASOCBuilding::StopSpawningMobs()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle_SpawnMob);
+}
+
+void ASOCBuilding::Timer_SpawnMob()
+{
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+	
+	AbilitySystemComponent->TryActivateAbilityByClass(MobSpawnAbilityClass, true);
+}
+
 #pragma endregion
 
 #pragma region Auto Ownership
