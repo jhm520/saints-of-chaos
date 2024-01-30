@@ -27,6 +27,7 @@ protected:
 	/** Called when owner changes, does nothing by default but can be overridden */
 	virtual void OnRep_Owner() override;
 
+	virtual void SetOwner( AActor* NewOwner ) override;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

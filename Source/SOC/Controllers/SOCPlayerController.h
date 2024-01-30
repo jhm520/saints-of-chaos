@@ -31,4 +31,17 @@ protected:
 
 #pragma endregion
 
+#pragma region Debug
+
+	// Sets default values for this character's properties
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug Commands")
+	void DebugSpawnMobs();
+
+	UFUNCTION(Server, Reliable)
+	void Server_DebugSpawnMobs();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug Commands")
+	TSubclassOf<class UGameplayAbility> MobSpawnAbilityClass;
+#pragma endregion
+
 };

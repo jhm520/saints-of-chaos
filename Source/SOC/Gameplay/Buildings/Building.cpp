@@ -29,6 +29,16 @@ void ASOCBuilding::BeginPlay()
 	
 }
 
+void ASOCBuilding::SetOwner( AActor* NewOwner )
+{
+	Super::SetOwner(NewOwner);
+
+	if (NewOwner)
+	{
+		InitAbilitySystem();
+	}
+}
+
 void ASOCBuilding::OnRep_Owner()
 {
 	Super::OnRep_Owner();
@@ -53,7 +63,7 @@ void ASOCBuilding::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 #pragma endregion 
 
-#pragma region Gameplay Abilities
+ #pragma region Gameplay Abilities
 
 void ASOCBuilding::InitAbilitySystem()
 {
