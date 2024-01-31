@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"	
 #include "GameplayAbilityCollection.h"
 #include "GameplayAbilitySpecHandle.h"
+#include "GASUtilityHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
@@ -144,42 +145,9 @@ void ASOCBuilding::StartSpawningMobs()
 	FGameplayTagContainer TagContainer;
 	GameplayEffect->GetOwnedGameplayTags(TagContainer);
 	
-	GetCooldownRemainingForTag(AbilitySystemComponent, TagContainer, TimeRemaining, Duration);
+	UGASUtilityHelperLibrary::GetCooldownRemainingForTag(AbilitySystemComponent, TagContainer, TimeRemaining, Duration);
 	
 	GetWorldTimerManager().SetTimer(TimerHandle_SpawnMob, this, &ASOCBuilding::Timer_SpawnMob, TimeRemaining, true);
-}
-
-bool ASOCBuilding::GetCooldownRemainingForTag(UAbilitySystemComponent* Target, FGameplayTagContainer InCooldownTags, float& TimeRemaining,
-															float& CooldownDuration)
-{
-	if (IsValid(Target) && InCooldownTags.Num() > 0)
-	{
-		TimeRemaining = 0.f;
-		CooldownDuration = 0.f;
-
-		FGameplayEffectQuery const Query = FGameplayEffectQuery::MakeQuery_MatchAnyOwningTags(InCooldownTags);
-		TArray<TPair<float, float>> DurationAndTimeRemaining = Target->GetActiveEffectsTimeRemainingAndDuration(Query);
-		if (DurationAndTimeRemaining.Num() > 0)
-		{
-			int32 BestIdx = 0;
-			float LongestTime = DurationAndTimeRemaining[0].Key;
-			for (int32 Idx = 1; Idx < DurationAndTimeRemaining.Num(); ++Idx)
-			{
-				if (DurationAndTimeRemaining[Idx].Key > LongestTime)
-				{
-					LongestTime = DurationAndTimeRemaining[Idx].Key;
-					BestIdx = Idx;
-				}
-			}
-
-			TimeRemaining = DurationAndTimeRemaining[BestIdx].Key;
-			CooldownDuration = DurationAndTimeRemaining[BestIdx].Value;
-
-			return true;
-		}
-	}
-
-	return false;
 }
 
 void ASOCBuilding::StopSpawningMobs()

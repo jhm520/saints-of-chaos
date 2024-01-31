@@ -56,7 +56,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug Commands")
 	TSubclassOf<class UGameplayAbility> MobSpawnAbilityClass;
 
-	static bool GetCooldownRemainingForTag(UAbilitySystemComponent* Target, FGameplayTagContainer InCooldownTags, float& TimeRemaining, float& CooldownDuration);
 #pragma endregion
 
 #pragma region Gameplay Ability System
