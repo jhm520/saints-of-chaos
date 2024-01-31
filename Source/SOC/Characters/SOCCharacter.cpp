@@ -5,11 +5,14 @@
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilityCollection.h"
 #include "SOCAI/SOCAIGameplayTags.h"
+#include "AggroSystem/Components/AggroSystemComponent.h"
 
 ASOCCharacter::ASOCCharacter()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
+
+	AggroSystemComponent = CreateDefaultSubobject<UAggroSystemComponent>(TEXT("AggroSystemComponent"));
 }
 
 void ASOCCharacter::PossessedBy(AController* NewController)

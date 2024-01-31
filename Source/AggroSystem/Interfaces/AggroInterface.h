@@ -4,6 +4,8 @@
 #include "UObject/Interface.h"
 #include "AggroInterface.generated.h"
 
+class UAggroSystemComponent;
+
 UINTERFACE(BlueprintType)
 class AGGROSYSTEM_API UAggroInterface : public UInterface
 {
@@ -17,5 +19,8 @@ class AGGROSYSTEM_API IAggroInterface
 {
 	GENERATED_BODY()
 public:
+
+	UFUNCTION()
+	virtual UAggroSystemComponent* GetAggroSystemComponent() const = 0;
 
 };

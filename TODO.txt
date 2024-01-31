@@ -5,3 +5,9 @@ TODO: Make a ABuilding class, subclass of APawn.
 	UBuildingSubsystem::GetClosestEnemyBuilding()
 
 TODO: AttitudeInterface to determine who is an enemy or friend
+TODO: AggroSystem - Module for managing Aggro 
+	- AggroInterface
+		- GetAggroComponent
+	- AggroComponent
+		- GetClosestTargetWithinRange
+	- GetThreats

@@ -17,7 +17,7 @@ class SOC_API USOCAIBehavior_FindEnemy : public USOCAIBehavior
 #pragma region Behavior
 
 public:
-	virtual bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
+	virtual bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const override;
 	
 #pragma endregion
 	

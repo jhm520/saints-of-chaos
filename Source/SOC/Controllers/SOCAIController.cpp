@@ -32,7 +32,7 @@ void ASOCAIController::Tick(const float DeltaSeconds)
 #pragma endregion
 
 #pragma region Behavior Inteface
-UE_DISABLE_OPTIMIZATION
+
 void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 {
 	if (Action.ActionTag == SOCAIActionTags::MoveToLocation)
@@ -45,5 +45,24 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 		}
 	}
 }
-UE_ENABLE_OPTIMIZATION
+
+#pragma endregion
+
+#pragma region Aggro System
+UAggroSystemComponent* ASOCAIController::GetAggroSystemComponent() const
+{
+	if (!GetPawn())
+	{
+		return nullptr;
+	}
+
+	IAggroInterface* AggroInterface = Cast<IAggroInterface>(GetPawn());
+
+	if (!AggroInterface)
+	{
+		return nullptr;
+	}
+
+	return AggroInterface->GetAggroSystemComponent();
+}
 #pragma endregion

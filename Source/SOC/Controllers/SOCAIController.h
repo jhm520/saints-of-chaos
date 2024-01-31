@@ -5,6 +5,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "AggroSystem/Interfaces/AggroInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAIController.generated.h"
 #pragma endregion
@@ -14,9 +15,10 @@
  */
 
 class USOCAIBehaviorComponent;
+class UAggroSystemComponent;
 
 UCLASS(Blueprintable)
-class SOCAI_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface
+class SOC_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface, public IAggroInterface
 {
 	GENERATED_BODY()
 	
@@ -48,5 +50,11 @@ public:
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
 #pragma endregion
+
+#pragma region Aggro System
+public:
+	virtual UAggroSystemComponent* GetAggroSystemComponent() const override;
+
+#pragma endregion 
 
 };

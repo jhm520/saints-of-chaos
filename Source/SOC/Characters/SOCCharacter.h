@@ -6,6 +6,8 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "AggroSystem/Components/AggroSystemComponent.h"
+#include "AggroSystem/Interfaces/AggroInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "SOCCharacter.generated.h"
 
@@ -14,8 +16,10 @@
  */
 //Base class for characters
 class UGameplayAbilityCollection;
+class UAggroSytemComponent;
+
 UCLASS()
-class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface
+class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -34,7 +38,7 @@ public:
 
 #pragma region Gameplay Abilities
 public:
-	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 protected:
 
@@ -47,5 +51,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TArray<TObjectPtr<UGameplayAbilityCollection>> AbilityCollections;
 #pragma endregion 
+
+#pragma region Aggro System
+public:
+	virtual UAggroSystemComponent* GetAggroSystemComponent() const override { return AggroSystemComponent;};
+
+protected:
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
+	TObjectPtr<UAggroSystemComponent> AggroSystemComponent;
+#pragma endregion 
+
 };
