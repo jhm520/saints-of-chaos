@@ -11,3 +11,4 @@ TODO: AggroSystem - Module for managing Aggro
 	- AggroComponent
 		- GetClosestTargetWithinRange
 	- GetThreats
+TODO: Figure out how to re-traverse the tree from the beginning

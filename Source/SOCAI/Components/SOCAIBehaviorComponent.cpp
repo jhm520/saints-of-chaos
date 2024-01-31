@@ -42,7 +42,7 @@ void USOCAIBehaviorComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 	// ...
 }
-UE_DISABLE_OPTIMIZATION
+
 void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 {
 	if (GetOwner()->GetLocalRole() != ROLE_Authority)
@@ -72,8 +72,11 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 	else
 	{
 		//return to root behavior
-		SetBehaviorState(GetRootBehaviorState());
 	}
+
+	//TODO: figure out more elegant way to reset the behavior state to the root of the tree
+	SetBehaviorState(GetRootBehaviorState());
+
 }
 
 void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
@@ -152,4 +155,3 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 
 	return true;
 }
-UE_ENABLE_OPTIMIZATION
