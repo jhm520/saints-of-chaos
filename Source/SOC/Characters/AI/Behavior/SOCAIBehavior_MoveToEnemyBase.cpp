@@ -72,7 +72,8 @@ bool USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation(const AActor* InActor,
 	{
 		return false;
 	}
-	
+
+	//TODO: Make a building subsystem, and use that to find the enemy base
 	for (TActorIterator<ASOCBuilding> It(GetWorld()); It; ++It)
 	{
 		ASOCBuilding* Building = *It;
