@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "AggroSystem/Interfaces/AggroInterface.h"
+#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAIController.generated.h"
 #pragma endregion
@@ -18,7 +19,7 @@ class USOCAIBehaviorComponent;
 class UAggroSystemComponent;
 
 UCLASS(Blueprintable)
-class SOC_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface, public IAggroInterface
+class SOC_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface, public IAttitudeInterface, public IAggroInterface
 {
 	GENERATED_BODY()
 	
@@ -46,7 +47,7 @@ public:
 
 	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;
 
-	virtual AActor* GetAvatarActor() const override {return GetPawn();};
+	virtual const AActor* GetAvatarActor() const override {return GetPawn();};
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
 #pragma endregion
@@ -55,6 +56,13 @@ public:
 public:
 	virtual UAggroSystemComponent* GetAggroSystemComponent() const override;
 
-#pragma endregion 
+	virtual bool ShouldAggro(AActor* AggroTarget) const override;
+
+#pragma endregion
+
+#pragma region Attitude System
+public:
+	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
+#pragma endregion
 
 };

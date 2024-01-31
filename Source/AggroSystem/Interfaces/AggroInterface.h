@@ -23,4 +23,7 @@ public:
 	UFUNCTION()
 	virtual UAggroSystemComponent* GetAggroSystemComponent() const = 0;
 
+	UFUNCTION()
+	virtual bool ShouldAggro(AActor* AggroTarget) const = 0;
+
 };

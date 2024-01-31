@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "SOCCharacter.h"
-#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAICharacter.generated.h"
 
+class USOCAIBehaviorComponent;
 //AI Controlled character
 UCLASS(Blueprintable)
-class SOC_API ASOCAICharacter : public ASOCCharacter
+class SOC_API ASOCAICharacter : public ASOCCharacter, public ISOCAIBehaviorInterface
 {
 	GENERATED_BODY()
 
@@ -35,6 +35,18 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 #pragma endregion
 
+#pragma region Attitude System
+public:
+	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
+#pragma endregion
+
+#pragma region Behavior
+
+	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override;
+
+	virtual const AActor* GetAvatarActor() const override {return this;};
+
+#pragma endregion
 
 
 };

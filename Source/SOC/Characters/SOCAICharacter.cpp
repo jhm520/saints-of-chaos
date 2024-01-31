@@ -76,3 +76,42 @@ void ASOCAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+#pragma region Attitude System
+EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) const
+{
+	if (!Other)
+	{
+		return EAttitude::Neutral;
+	}
+
+	if (!GetController())
+	{
+		return EAttitude::Neutral;
+	}
+
+	if (!GetController()->Implements<UAttitudeInterface>())
+	{
+		return EAttitude::Neutral;
+	}
+
+	return IAttitudeInterface::Execute_GetAttitudeTowards(GetController(), Other);
+}
+#pragma endregion
+
+#pragma region Behavior
+
+USOCAIBehaviorComponent* ASOCAICharacter::GetBehaviorComponent() const
+{
+	ISOCAIBehaviorInterface* ControllerBehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetController());
+
+	if (!ControllerBehaviorInterface)
+	{
+		return nullptr;
+	}
+
+	return ControllerBehaviorInterface->GetBehaviorComponent();
+}
+
+
+#pragma endregion

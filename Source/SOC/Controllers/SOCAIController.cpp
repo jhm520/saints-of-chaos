@@ -65,4 +65,70 @@ UAggroSystemComponent* ASOCAIController::GetAggroSystemComponent() const
 
 	return AggroInterface->GetAggroSystemComponent();
 }
+
+bool ASOCAIController::ShouldAggro(AActor* AggroTarget) const
+{
+	IAggroInterface* AggroInterface = Cast<IAggroInterface>(GetPawn());
+
+	if (!AggroInterface)
+	{
+		return false;
+	}
+
+	return AggroInterface->ShouldAggro(AggroTarget);
+}
+
+#pragma endregion
+
+
+#pragma region Attitude System
+EAttitude ASOCAIController::GetAttitudeTowards_Implementation(AActor* Other) const
+{
+	if (!Other)
+	{
+		return EAttitude::Neutral;
+	}
+
+	USOCAIBehaviorComponent* LocalBehaviorComponent = GetBehaviorComponent();
+
+	if (!LocalBehaviorComponent)
+	{
+		return EAttitude::Neutral;
+	}
+
+	AActor* Director = LocalBehaviorComponent->GetDirector();
+
+	if (!Director)
+	{
+		return EAttitude::Neutral;
+	}
+
+	ISOCAIBehaviorInterface* OtherBehaviorInterface = Cast<ISOCAIBehaviorInterface>(Other);
+
+	if (!OtherBehaviorInterface)
+	{
+		return EAttitude::Neutral;
+	}
+	
+	USOCAIBehaviorComponent* OtherBehaviorComponent = OtherBehaviorInterface->GetBehaviorComponent();
+
+	if (!OtherBehaviorComponent)
+	{
+		return EAttitude::Neutral;
+	}
+
+	AActor* OtherDirector = OtherBehaviorComponent->GetDirector();
+
+	if (!OtherDirector)
+	{
+		return EAttitude::Neutral;
+	}
+
+	if (Director == OtherDirector)
+	{
+		return EAttitude::Friendly;
+	}
+
+	return EAttitude::Hostile;
+}
 #pragma endregion

@@ -26,4 +26,26 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 #pragma endregion
 
+#pragma region Aggro System
+public:
+	UFUNCTION(BlueprintCallable, Category = "Aggro System")
+	AActor* FindClosestTarget();
+
+	UFUNCTION(BlueprintCallable, Category = "Aggro System")
+	void FindTargets(TArray<AActor*>& OutTargets);
+
+	UFUNCTION(BlueprintPure, Category = "Aggro System")
+	bool ShouldAggro(AActor* AggroTarget);
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Aggro System")
+	float AggroRadius = 1000.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Aggro System")
+	TArray<TEnumAsByte<EObjectTypeQuery>> AggroObjectTypes;
+
+
+#pragma endregion
+
 };

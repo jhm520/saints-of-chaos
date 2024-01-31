@@ -27,7 +27,7 @@ public:
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const = 0;
 
-	virtual AActor* GetAvatarActor() const = 0;
+	virtual const AActor* GetAvatarActor() const = 0;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, Category = "SOCAI", meta=(DisplayName="Do AI Action"))
 	void DoAIAction(const FSOCAIAction& Action);

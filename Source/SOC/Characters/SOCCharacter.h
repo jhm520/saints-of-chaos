@@ -50,11 +50,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TArray<TObjectPtr<UGameplayAbilityCollection>> AbilityCollections;
-#pragma endregion 
+#pragma endregion
 
 #pragma region Aggro System
 public:
 	virtual UAggroSystemComponent* GetAggroSystemComponent() const override { return AggroSystemComponent;};
+
+	virtual bool ShouldAggro(AActor* AggroTarget) const override;
 
 protected:
 	
