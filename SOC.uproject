@@ -41,6 +41,15 @@
 				"Engine",
 				"GameplayAbilities"
 			]
+		},
+		{
+			"Name": "AggroSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"GameplayAbilities"
+			]
 		}
 	],
 	"Plugins": [
