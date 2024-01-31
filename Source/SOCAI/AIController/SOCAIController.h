@@ -46,6 +46,7 @@ public:
 
 	virtual AActor* GetAvatarActor() const override {return GetPawn();};
 
+	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
 #pragma endregion
 
 };

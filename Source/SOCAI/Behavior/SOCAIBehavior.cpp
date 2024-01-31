@@ -3,6 +3,10 @@
 
 #include "SOCAIBehavior.h"
 
+#include "SOCAI/Components/SOCAIBehaviorComponent.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+
+
 bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	//add the tag to the behavior path, letting the other nodes know that we've traversed this node
@@ -62,6 +66,25 @@ bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction&
 	
 	return K2_CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
 
+}
+
+AActor* USOCAIBehavior::GetDirector(const AActor* InBehaviorActor) const
+{
+	const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(InBehaviorActor);
+
+	if (!BehaviorInterface)
+	{
+		return nullptr;
+	}
+
+	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
+
+	if (!BehaviorComponent)
+	{
+		return nullptr;
+	}
+
+	return BehaviorComponent->GetDirector();
 }
 
 void USOCAIBehavior::AddChildBehavior(USOCAIBehavior* InChildBehavior)

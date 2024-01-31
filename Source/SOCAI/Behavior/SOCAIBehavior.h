@@ -95,7 +95,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, DisplayName="CalculateCurrentAction", Category = "AI|Behavior")
 	bool K2_CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
-	
+
+
+	UFUNCTION(BlueprintPure, Category = "AI|Director")
+	AActor* GetDirector(const AActor* InBehaviorActor) const;
 #pragma endregion
 
 };

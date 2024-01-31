@@ -7,13 +7,14 @@
 #include "CoreUtility/AutoOwnership/Interfaces/AutoOwnershipInterface.h"
 #include "GameFramework/Pawn.h"
 #include "GameplayTagContainer.h"
+#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "Building.generated.h"
 
 class UGameplayAbilityCollection;
 class UAbilitySystemComponent;
 
 UCLASS()
-class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface
+class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface
 {
 	GENERATED_BODY()
 #pragma region Framework

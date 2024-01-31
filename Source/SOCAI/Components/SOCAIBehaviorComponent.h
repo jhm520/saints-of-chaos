@@ -76,4 +76,17 @@ public:
 	bool TryCreateBehaviorManager();
 #pragma endregion
 
+#pragma region Director
+public:
+	//returns the actor that is directing the behavior of this actor
+	AActor* GetDirector() const { return Director; }
+
+	//sets the actor that directs the behavior of this actor
+	AActor* SetDirector(AActor* InDirector) { return Director = InDirector; }
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Director")
+	TObjectPtr<AActor> Director = nullptr;
+
+#pragma endregion
+
 };

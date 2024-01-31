@@ -3,7 +3,9 @@
 
 #include "SOCAIBehavior_MoveToEnemyBase.h"
 
+#include "SOC/Gameplay/Buildings/Building.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+#include "EngineUtils.h"
 
 #pragma region Behavior
 
@@ -30,7 +32,16 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 
 	const FVector& CurrentLocation = AvatarActor->GetActorLocation();
 
-	const float CurrentDistance = (CurrentLocation - GetEnemyBaseLocation()).Size();
+	FVector EnemyBaseLocation;
+
+	const bool bFoundEnemyBase = GetEnemyBaseLocation(InActor, EnemyBaseLocation);
+
+	if (!bFoundEnemyBase)
+	{
+		return false;
+	}
+
+	const float CurrentDistance = (CurrentLocation - EnemyBaseLocation).Size();
 
 	if (CurrentDistance < DistanceThreshold)
 	{
@@ -39,7 +50,7 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 	
 	OutAction.BehaviorTag = GetBehaviorTag();
 	OutAction.ActionTag = SOCAIActionTags::MoveToLocation;
-	OutAction.TargetLocation = GetEnemyBaseLocation();
+	OutAction.TargetLocation = EnemyBaseLocation;
 	
 	return Super::CalculateCurrentAction(InActor, OutAction, BehaviorPath, InParentAction);
 }
@@ -48,9 +59,46 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 
 #pragma region Enemy Base
 
-FVector USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation() const
+bool USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation(const AActor* InActor, FVector& OutEnemyBaseLocation) const
 {
-	return FVector::ZeroVector + FVector(100.0f, 0.0f, 0.0f);
+	if (!InActor)
+	{
+		return false;
+	}
+
+	AActor* Director = GetDirector(InActor);
+
+	if (!Director)
+	{
+		return false;
+	}
+	
+	for (TActorIterator<ASOCBuilding> It(GetWorld()); It; ++It)
+	{
+		ASOCBuilding* Building = *It;
+
+		if (!Building)
+		{
+			continue;
+		}
+
+		if (!Director->Implements<UAttitudeInterface>())
+		{
+			continue;
+		}
+		
+		const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(Director, Building);
+
+		if (Attitude < EAttitude::Hostile)
+		{
+			continue;
+		}
+		
+		OutEnemyBaseLocation = Building->GetActorLocation();
+		return true;
+	}
+	
+	return false;
 }
 
 #pragma endregion

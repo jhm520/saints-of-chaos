@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "SOCCharacter.generated.h"
 
 /**
@@ -14,7 +15,7 @@
 //Base class for characters
 class UGameplayAbilityCollection;
 UCLASS()
-class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface
+class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface
 {
 	GENERATED_BODY()
 #pragma region Framework

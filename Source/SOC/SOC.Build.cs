@@ -19,7 +19,8 @@ public class SOC : ModuleRules
 			"SOCAI", 
 			"GameplayAbilities", 
 			"GameplayTasks",
-			"GameplayTags"
+			"GameplayTags",
+			"AIModule"
 		});
 
 		//Plugins

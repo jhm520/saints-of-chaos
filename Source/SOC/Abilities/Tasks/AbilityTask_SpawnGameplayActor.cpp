@@ -30,7 +30,7 @@ bool UAbilityTask_SpawnGameplayActor::BeginSpawningActor(UGameplayAbility* Ownin
 		{
 			const FGameplayAbilityActorInfo &Info = OwningAbility->GetActorInfo();
 
-			SpawnedActor = World->SpawnActorDeferred<AActor>(InClass, FTransform::Identity, nullptr, Cast<APawn>(Info.AvatarActor.Get()), ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+			SpawnedActor = World->SpawnActorDeferred<AActor>(InClass, FTransform::Identity, Info.OwnerActor.Get(), Cast<APawn>(Info.AvatarActor.Get()), ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		}
 	}
 	

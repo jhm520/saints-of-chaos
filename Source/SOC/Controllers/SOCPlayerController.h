@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "SOCPlayerController.generated.h"
@@ -14,7 +15,7 @@ class UAutoOwnershipComponent;
  */
 
 UCLASS()
-class SOC_API ASOCPlayerController : public APlayerController
+class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -42,6 +43,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug Commands")
 	TSubclassOf<class UGameplayAbility> MobSpawnAbilityClass;
+#pragma endregion
+
+#pragma region Attitude
+
+	EAttitude GetAttitudeTowards_Implementation(AActor* Other) const;
+
 #pragma endregion
 
 };
