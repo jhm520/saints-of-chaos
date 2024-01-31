@@ -6,6 +6,7 @@
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "EngineUtils.h"
+#include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 
 #pragma region Behavior
 
@@ -73,11 +74,17 @@ bool USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation(const AActor* InActor,
 		return false;
 	}
 
-	//TODO: Make a building subsystem, and use that to find the enemy base
-	for (TActorIterator<ASOCBuilding> It(GetWorld()); It; ++It)
-	{
-		ASOCBuilding* Building = *It;
+	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(Director);
 
+	if (!BuildingSubsystem)
+	{
+		return false;
+	}
+
+	TArray<ASOCBuilding*> Buildings = BuildingSubsystem->GetAllBuildings();
+
+	for (ASOCBuilding* Building : Buildings)
+	{
 		if (!Building)
 		{
 			continue;

@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"	
+#include "BuildingSubsystem.h"
 #include "GameplayAbilityCollection.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GASUtilityHelperLibrary.h"
@@ -28,13 +29,26 @@ ASOCBuilding::ASOCBuilding()
 // Called when the game starts or when spawned
 void ASOCBuilding::BeginPlay()
 {
-	Super::BeginPlay();
+	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(this);
+
+	if (BuildingSubsystem)
+	{
+		BuildingSubsystem->Register(this);
+	}
 	
+	Super::BeginPlay();
 }
 
 void ASOCBuilding::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	StopSpawningMobs();
+
+	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(this);
+
+	if (BuildingSubsystem)
+	{
+		BuildingSubsystem->Unregister(this);
+	}
 	
 	Super::EndPlay(EndPlayReason);
 }
