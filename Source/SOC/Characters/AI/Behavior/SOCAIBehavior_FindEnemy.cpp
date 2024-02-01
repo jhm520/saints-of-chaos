@@ -30,9 +30,8 @@ bool USOCAIBehavior_FindEnemy::CalculateCurrentAction(const AActor* InActor, FSO
 	}
 
 	OutAction.BehaviorTag = SOCAIBehaviorTags::FindEnemy;
-	OutAction.ActionTag = SOCAIActionTags::MoveToActor;
 	OutAction.TargetActor = ClosestEnemy;
 	
-	return Super::CalculateCurrentAction(InActor, OutAction, BehaviorPath, InParentAction);
+	return Super::CalculateCurrentAction(InActor, OutAction, BehaviorPath, OutAction);
 }
 UE_ENABLE_OPTIMIZATION

@@ -44,6 +44,11 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 			MoveToLocation(Action.TargetLocation, 100.0f);
 		}
 	}
+
+	if (Action.ActionTag == SOCAIActionTags::MoveToActor)
+	{
+		MoveToActor(Action.TargetActor, 100.0f);
+	}
 }
 
 #pragma endregion

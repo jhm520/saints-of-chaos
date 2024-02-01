@@ -100,6 +100,13 @@ void UAggroSystemComponent::FindTargets(TArray<AActor*>& OutTargets)
 	
 	const bool bOverlapResult = UKismetSystemLibrary::SphereOverlapActors(this, GetOwner()->GetActorLocation(), AggroRadius, AggroObjectTypes, TSubclassOf<APawn>(), ActorsToIgnore, OutTargets);
 
+	if (OutTargets.IsEmpty())
+	{
+		return;
+	}
+
+	TArray<AActor*> TargetsCopy = OutTargets;
+	
 	for (AActor* Target : OutTargets)
 	{
 		if (!Target)
@@ -109,9 +116,11 @@ void UAggroSystemComponent::FindTargets(TArray<AActor*>& OutTargets)
 
 		if (!ShouldAggro(Target))
 		{
-			OutTargets.Remove(Target);
+			TargetsCopy.Remove(Target);
 		}
 	}
+
+	OutTargets = TargetsCopy;
 }
 
 
