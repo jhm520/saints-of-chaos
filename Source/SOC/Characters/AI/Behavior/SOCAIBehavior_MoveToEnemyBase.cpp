@@ -26,7 +26,7 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 
 	const AActor* AvatarActor = BehaviorInterface->GetAvatarActor();
 
-	if (!AvatarActor)
+	if (!IsValid(AvatarActor))
 	{
 		return false;
 	}
@@ -47,7 +47,7 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 	// If we are already within the distance threshold, we don't need to move
 	if (CurrentDistance < DistanceThreshold)
 	{
-		return true;
+		return false;
 	}
 	
 	OutAction.BehaviorTag = GetBehaviorTag();

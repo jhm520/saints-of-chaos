@@ -8,6 +8,8 @@
 #include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAIBehaviorComponent.generated.h"
 
+class ASOCAIBehaviorManager;
+
 //component for actors that are controlled by the SOCAI system and AI Behaviors
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SOCAI_API USOCAIBehaviorComponent : public UActorComponent

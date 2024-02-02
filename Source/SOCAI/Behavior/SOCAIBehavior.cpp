@@ -6,33 +6,35 @@
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
-
 bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	//add the tag to the behavior path, letting the other nodes know that we've traversed this node
 	BehaviorPath.AddTag(GetBehaviorTag());
 	
 	//if we passed in a ParentAction with a specified behavior tag, decide the action on that behavior instead
-	if (GetChildBehaviorTags().HasTag(InParentAction.BehaviorTag))
+	if (GetChildBehaviorTags().HasTagExact(InParentAction.BehaviorTag))
 	{
 		USOCAIBehavior* ChildBehavior = GetChildBehavior(InParentAction.BehaviorTag);
 
 		if (ChildBehavior)
 		{
 			const bool bChildSuccess = ChildBehavior->CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
-
+		
 			if (bChildSuccess)
 			{
 				return true;
 			}
 		}
 	}
+
+	TArray<FGameplayTag> GameplayTagArray;
+	GetChildBehaviorTags().GetGameplayTagArray(GameplayTagArray);
 	
 	//Check each of this node's children and check if we should do that action instead
-	for (const FGameplayTag& LocalBehaviorTag : GetChildBehaviorTags())
+	for (const FGameplayTag& LocalBehaviorTag : GameplayTagArray)
 	{
 		//Do not traverse nodes that we've already traversed on this path to avoid infinite looping
-		if (BehaviorPath.HasTag(LocalBehaviorTag))
+		if (BehaviorPath.HasTagExact(LocalBehaviorTag))
 		{
 			continue;
 		}
@@ -45,14 +47,14 @@ bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction&
 		}
 		
 		const bool bChildSuccess = ChildBehavior->CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
-
+		
 		if (bChildSuccess)
 		{
 			return true;
 		}
 	}
 
-	//If its already decided that we're executing an action, return true
+	//If its already decided that we're executing an action, by either the parent or a subclass, return true
 	if (InParentAction.ActionTag != SOCAIActionTags::None)
 	{
 		return true;

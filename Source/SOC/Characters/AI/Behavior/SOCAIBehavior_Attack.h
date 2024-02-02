@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "SOCAI/Behavior/SOCAIBehavior.h"
-#include "SOCAIBehavior_MoveToCombatRange.generated.h"
+#include "SOCAIBehavior_Attack.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SOC_API USOCAIBehavior_MoveToCombatRange : public USOCAIBehavior
+class SOC_API USOCAIBehavior_Attack : public USOCAIBehavior
 {
 	GENERATED_BODY()
 	
@@ -25,12 +25,4 @@ public:
 	//InParentAction is the action that the parent behavior has decided on, used to override behaviors of children
 	virtual bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const override;
 #pragma endregion
-	
-#pragma region Enemy Base
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
-	float DistanceThreshold = 150.0f;
-	
-#pragma endregion
-	
 };

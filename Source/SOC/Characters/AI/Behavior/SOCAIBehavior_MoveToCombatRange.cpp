@@ -37,7 +37,7 @@ bool USOCAIBehavior_MoveToCombatRange::CalculateCurrentAction(const AActor* InAc
 	// If we are already within the distance threshold, we don't need to move
 	if (CurrentDistance < DistanceThreshold)
 	{
-		return true;
+		return false;
 	}
 
 	OutAction.BehaviorTag = SOCAIBehaviorTags::MoveToCombatRange;
