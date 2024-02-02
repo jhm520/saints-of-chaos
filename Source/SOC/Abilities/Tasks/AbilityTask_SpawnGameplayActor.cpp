@@ -5,7 +5,6 @@
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(AbilityTask_SpawnGameplayActor)
 
-UE_DISABLE_OPTIMIZATION
 UAbilityTask_SpawnGameplayActor::UAbilityTask_SpawnGameplayActor(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -84,7 +83,6 @@ void UAbilityTask_SpawnGameplayActor::FinishSpawningActor(UGameplayAbility* Owni
 
 	EndTask();
 }
-UE_ENABLE_OPTIMIZATION
 // ---------------------------------------------------------------------------------------
 
 

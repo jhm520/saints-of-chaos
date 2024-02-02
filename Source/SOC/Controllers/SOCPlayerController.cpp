@@ -8,7 +8,7 @@
 
 #include "SOC/Gameplay/Buildings/Building.h"
 
-UE_DISABLE_OPTIMIZATION
+
 #pragma region Framework
 
 ASOCPlayerController::ASOCPlayerController()
@@ -96,5 +96,3 @@ EAttitude ASOCPlayerController::GetAttitudeTowards_Implementation(AActor* Other)
 }
 
 #pragma endregion
-
-UE_ENABLE_OPTIMIZATION

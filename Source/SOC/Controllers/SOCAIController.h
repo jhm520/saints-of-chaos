@@ -43,6 +43,13 @@ public:
 
 #pragma endregion
 
+#pragma region Actions
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Actions")
+	float MovementAcceptanceRadius;
+
+#pragma endregion
+
 #pragma region Behavior Inteface
 
 	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;

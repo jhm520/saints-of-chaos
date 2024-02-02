@@ -26,4 +26,11 @@ public:
 	virtual bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const override;
 #pragma endregion
 	
+#pragma region Enemy Base
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
+	float DistanceThreshold = 100.0f;
+	
+#pragma endregion
+	
 };

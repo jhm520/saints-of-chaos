@@ -26,7 +26,7 @@ protected:
 	bool GetEnemyBaseLocation(const AActor* InActor, FVector& OutEnemyBaseLocation) const;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
-	float DistanceThreshold = 200.0f;
+	float DistanceThreshold = 100.0f;
 	
 #pragma endregion
 

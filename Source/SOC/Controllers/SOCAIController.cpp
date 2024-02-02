@@ -11,6 +11,7 @@
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
+	MovementAcceptanceRadius = 50.0f;
 }
 
 void ASOCAIController::BeginPlay()
@@ -41,13 +42,13 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 
 		if (CurrentMoveDestination != Action.TargetLocation)
 		{
-			MoveToLocation(Action.TargetLocation, 100.0f);
+			MoveToLocation(Action.TargetLocation, MovementAcceptanceRadius);
 		}
 	}
 
 	if (Action.ActionTag == SOCAIActionTags::MoveToActor)
 	{
-		MoveToActor(Action.TargetActor, 100.0f);
+		MoveToActor(Action.TargetActor, MovementAcceptanceRadius);
 	}
 }
 

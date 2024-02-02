@@ -4,6 +4,7 @@
 #include "SOCAICharacter.h"
 
 #include "AIController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 
 // Sets default values
@@ -13,6 +14,8 @@ ASOCAICharacter::ASOCAICharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
+	GetCharacterMovement()->bUseRVOAvoidance = true;
+	GetCharacterMovement()->AvoidanceConsiderationRadius = 100.0f;
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +30,6 @@ void ASOCAICharacter::SetOwner( AActor* NewOwner )
 	Super::SetOwner(NewOwner);
 }
 
-UE_DISABLE_OPTIMIZATION
 void ASOCAICharacter::SpawnDefaultController()
 {
 	//before we spawn the AI controller, we see if we already set a different owner of this actor
@@ -61,7 +63,6 @@ void ASOCAICharacter::SpawnDefaultController()
 	//set the previous owner to be the director of the behavior component
 	BehaviorComponent->SetDirector(OldOwner);
 }
-UE_ENABLE_OPTIMIZATION
 
 // Called every frame
 void ASOCAICharacter::Tick(float DeltaTime)

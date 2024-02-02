@@ -44,9 +44,10 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 
 	const float CurrentDistance = (CurrentLocation - EnemyBaseLocation).Size();
 
+	// If we are already within the distance threshold, we don't need to move
 	if (CurrentDistance < DistanceThreshold)
 	{
-		return false;
+		return true;
 	}
 	
 	OutAction.BehaviorTag = GetBehaviorTag();
