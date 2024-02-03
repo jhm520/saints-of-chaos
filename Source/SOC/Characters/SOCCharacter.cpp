@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilityCollection.h"
 #include "SOCAI/SOCAIGameplayTags.h"
+#include "SOC/Attributes/Health/HealthAttributeSet.h"
 #include "AggroSystem/Components/AggroSystemComponent.h"
 
 ASOCCharacter::ASOCCharacter()
@@ -13,6 +14,9 @@ ASOCCharacter::ASOCCharacter()
 	AbilitySystemComponent->SetIsReplicated(true);
 
 	AggroSystemComponent = CreateDefaultSubobject<UAggroSystemComponent>(TEXT("AggroSystemComponent"));
+
+	HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttribute"));
+
 }
 
 void ASOCCharacter::PossessedBy(AController* NewController)
@@ -77,6 +81,9 @@ void ASOCCharacter::InitAbilitySystem()
 
 		Collection->GiveAbilities(AbilitySystemComponent, BoundHandles, DefaultBoundHandles);
 	}
+
+	HealthAttributeSet->InitHealth(100.0f);
+	HealthAttributeSet->InitMaxHealth(100.0f);
 }
 
 UAbilitySystemComponent* ASOCCharacter::GetAbilitySystemComponent() const

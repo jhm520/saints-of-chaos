@@ -17,7 +17,7 @@
 //Base class for characters
 class UGameplayAbilityCollection;
 class UAggroSytemComponent;
-
+class UHealthAttributeSet;
 UCLASS()
 class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface
 {
@@ -50,6 +50,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TArray<TObjectPtr<UGameplayAbilityCollection>> AbilityCollections;
+#pragma endregion
+
+#pragma region Attribute: Health
+protected:
+	UPROPERTY()
+	TObjectPtr<UHealthAttributeSet> HealthAttributeSet;
 #pragma endregion
 
 #pragma region Aggro System
