@@ -12,3 +12,4 @@ TODO: AggroSystem - Module for managing Aggro
 		- GetClosestTargetWithinRange
 	- GetThreats
 TODO: Figure out how to re-traverse the tree from the beginning
+TODO: SOCCharacterTargetActor, look at GameplayAbilityTargetActor_Trace for examples on how to use Target Actors
