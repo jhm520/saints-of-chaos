@@ -13,6 +13,11 @@ UCLASS()
 class SOC_API USOCAIBehavior_MoveToEnemyBase : public USOCAIBehavior
 {
 	GENERATED_BODY()
+	
+#pragma region Framework
+protected:
+	USOCAIBehavior_MoveToEnemyBase();
+#pragma endregion
 
 #pragma region Behavior
 
@@ -26,7 +31,7 @@ protected:
 	bool GetEnemyBaseLocation(const AActor* InActor, FVector& OutEnemyBaseLocation) const;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
-	float DistanceThreshold = 100.0f;
+	float DistanceThreshold;
 	
 #pragma endregion
 

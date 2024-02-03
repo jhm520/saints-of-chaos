@@ -63,7 +63,6 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 		InitAbilitySystem();
 
 		StartSpawningMobs();
-
 	}
 }
 
@@ -132,9 +131,27 @@ void ASOCBuilding::StartSpawningMobs()
 	{
 		return;
 	}
-
-	Timer_SpawnMob();
 	
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+	
+	AbilitySystemComponent->TryActivateAbilityByClass(MobSpawnAbilityClass, true);
+}
+
+void ASOCBuilding::StopSpawningMobs()
+{
+	if (!GetWorld())
+	{
+		return;
+	}
+	
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+
 	FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(MobSpawnAbilityClass);
 
 	if (!AbilitySpec)
@@ -147,26 +164,8 @@ void ASOCBuilding::StartSpawningMobs()
 		return;
 	}
 
-	UGameplayEffect* GameplayEffect = AbilitySpec->Ability->GetCooldownGameplayEffect();
-
-	if (!GameplayEffect)
-	{
-		return;
-	}
-
-	float TimeRemaining;
-	float Duration;
-	FGameplayTagContainer TagContainer;
-	GameplayEffect->GetOwnedGameplayTags(TagContainer);
 	
-	UGASUtilityHelperLibrary::GetCooldownRemainingForTag(AbilitySystemComponent, TagContainer, TimeRemaining, Duration);
-	
-	GetWorldTimerManager().SetTimer(TimerHandle_SpawnMob, this, &ASOCBuilding::Timer_SpawnMob, TimeRemaining, true);
-}
-
-void ASOCBuilding::StopSpawningMobs()
-{
-	GetWorldTimerManager().ClearTimer(TimerHandle_SpawnMob);
+	AbilitySpec->Ability->CancelAbility(AbilitySpec->Ability->GetCurrentAbilitySpecHandle(), AbilitySpec->Ability->GetCurrentActorInfo(), AbilitySpec->Ability->GetCurrentActivationInfo(), true);
 }
 
 void ASOCBuilding::Timer_SpawnMob()

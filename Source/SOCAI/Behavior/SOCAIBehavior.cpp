@@ -116,7 +116,7 @@ USOCAIBehavior* USOCAIBehavior::GetChildBehavior(const FGameplayTag& InBehaviorT
 	return *BehaviorPtr;
 }
 
-USOCAIBehavior::USOCAIBehavior(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+USOCAIBehavior::USOCAIBehavior()
 {
 	
 }

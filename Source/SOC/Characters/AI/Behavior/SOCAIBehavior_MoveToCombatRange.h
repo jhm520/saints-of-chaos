@@ -13,6 +13,14 @@ UCLASS()
 class SOC_API USOCAIBehavior_MoveToCombatRange : public USOCAIBehavior
 {
 	GENERATED_BODY()
+
+#pragma region Framework
+
+protected:
+	USOCAIBehavior_MoveToCombatRange();
+
+#pragma endregion
+
 	
 #pragma region Behavior
 
@@ -29,7 +37,7 @@ public:
 #pragma region Enemy Base
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
-	float DistanceThreshold = 150.0f;
+	float DistanceThreshold;
 	
 #pragma endregion
 	

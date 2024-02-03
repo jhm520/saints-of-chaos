@@ -40,7 +40,7 @@ class SOCAI_API USOCAIBehavior : public UObject
 
 #pragma region Framework
 protected:
-	USOCAIBehavior(const FObjectInitializer& ObjectInitializer);
+	USOCAIBehavior();
 #pragma endregion
 
 #pragma region Initialization

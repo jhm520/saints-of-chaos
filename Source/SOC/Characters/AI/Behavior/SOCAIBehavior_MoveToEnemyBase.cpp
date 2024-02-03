@@ -8,6 +8,13 @@
 #include "EngineUtils.h"
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 
+#pragma region Framework
+USOCAIBehavior_MoveToEnemyBase::USOCAIBehavior_MoveToEnemyBase()
+{
+	DistanceThreshold = 100.0f;
+}
+#pragma endregion
+
 #pragma region Behavior
 
 bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const

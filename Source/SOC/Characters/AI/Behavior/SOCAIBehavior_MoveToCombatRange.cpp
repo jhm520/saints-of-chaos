@@ -5,6 +5,11 @@
 
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
+USOCAIBehavior_MoveToCombatRange::USOCAIBehavior_MoveToCombatRange()
+{
+	DistanceThreshold = 150.0f;
+}
+
 bool USOCAIBehavior_MoveToCombatRange::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	AActor* TargetActor = InParentAction.TargetActor;
