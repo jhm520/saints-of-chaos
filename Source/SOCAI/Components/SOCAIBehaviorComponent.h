@@ -47,6 +47,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag RootBehaviorState = SOCAIBehaviorTags::Behavior;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
+	FSOCAIAction CurrentAction;
 	
 public:
 	
@@ -55,9 +58,10 @@ public:
 	
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
-	
 	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
 	bool SetBehaviorState(const FGameplayTag& InBehaviorTag);
+
+	const FSOCAIAction& GetCurrentAction() const {return CurrentAction;};
 
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	const FGameplayTag& GetCurrentBehaviorState() {return CurrentBehaviorState;};

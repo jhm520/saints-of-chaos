@@ -116,3 +116,34 @@ USOCAIBehaviorComponent* ASOCAICharacter::GetBehaviorComponent() const
 
 
 #pragma endregion
+
+#pragma region Target Actors
+	
+/** Returns the actor that is the target of this ability */
+AActor* ASOCAICharacter::GetTargetActor() const
+{
+	if (!GetController())
+	{
+		return nullptr;
+	}
+
+	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetController());
+
+	if (!BehaviorInterface)
+	{
+		return nullptr;
+	}
+
+	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
+
+	if (!BehaviorComponent)
+	{
+		return nullptr;
+	}
+
+	const FSOCAIAction& CurrentAction = BehaviorComponent->GetCurrentAction();
+
+	return CurrentAction.TargetActor;
+}
+
+#pragma endregion

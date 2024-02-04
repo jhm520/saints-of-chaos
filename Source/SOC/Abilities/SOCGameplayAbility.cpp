@@ -17,3 +17,20 @@ bool USOCGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Ha
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 #pragma endregion
+
+#pragma region Target Actors
+	
+/** Returns the actor that is the target of this ability */
+AActor* USOCGameplayAbility::GetTargetActor() const
+{
+	IGameplayAbilityTargetActorInterface* TargetActorInterface = Cast<IGameplayAbilityTargetActorInterface>(GetActorInfo().AvatarActor.Get());
+
+	if (!TargetActorInterface)
+	{
+		return nullptr;
+	}
+	
+	return TargetActorInterface->GetTargetActor();
+}
+
+#pragma endregion

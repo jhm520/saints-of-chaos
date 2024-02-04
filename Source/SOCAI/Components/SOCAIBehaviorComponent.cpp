@@ -17,6 +17,8 @@ USOCAIBehaviorComponent::USOCAIBehaviorComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	// SetIsReplicatedByDefault(true);
 	// ...
+	
+	CurrentAction = FSOCAIAction();
 }
 
 
@@ -86,6 +88,8 @@ void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
 	{
 		SetBehaviorState(InAction.BehaviorTag);
 	}
+
+	CurrentAction = InAction;
 
 	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
 	

@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class SOC_API USOCGameplayAbility : public UGameplayAbilityBase
+class SOC_API USOCGameplayAbility : public UGameplayAbilityBase, public IGameplayAbilityTargetActorInterface
 {
 	GENERATED_BODY()
 
@@ -28,4 +28,12 @@ public:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const;
 	
 #pragma endregion
+
+#pragma region Target Actors
+	
+	/** Returns the actor that is the target of this ability */
+	virtual AActor* GetTargetActor() const override;
+
+#pragma endregion
+
 };

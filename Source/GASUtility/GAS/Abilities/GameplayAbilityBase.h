@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "TargetActors/GameplayAbilityTargetActorInterface.h"
 #include "GameplayAbilityBase.generated.h"
 
 /**

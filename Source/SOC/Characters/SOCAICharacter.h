@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "SOCCharacter.h"
+#include "GAS/Abilities/TargetActors/GameplayAbilityTargetActorInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAICharacter.generated.h"
 
 class USOCAIBehaviorComponent;
 //AI Controlled character
 UCLASS(Blueprintable)
-class SOC_API ASOCAICharacter : public ASOCCharacter, public ISOCAIBehaviorInterface
+class SOC_API ASOCAICharacter : public ASOCCharacter, public ISOCAIBehaviorInterface, public IGameplayAbilityTargetActorInterface
 {
 	GENERATED_BODY()
 
@@ -45,6 +46,13 @@ public:
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override;
 
 	virtual const AActor* GetAvatarActor() const override {return this;};
+
+#pragma endregion
+
+#pragma region Target Actors
+	
+	/** Returns the actor that is the target of this ability */
+	virtual AActor* GetTargetActor() const override;
 
 #pragma endregion
 
