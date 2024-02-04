@@ -7,6 +7,8 @@
 #include "../SOCAIGameplayTags.h"
 #include "SOCAIBehavior.generated.h"
 
+class UGameplayAbility;
+
 //struct to represent an AIController's current action
 USTRUCT(BlueprintType)
 struct SOCAI_API FSOCAIAction
@@ -28,6 +30,47 @@ public:
 	TObjectPtr<AActor> TargetActor = nullptr;
 
 	FSOCAIAction(){}
+};
+
+UENUM(BlueprintType)
+enum class EBehaviorGameplayAbilityActivationMode : uint8
+{
+	//The ability will be activated when the behavior is entered
+	OnEnter,
+	//The ability will be activated when the behavior is exited
+	OnExit,
+	//The ability will be activated when the behavior is entered and exited
+	OnEnterAndExit,
+	None
+};
+
+UENUM(BlueprintType)
+enum class EBehaviorGameplayAbilityDeactivationMode : uint8
+{
+	//The ability will be deactivated when the behavior is entered
+	OnEnter,
+	//The ability will be deactivated when the behavior is exited
+	OnExit,
+	//The ability will be deactivated when the behavior is entered and exited
+	OnEnterAndExit,
+	None
+};
+
+//struct to represent an AIController's current action
+USTRUCT(BlueprintType)
+struct SOCAI_API FBehaviorGameplayAbility
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	EBehaviorGameplayAbilityActivationMode ActivationMode = EBehaviorGameplayAbilityActivationMode::OnEnter;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	EBehaviorGameplayAbilityDeactivationMode DeactivationMode = EBehaviorGameplayAbilityDeactivationMode::OnExit;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TSubclassOf<UGameplayAbility> GameplayAbilityClass;
+
 };
 
 /**
@@ -95,10 +138,27 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, DisplayName="CalculateCurrentAction", Category = "AI|Behavior")
 	bool K2_CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const;
-
-
+	
 	UFUNCTION(BlueprintPure, Category = "AI|Director")
 	AActor* GetDirector(const AActor* InBehaviorActor) const;
+	
+	virtual void OnEnteredBehavior(AActor* InBehaviorActor, const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const;
+
+	virtual void OnExitedBehavior(AActor* InBehaviorActor, const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const;
+
+	UFUNCTION(BlueprintImplementableEvent, DisplayName="OnEnteredBehavior", Category = "AI|Behavior")
+	void K2_OnEnteredBehavior(const AActor* InBehaviorActor, const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const;
+
+	UFUNCTION(BlueprintImplementableEvent, DisplayName="OnExitedBehavior", Category = "AI|Behavior")
+	void K2_OnExitedBehavior(const AActor* InBehaviorActor, const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const;
+
+#pragma endregion
+
+#pragma region Gameplay Ability System
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TArray<FBehaviorGameplayAbility> BehaviorGameplayAbilities;
+
 #pragma endregion
 
 };

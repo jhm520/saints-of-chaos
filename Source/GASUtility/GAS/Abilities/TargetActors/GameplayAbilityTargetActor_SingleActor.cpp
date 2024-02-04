@@ -37,11 +37,9 @@ AActor* AGameplayAbilityTargetActor_SingleActor::GetTargetActor()
 void AGameplayAbilityTargetActor_SingleActor::ConfirmTargetingAndContinue()
 {
 	check(ShouldProduceTargetData());
-	if (SourceActor)
-	{
-		bDebug = false;
-		FGameplayAbilityTargetDataHandle Handle = MakeTargetData(GetTargetActor());
-		TargetDataReadyDelegate.Broadcast(Handle);
-	}
+	
+	bDebug = false;
+	FGameplayAbilityTargetDataHandle Handle = MakeTargetData(GetTargetActor());
+	TargetDataReadyDelegate.Broadcast(Handle);
 }
 

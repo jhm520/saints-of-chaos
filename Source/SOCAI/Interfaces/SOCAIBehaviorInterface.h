@@ -31,4 +31,11 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, Category = "SOCAI", meta=(DisplayName="Do AI Action"))
 	void DoAIAction(const FSOCAIAction& Action);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, Category = "SOCAI", meta=(DisplayName="On Entered Behavior"))
+	void OnEnteredBehavior(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, Category = "SOCAI", meta=(DisplayName="On Exited Behavior"))
+	void OnExitedBehavior(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const;
+
 };

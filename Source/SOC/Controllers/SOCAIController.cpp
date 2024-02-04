@@ -52,6 +52,26 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 	}
 }
 
+void ASOCAIController::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const
+{
+	if (!GetPawn() || !GetPawn()->Implements<USOCAIBehaviorInterface>())
+	{
+		return;
+	}
+
+	ISOCAIBehaviorInterface::Execute_OnEnteredBehavior(GetPawn(), InEnteredBehaviorAction, InExitedBehaviorAction);
+}
+
+void ASOCAIController::OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const
+{
+	if (!GetPawn() || !GetPawn()->Implements<USOCAIBehaviorInterface>())
+	{
+		return;
+	}
+
+	ISOCAIBehaviorInterface::Execute_OnExitedBehavior(GetPawn(), InExitedBehaviorAction, InEnteredBehaviorAction);
+}
+
 #pragma endregion
 
 #pragma region Aggro System
@@ -137,4 +157,20 @@ EAttitude ASOCAIController::GetAttitudeTowards_Implementation(AActor* Other) con
 
 	return EAttitude::Hostile;
 }
+#pragma endregion
+
+#pragma region Ability System
+
+UAbilitySystemComponent* ASOCAIController::GetAbilitySystemComponent() const
+{
+	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(GetPawn());
+
+	if (!AbilitySystemInterface)
+	{
+		return nullptr;
+	}
+
+	return AbilitySystemInterface->GetAbilitySystemComponent();
+}
+
 #pragma endregion

@@ -47,6 +47,10 @@ public:
 
 	virtual const AActor* GetAvatarActor() const override {return this;};
 
+	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
+
+	virtual void OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const override;
+
 #pragma endregion
 
 #pragma region Target Actors

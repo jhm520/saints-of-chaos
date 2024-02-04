@@ -114,6 +114,19 @@ USOCAIBehaviorComponent* ASOCAICharacter::GetBehaviorComponent() const
 	return ControllerBehaviorInterface->GetBehaviorComponent();
 }
 
+void ASOCAICharacter::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const
+{
+	if (InEnteredBehaviorAction.ActionTag == SOCAIActionTags::Attack)
+	{
+		
+	}
+}
+
+void ASOCAICharacter::OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const
+{
+	
+}
+
 
 #pragma endregion
 

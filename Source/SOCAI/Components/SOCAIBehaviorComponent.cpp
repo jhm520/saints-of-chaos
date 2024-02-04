@@ -81,15 +81,41 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 
 }
 
+void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
+{
+	USOCAIBehavior* PreviousActionBehavior = GetBehavior(InPreviousAction.BehaviorTag);
+
+	
+	if (PreviousActionBehavior)
+	{
+		PreviousActionBehavior->OnExitedBehavior(GetOwner(), InPreviousAction, InCurrentAction);
+	}
+
+	USOCAIBehavior* CurrentActionBehavior = GetBehavior(InCurrentAction.BehaviorTag);
+	
+	if (CurrentActionBehavior)
+	{
+		CurrentActionBehavior->OnEnteredBehavior(GetOwner(), InCurrentAction, InPreviousAction);
+	}
+}
+
+
 void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
 {
+	const FSOCAIAction PreviousAction = CurrentAction;
+
+	CurrentAction = InAction;
+	
 	//trigger a behavior state change if the action says we're supposed to
 	if (InAction.BehaviorTag != SOCAIBehaviorTags::None)
 	{
 		SetBehaviorState(InAction.BehaviorTag);
 	}
 
-	CurrentAction = InAction;
+	if (PreviousAction.BehaviorTag != CurrentAction.BehaviorTag)
+	{
+		OnActionChanged(CurrentAction, PreviousAction);
+	}
 
 	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
 	
@@ -112,6 +138,8 @@ bool USOCAIBehaviorComponent::SetBehaviorState(const FGameplayTag& InBehaviorTag
 	}
 	
 	const FGameplayTag& PreviousBehaviorState = CurrentBehaviorState;
+
+	USOCAIBehavior* PreviousBehavior = GetBehavior(PreviousBehaviorState);
 
 	CurrentBehaviorState = InBehaviorTag;
 

@@ -45,6 +45,8 @@ protected:
 
 	virtual void DoAction(const FSOCAIAction& InAction);
 
+	virtual void OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction);
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag RootBehaviorState = SOCAIBehaviorTags::Behavior;
 

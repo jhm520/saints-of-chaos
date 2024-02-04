@@ -8,7 +8,7 @@ public class SOCAI : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "GameplayTags"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "GameplayTags", "GameplayAbilities"});
 
 		//Plugins
         PublicDependencyModuleNames.AddRange(new string[] { });

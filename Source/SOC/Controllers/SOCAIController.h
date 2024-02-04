@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "AIController.h"
 #include "AggroSystem/Interfaces/AggroInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
@@ -19,7 +20,7 @@ class USOCAIBehaviorComponent;
 class UAggroSystemComponent;
 
 UCLASS(Blueprintable)
-class SOC_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface, public IAttitudeInterface, public IAggroInterface
+class SOC_API ASOCAIController : public AAIController, public ISOCAIBehaviorInterface, public IAttitudeInterface, public IAggroInterface, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 	
@@ -57,6 +58,11 @@ public:
 	virtual const AActor* GetAvatarActor() const override {return GetPawn();};
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
+
+	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
+
+	virtual void OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const override;
+
 #pragma endregion
 
 #pragma region Aggro System
@@ -70,6 +76,11 @@ public:
 #pragma region Attitude System
 public:
 	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
+#pragma endregion
+
+#pragma region Ability System
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 #pragma endregion
 
 };
