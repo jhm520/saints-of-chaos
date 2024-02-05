@@ -101,3 +101,111 @@ bool ASOCCharacter::ShouldAggro(AActor* AggroTarget) const
 }
 
 #pragma endregion
+
+#pragma region Health Interface
+
+float ASOCCharacter::GetHealth_Implementation() const
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return 0.0f;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return 0.0f;
+	}
+
+	return HealthAttributeSet->GetHealth();
+}
+void ASOCCharacter::SetHealth_Implementation(float NewHealth)
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return;
+	}
+
+	return HealthAttributeSet->SetHealth(NewHealth);
+}
+
+float ASOCCharacter::GetMaxHealth_Implementation() const
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return 0.0f;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return 0.0f;
+	}
+
+	return HealthAttributeSet->GetMaxHealth();
+}
+
+void ASOCCharacter::SetMaxHealth_Implementation(float NewMaxHealth)
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return;
+	}
+
+	return HealthAttributeSet->SetMaxHealth(NewMaxHealth);
+}
+
+bool ASOCCharacter::IsAlive_Implementation() const
+{
+	return IHealthInterface::Execute_GetHealth(this) > 0.0f;
+}
+
+void ASOCCharacter::OnHealthChanged_Implementation(float OldHealth, float NewHealth, float MaxHealth)
+{
+	if (HasAuthority() && NewHealth <= 0.0f && OldHealth > 0.0f)
+	{
+		Die();
+	}
+}
+
+void ASOCCharacter::OnMaxHealthChanged_Implementation(float OldMaxHealth, float MaxHealth, float CurrentHealth)
+{
+	
+}
+
+#pragma endregion
+
+#pragma region Death
+
+void ASOCCharacter::Die()
+{
+	OnDeath();
+}
+
+void ASOCCharacter::OnDeath()
+{
+	K2_OnDeath();
+
+	if (HasAuthority())
+	{
+		Destroy();
+	}
+}
+
+#pragma endregion

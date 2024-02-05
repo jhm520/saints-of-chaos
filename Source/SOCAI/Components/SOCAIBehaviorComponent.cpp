@@ -64,7 +64,7 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 	FGameplayTagContainer BehaviorPath = FGameplayTagContainer::EmptyContainer;
 	const bool bSuccess = LocalCurrentBehavior->CalculateCurrentAction(GetOwner(), CurrentActionStruct, BehaviorPath);
 
-	GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, FString::Printf(TEXT("Following Behavior %s, Doing action %s"), *CurrentActionStruct.BehaviorTag.ToString(), *CurrentActionStruct.ActionTag.ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, FString::Printf(TEXT("Following Behavior %s, Doing action %s"), *CurrentActionStruct.BehaviorTag.ToString(), *CurrentActionStruct.ActionTag.ToString()));
 
 	//do the action
 	if (bSuccess)

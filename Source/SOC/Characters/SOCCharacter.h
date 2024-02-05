@@ -9,6 +9,7 @@
 #include "AggroSystem/Components/AggroSystemComponent.h"
 #include "AggroSystem/Interfaces/AggroInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
+#include "SOC/Attributes/Health/HealthInterface.h"
 #include "SOCCharacter.generated.h"
 
 /**
@@ -19,7 +20,7 @@ class UGameplayAbilityCollection;
 class UAggroSytemComponent;
 class UHealthAttributeSet;
 UCLASS()
-class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface
+class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface, public IHealthInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -68,6 +69,30 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TObjectPtr<UAggroSystemComponent> AggroSystemComponent;
-#pragma endregion 
+#pragma endregion
+
+#pragma region Health Interface
+
+	virtual float GetHealth_Implementation() const override;
+	virtual void SetHealth_Implementation(float NewHealth) override;
+	virtual float GetMaxHealth_Implementation() const override;
+	virtual void SetMaxHealth_Implementation(float NewMaxHealth) override;
+	virtual bool IsAlive_Implementation() const override;
+	virtual void OnHealthChanged_Implementation(float OldHealth, float NewHealth, float MaxHealth) override;
+	virtual void OnMaxHealthChanged_Implementation(float OldMaxHealth, float MaxHealth, float CurrentHealth) override;
+
+#pragma endregion
+
+#pragma region Death
+
+protected:
+	virtual void Die();
+
+	virtual void OnDeath();
+
+	UFUNCTION(BlueprintImplementableEvent, DisplayName="OnDeath", Category = "AI|Behavior")
+	void K2_OnDeath();
+
+#pragma endregion
 
 };
