@@ -7,11 +7,17 @@
 #include "SOCAI/SOCAIGameplayTags.h"
 #include "SOC/Attributes/Health/HealthAttributeSet.h"
 #include "AggroSystem/Components/AggroSystemComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "SOC/HUD/Widgets/CharacterInfoWidget.h"
 
 ASOCCharacter::ASOCCharacter()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
+
+	CharacterInfoWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("CharacterInfoWidgetComponent"));
+	CharacterInfoWidgetComponent->SetupAttachment(GetRootComponent());
 
 	AggroSystemComponent = CreateDefaultSubobject<UAggroSystemComponent>(TEXT("AggroSystemComponent"));
 
@@ -32,12 +38,22 @@ void ASOCCharacter::BeginPlay()
 	
 	SetupGameplayTags();
 
+	InitializeCharacterInfoWidget();
+
 }
 
 void ASOCCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 }
+
+void ASOCCharacter::Tick(const float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	TickCharacterInfoWidgetOrientation();
+}
+
 
 void ASOCCharacter::SetupGameplayTags()
 {
@@ -178,9 +194,14 @@ bool ASOCCharacter::IsAlive_Implementation() const
 
 void ASOCCharacter::OnHealthChanged_Implementation(float OldHealth, float NewHealth, float MaxHealth)
 {
-	if (HasAuthority() && NewHealth <= 0.0f && OldHealth > 0.0f)
+	UpdateCharacterInfoWidget_Health();
+
+	if (HasAuthority())
 	{
-		Die();
+		if (NewHealth <= 0.0f && OldHealth > 0.0f)
+		{
+			Die();
+		}
 	}
 }
 
@@ -206,6 +227,73 @@ void ASOCCharacter::OnDeath()
 	{
 		Destroy();
 	}
+}
+
+#pragma endregion
+
+#pragma region Character Info Widget
+
+void ASOCCharacter::InitializeCharacterInfoWidget()
+{
+	//if we already made this widget, don't make it again
+	if (CharacterInfoWidget)
+	{
+		return;
+	}
+
+	if (!CharacterInfoWidgetClass)
+	{
+		return;
+	}
+
+	CharacterInfoWidget = CreateWidget<UCharacterInfoWidget>(GetWorld(), CharacterInfoWidgetClass);
+
+	CharacterInfoWidgetComponent->SetWidget(CharacterInfoWidget);
+
+	UpdateCharacterInfoWidget();
+}
+
+void ASOCCharacter::UpdateCharacterInfoWidget()
+{
+	InitializeCharacterInfoWidget();
+
+	UpdateCharacterInfoWidget_Health();
+}
+
+void ASOCCharacter::TickCharacterInfoWidgetOrientation()
+{
+	if (!CharacterInfoWidgetComponent)
+	{
+		return;
+	}
+	
+	APlayerController* LocalPC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (!LocalPC)
+	{
+		return;
+	}
+	
+	const FVector& CameraLocation = LocalPC->PlayerCameraManager->GetCameraLocation();
+
+	const FVector& ComponentLocation = CharacterInfoWidgetComponent->GetComponentLocation();
+	
+	CharacterInfoWidgetComponent->SetWorldRotation((CameraLocation - ComponentLocation).Rotation());
+}
+
+
+void ASOCCharacter::UpdateCharacterInfoWidget_Health()
+{
+	if (!CharacterInfoWidget)
+	{
+		InitializeCharacterInfoWidget();
+		return;
+	}
+
+	const float CurrentHealth = IHealthInterface::Execute_GetHealth(this);
+	const float MaxHealth = IHealthInterface::Execute_GetMaxHealth(this);
+	
+	CharacterInfoWidget->OnHealthChanged(CurrentHealth, MaxHealth);
 }
 
 #pragma endregion

@@ -19,6 +19,9 @@
 class UGameplayAbilityCollection;
 class UAggroSytemComponent;
 class UHealthAttributeSet;
+class UWidgetComponent;
+class UCharacterInfoWidget;
+
 UCLASS()
 class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface, public IHealthInterface
 {
@@ -30,7 +33,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	
+
+	virtual void Tick(const float DeltaSeconds) override;
+
 public:
 	virtual void PossessedBy(AController* NewController) override;
 #pragma endregion
@@ -92,6 +97,29 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, DisplayName="OnDeath", Category = "AI|Behavior")
 	void K2_OnDeath();
+
+#pragma endregion
+
+#pragma region Character Info Widget
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Info")
+	TSubclassOf<UCharacterInfoWidget> CharacterInfoWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Info")
+	TObjectPtr<UCharacterInfoWidget> CharacterInfoWidget;
+
+	void InitializeCharacterInfoWidget();
+	
+	void TickCharacterInfoWidgetOrientation();
+	
+	void UpdateCharacterInfoWidget();
+
+	void UpdateCharacterInfoWidget_Health();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Info")
+	TObjectPtr<UWidgetComponent> CharacterInfoWidgetComponent;
 
 #pragma endregion
 

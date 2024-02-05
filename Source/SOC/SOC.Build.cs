@@ -20,7 +20,9 @@ public class SOC : ModuleRules
 			"GameplayAbilities", 
 			"GameplayTasks",
 			"GameplayTags",
-			"AIModule"
+			"AIModule",
+			"UMG",
+			"CommonUI"
 		});
 
 		//Plugins
