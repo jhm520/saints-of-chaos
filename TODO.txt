@@ -13,3 +13,10 @@ TODO: AggroSystem - Module for managing Aggro
 	- GetThreats
 TODO: Figure out how to re-traverse the tree from the beginning
 TODO: SOCCharacterTargetActor, look at GameplayAbilityTargetActor_Trace for examples on how to use Target Actors
+TODO: Adding animations
+
+Assuming we go with the Auto-RTS route, what kind of units should we have?
+
+Spear guy		50
+Sword and shield guy	65
+Rifle/Bow/Crossbow guy	lyra anims free
