@@ -3,15 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "GameFramework/Pawn.h"
 #include "RTSPlayerPawn.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
 class UEnhancedInputActionBindingCollection;
+class UFloatingPawnMovement;
 
 UCLASS()
-class RTSUTILITY_API ARTSPlayerPawn : public ACharacter
+class RTSUTILITY_API ARTSPlayerPawn : public APawn
 {
 	GENERATED_BODY()
 
@@ -64,6 +65,9 @@ public:
 
 #pragma region Movement
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+	TObjectPtr<UFloatingPawnMovement> FloatingPawnMovement;
+	
 	UFUNCTION()
 	void InputAction_Movement(const FInputActionInstance& Instance, EInputActionBinding AbilityInput, const UInputAction* InputAction);
 #pragma endregion

@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "CoreUtility/EnhancedInput/EnhancedInputActionBindingCollection.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 #pragma region Framework
 
@@ -18,13 +19,17 @@ ARTSPlayerPawn::ARTSPlayerPawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SceneRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRootComponent"));
-	SceneRootComponent->SetupAttachment(GetRootComponent());
+	SetRootComponent(SceneRootComponent);
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(SceneRootComponent);
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovement"));
+
+	
 }
 
 // Called when the game starts or when spawned
