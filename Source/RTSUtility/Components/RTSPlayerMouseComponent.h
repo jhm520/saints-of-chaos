@@ -60,7 +60,7 @@ protected:
 
 	//how close the mouse has to be to the edge of the screen to start scrolling
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Scrolling")
-	float MouseScrollBorder = 10.0f;
+	float MouseScrollBorder;
 
 public:
 	UPROPERTY(BlueprintAssignable)

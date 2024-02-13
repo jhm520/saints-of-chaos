@@ -19,6 +19,7 @@ URTSPlayerMouseComponent::URTSPlayerMouseComponent()
 	bRTSMouseEnabled = true;
 	bRTSMouseEnabledByDefault = true;
 
+	MouseScrollBorder = 10.0f;
 	// ...
 }
 

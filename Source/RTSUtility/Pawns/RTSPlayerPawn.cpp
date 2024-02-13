@@ -140,8 +140,8 @@ void ARTSPlayerPawn::DoMovement(const FVector& Axis)
 	const FVector& ForwardVector = GetActorForwardVector();
 	const FVector& RightVector = GetActorRightVector();
 
-	const float ForwardValue = FVector::DotProduct(Axis, ForwardVector);
-	const float RightValue = FVector::DotProduct(Axis, RightVector);
+	const float ForwardValue = Axis.X;
+	const float RightValue = Axis.Y;
 
 	AddMovementInput(ForwardVector, ForwardValue);
 	AddMovementInput(RightVector, RightValue);
