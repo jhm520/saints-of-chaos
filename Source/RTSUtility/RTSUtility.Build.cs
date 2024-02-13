@@ -1,8 +1,8 @@
 using UnrealBuildTool;
 
-public class CoreUtility : ModuleRules
+public class RTSUtility : ModuleRules
 {
-	public CoreUtility(ReadOnlyTargetRules Target) : base(Target)
+	public RTSUtility(ReadOnlyTargetRules Target) : base(Target)
 	{
 
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
@@ -25,10 +25,9 @@ public class CoreUtility : ModuleRules
             "DeveloperSettings",
             "UMG",
             "AudioExtensions",
-            "EnhancedInput"
-            
-            // This module should have no other dependencies other than the engine itself!
-        });
+            "CoreUtility",
+            "GASUtility"
+		});
 				
 		
 		/*
@@ -38,7 +37,8 @@ public class CoreUtility : ModuleRules
 		{
 			"GameplayAbilities",
 			"GameplayTags", 
-			"GameplayTasks"
+			"GameplayTasks",
+			"EnhancedInput"
 		});
 		
 		//PublicIncludePaths.Add("CoreUtility");

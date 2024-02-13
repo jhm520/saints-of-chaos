@@ -51,6 +51,15 @@
 				"Engine",
 				"GameplayAbilities"
 			]
+		},
+		{
+			"Name": "RTSUtility",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"GameplayAbilities"
+			]
 		}
 	],
 	"Plugins": [

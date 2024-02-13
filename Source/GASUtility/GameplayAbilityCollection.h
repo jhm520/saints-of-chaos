@@ -16,6 +16,7 @@ class UGameplayAbility;
 UENUM(BlueprintType)
 enum class EAbilityInputBindingKey : uint8
 {
+	None UMETA(DisplayName = "None"),
 	Ability1 UMETA(DisplayName = "Ability1 (LMB)"),
 	Ability2 UMETA(DisplayName = "Ability2 (RMB)"),
 	Ability3 UMETA(DisplayName = "Ability3 (Q)"),

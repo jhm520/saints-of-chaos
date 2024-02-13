@@ -33,7 +33,8 @@ public class SOC : ModuleRules
         {
 	        "CoreUtility", 
 	        "GASUtility",
-	        "AggroSystem"
+	        "AggroSystem",
+			"RTSUtility"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
