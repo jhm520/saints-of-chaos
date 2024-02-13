@@ -9,6 +9,7 @@
 #include "CoreUtility/EnhancedInput/EnhancedInputActionBindingCollection.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "RTSUtility/Components/RTSPlayerMouseComponent.h"
 
 #pragma region Framework
 
@@ -29,13 +30,15 @@ ARTSPlayerPawn::ARTSPlayerPawn()
 
 	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovement"));
 
-	
+	RTSPlayerMouseComponent = CreateDefaultSubobject<URTSPlayerMouseComponent>(TEXT("RTSPlayerMouseComponent"));
 }
 
 // Called when the game starts or when spawned
 void ARTSPlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	RTSPlayerMouseComponent->OnMouseScreenEdgeScroll.AddDynamic(this, &ARTSPlayerPawn::OnPlayerMouseEdgeScroll);
 	
 }
 
@@ -118,15 +121,22 @@ void ARTSPlayerPawn::InputAction(const FInputActionInstance& Instance, EInputAct
 
 #pragma region Movement
 
-void ARTSPlayerPawn::InputAction_Movement(const FInputActionInstance& Instance, EInputActionBinding AbilityInput, const UInputAction* InputAction)
+void ARTSPlayerPawn::InputAction_Movement(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction)
 {
 	if (!InputAction)
 	{
 		return;
 	}
 	
-	const FVector Axis = Instance.GetValue().Get<FVector>();
+	const FVector& Axis = Instance.GetValue().Get<FVector>();
 
+	DoMovement(Axis);
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Axis: %s"), *Axis.ToString()));
+}
+
+void ARTSPlayerPawn::DoMovement(const FVector& Axis)
+{
 	const FVector& ForwardVector = GetActorForwardVector();
 	const FVector& RightVector = GetActorRightVector();
 
@@ -135,7 +145,17 @@ void ARTSPlayerPawn::InputAction_Movement(const FInputActionInstance& Instance, 
 
 	AddMovementInput(ForwardVector, ForwardValue);
 	AddMovementInput(RightVector, RightValue);
-
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Axis: %s"), *Axis.ToString()));
 }
+
+#pragma endregion
+
+#pragma region Mouse
+
+void ARTSPlayerPawn::OnPlayerMouseEdgeScroll(const FVector2D& Direction)
+{
+	const FVector& ThreeDirection = FVector(Direction.X, Direction.Y, 0.0f);
+	
+	DoMovement(ThreeDirection);
+}
+
 #pragma endregion

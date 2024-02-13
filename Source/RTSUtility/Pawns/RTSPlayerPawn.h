@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UEnhancedInputActionBindingCollection;
 class UFloatingPawnMovement;
+class URTSPlayerMouseComponent;
 
 UCLASS()
 class RTSUTILITY_API ARTSPlayerPawn : public APawn
@@ -65,11 +66,26 @@ public:
 
 #pragma region Movement
 
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	TObjectPtr<UFloatingPawnMovement> FloatingPawnMovement;
 	
 	UFUNCTION()
-	void InputAction_Movement(const FInputActionInstance& Instance, EInputActionBinding AbilityInput, const UInputAction* InputAction);
+	void InputAction_Movement(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction);
+
+	UFUNCTION()
+	void DoMovement(const FVector& Axis);
+#pragma endregion
+
+#pragma region Mouse
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mouse")
+	TObjectPtr<URTSPlayerMouseComponent> RTSPlayerMouseComponent;
+
+	UFUNCTION()
+	void OnPlayerMouseEdgeScroll(const FVector2D& Direction);
+
 #pragma endregion
 
 };
