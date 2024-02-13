@@ -15,7 +15,8 @@ URTSPlayerMouseComponent::URTSPlayerMouseComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	
 	SetIsReplicatedByDefault(false);
-	
+
+	bRTSMouseEnabled = true;
 	bRTSMouseEnabledByDefault = true;
 
 	// ...

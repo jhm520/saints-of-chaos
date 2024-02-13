@@ -84,7 +84,7 @@ protected:
 	TObjectPtr<URTSPlayerMouseComponent> RTSPlayerMouseComponent;
 
 	UFUNCTION()
-	void OnPlayerMouseEdgeScroll(const FVector2D& Direction);
+	void OnPlayerMouseScreenEdgeScroll(const FVector2D& Direction);
 
 #pragma endregion
 

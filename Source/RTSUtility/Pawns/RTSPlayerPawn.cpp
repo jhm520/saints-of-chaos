@@ -38,7 +38,7 @@ void ARTSPlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	RTSPlayerMouseComponent->OnMouseScreenEdgeScroll.AddDynamic(this, &ARTSPlayerPawn::OnPlayerMouseEdgeScroll);
+	RTSPlayerMouseComponent->OnMouseScreenEdgeScroll.AddDynamic(this, &ARTSPlayerPawn::OnPlayerMouseScreenEdgeScroll);
 	
 }
 
@@ -151,7 +151,7 @@ void ARTSPlayerPawn::DoMovement(const FVector& Axis)
 
 #pragma region Mouse
 
-void ARTSPlayerPawn::OnPlayerMouseEdgeScroll(const FVector2D& Direction)
+void ARTSPlayerPawn::OnPlayerMouseScreenEdgeScroll(const FVector2D& Direction)
 {
 	const FVector& ThreeDirection = FVector(Direction.X, Direction.Y, 0.0f);
 	
