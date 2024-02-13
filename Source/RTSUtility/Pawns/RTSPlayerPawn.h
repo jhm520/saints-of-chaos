@@ -41,6 +41,13 @@ public:
 #pragma endregion
 
 #pragma region Camera
+protected:
+	
+	UFUNCTION()
+	void InputAction_CameraZoom(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction);
+
+	void DoCameraZoom(float ZoomValue);
+
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	TObjectPtr<UCameraComponent> CameraComponent;
@@ -87,5 +94,4 @@ protected:
 	void OnPlayerMouseScreenEdgeScroll(const FVector2D& Direction);
 
 #pragma endregion
-
 };

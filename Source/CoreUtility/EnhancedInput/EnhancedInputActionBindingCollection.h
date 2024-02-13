@@ -11,7 +11,8 @@ UENUM(BlueprintType)
 enum class EInputActionBinding : uint8
 {
 	None UMETA(DisplayName = "None"),
-	Movement UMETA(DisplayName = "Movement")
+	Movement UMETA(DisplayName = "Movement"),
+	CameraZoom UMETA(DisplayName = "CameraZoom")
 	
 	// Add your own bindings if you need to.
 };

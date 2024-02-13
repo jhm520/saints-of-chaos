@@ -115,8 +115,38 @@ void ARTSPlayerPawn::InputAction(const FInputActionInstance& Instance, EInputAct
 			InputAction_Movement(Instance, AbilityInput, InputAction);
 			break;
 		}
+		case EInputActionBinding::CameraZoom:
+		{
+			InputAction_CameraZoom(Instance, AbilityInput, InputAction);
+			break;
+		}
 	}
 }
+#pragma endregion
+
+#pragma region Camera
+
+void ARTSPlayerPawn::InputAction_CameraZoom(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction)
+{
+	const float Value = Instance.GetValue().Get<float>();
+	
+	DoCameraZoom(Value);
+}
+
+void ARTSPlayerPawn::DoCameraZoom(float ZoomValue)
+{
+	float NewTargetArmLength = SpringArmComponent->TargetArmLength;
+
+	static float ZoomSpeed = 100.0f;
+
+	NewTargetArmLength += ZoomValue > 0.0f ? -ZoomSpeed : ZoomSpeed;
+	
+	SpringArmComponent->TargetArmLength = FMath::Clamp(NewTargetArmLength, 300.0f, 1500000.0f);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("NewTargetArmLength: %f"), NewTargetArmLength));
+}
+
+
 #pragma endregion
 
 #pragma region Movement
