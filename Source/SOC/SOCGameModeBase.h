@@ -3,17 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "CoreUtility/GameMode/CoreGameModeBase.h"
 #include "SOCGameModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SOC_API ASOCGameModeBase : public AGameModeBase
+class SOC_API ASOCGameModeBase : public ACoreGameModeBase
 {
 	GENERATED_BODY()
-public:
-	//func vehicle func vehicle func vehicle func vehicle func vehicle func vehicle func vehicle func vehicle 
-	void FuncVehicle();
+
 };

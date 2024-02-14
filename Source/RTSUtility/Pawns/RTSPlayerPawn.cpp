@@ -7,7 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
 #include "CoreUtility/EnhancedInput/EnhancedInputActionBindingCollection.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "CoreUtility/SpringArm/Components/SpringArmComponentBase.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "RTSUtility/Components/RTSPlayerMouseComponent.h"
 
@@ -22,15 +22,20 @@ ARTSPlayerPawn::ARTSPlayerPawn()
 	SceneRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRootComponent"));
 	SetRootComponent(SceneRootComponent);
 
-	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponentBase>(TEXT("SpringArmComponent"));
 	SpringArmComponent->SetupAttachment(SceneRootComponent);
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+	
+	CameraZoomDistanceIncrement = 250.0f;
+	MinimumCameraZoomDistance = 300.0f;
+	MaximumCameraZoomDistance = 1500000.0f;
 
 	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingPawnMovement"));
 
 	RTSPlayerMouseComponent = CreateDefaultSubobject<URTSPlayerMouseComponent>(TEXT("RTSPlayerMouseComponent"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -135,15 +140,13 @@ void ARTSPlayerPawn::InputAction_CameraZoom(const FInputActionInstance& Instance
 
 void ARTSPlayerPawn::DoCameraZoom(float ZoomValue)
 {
-	float NewTargetArmLength = SpringArmComponent->TargetArmLength;
+	float NewTargetArmLength = SpringArmComponent->GetDesiredSpringArmLength();
 
-	static float ZoomSpeed = 100.0f;
-
-	NewTargetArmLength += ZoomValue > 0.0f ? -ZoomSpeed : ZoomSpeed;
+	NewTargetArmLength += ZoomValue > 0.0f ? -CameraZoomDistanceIncrement : CameraZoomDistanceIncrement;
 	
-	SpringArmComponent->TargetArmLength = FMath::Clamp(NewTargetArmLength, 300.0f, 1500000.0f);
+	SpringArmComponent->SetDesiredSpringArmLength(FMath::Clamp(NewTargetArmLength, MinimumCameraZoomDistance, MaximumCameraZoomDistance));
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("NewTargetArmLength: %f"), NewTargetArmLength));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("NewTargetArmLength: %f"), NewTargetArmLength));
 }
 
 

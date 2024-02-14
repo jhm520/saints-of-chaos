@@ -9,6 +9,7 @@
 #include "GameplayAbilityCollection.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GASUtilityHelperLibrary.h"
+#include "CoreUtility/CoreUtilityBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
@@ -205,32 +206,9 @@ bool ASOCBuilding::CanTakeOwnership(AActor* InOwner) const
 		return false;
 	}
 
-	AGameStateBase* GameStateBase = GetWorld()->GetGameState<AGameStateBase>();
-
-	if (!GameStateBase)
-	{
-		return false;
-	}
-
-	TArray<APlayerState*> PlayerStates = GameStateBase->PlayerArray;
-
-	APlayerState* OwningPlayerState = PlayerController->GetPlayerState<APlayerState>();
-
-	if (!OwningPlayerState)
-	{
-		return false;
-	}
-
-	int32 PlayerIndex;
+	const int32 ControllerId = UCoreUtilityBlueprintLibrary::GetAuthPlayerControllerId(this, PlayerController);
 	
-	bool bFoundPlayer = PlayerStates.Find(OwningPlayerState, PlayerIndex);
-
-	if (!bFoundPlayer)
-	{
-		return false;
-	}
-	
-	if (PlayerIndex != OwningControllerId)
+	if (ControllerId != OwningControllerId)
 	{
 		return false;
 	}

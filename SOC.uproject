@@ -13,7 +13,8 @@
 				"SOCAI",
 				"GASUtility",
 				"GameplayAbilities",
-				"CommonUI"
+				"CommonUI",
+				"CoreUtility"
 			]
 		},
 		{

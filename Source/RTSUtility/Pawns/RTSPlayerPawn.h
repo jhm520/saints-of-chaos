@@ -7,7 +7,7 @@
 #include "RTSPlayerPawn.generated.h"
 
 class UCameraComponent;
-class USpringArmComponent;
+class USpringArmComponentBase;
 class UEnhancedInputActionBindingCollection;
 class UFloatingPawnMovement;
 class URTSPlayerMouseComponent;
@@ -48,12 +48,21 @@ protected:
 
 	void DoCameraZoom(float ZoomValue);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
+	float CameraZoomDistanceIncrement;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
+	float MinimumCameraZoomDistance;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
+	float MaximumCameraZoomDistance;
+
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	TObjectPtr<UCameraComponent> CameraComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
-	TObjectPtr<USpringArmComponent> SpringArmComponent;
+	TObjectPtr<USpringArmComponentBase> SpringArmComponent;
 
 #pragma endregion
 	
