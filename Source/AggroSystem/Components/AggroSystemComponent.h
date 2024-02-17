@@ -29,6 +29,9 @@ public:
 #pragma region Aggro System
 public:
 	UFUNCTION(BlueprintCallable, Category = "Aggro System")
+	AActor* FindAggroTarget();
+	
+	UFUNCTION(BlueprintCallable, Category = "Aggro System")
 	AActor* FindClosestTarget();
 
 	UFUNCTION(BlueprintCallable, Category = "Aggro System")
@@ -45,6 +48,28 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Aggro System")
 	TArray<TEnumAsByte<EObjectTypeQuery>> AggroObjectTypes;
 
+
+#pragma endregion
+
+#pragma region Threat
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Threat")
+	TMap<AActor*, int32> ThreatMap;
+public:
+
+	//adds threat to the target
+	UFUNCTION(BlueprintCallable, Category = "Threat")
+	void AddThreat(AActor* ThreatTarget, int32 ThreatValue);
+
+	//removes threat from the target
+	UFUNCTION(BlueprintCallable, Category = "Threat")
+	void ClearThreat(AActor* ThreatTarget);
+
+	//returns true if the target threatens the owner of this component
+	//OutThreat will be set to the threat value
+	UFUNCTION(BlueprintPure, Category = "Threat")
+	bool GetThreat(AActor* ThreatTarget, int32& OutThreat) const;
 
 #pragma endregion
 

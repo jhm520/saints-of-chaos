@@ -38,7 +38,43 @@ void UAggroSystemComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 #pragma endregion
 
-#pragma region Framework
+#pragma region Aggro System
+
+AActor* UAggroSystemComponent::FindAggroTarget()
+{
+	TArray<AActor*> AggroTargets;
+
+	FindTargets(AggroTargets);
+
+	AActor* AggroTarget = nullptr;
+
+	//get the target with the highest threat
+	
+	int32 MaxThreat = 0;
+	for (AActor* Target : AggroTargets)
+	{
+		if (!Target)
+		{
+			continue;
+		}
+
+		int32 Threat = 0;
+		const bool bGotThreat = GetThreat(Target, Threat);
+
+		if (Threat > MaxThreat)
+		{
+			MaxThreat = Threat;
+			AggroTarget = Target;
+		}
+	}
+
+	if (AggroTarget)
+	{
+		return AggroTarget;
+	}
+	
+	return FindClosestTarget();
+}
 
 AActor* UAggroSystemComponent::FindClosestTarget()
 {
@@ -123,5 +159,58 @@ void UAggroSystemComponent::FindTargets(TArray<AActor*>& OutTargets)
 	OutTargets = TargetsCopy;
 }
 
+#pragma endregion
+
+#pragma region Threat
+
+void UAggroSystemComponent::AddThreat(AActor* ThreatTarget, int32 ThreatValue)
+{
+	if (!ThreatTarget)
+	{
+		return;
+	}
+
+	int32* ThreatPtr = ThreatMap.Find(ThreatTarget);
+
+	//if the target is not in the map, add it
+	if (!ThreatPtr)
+	{
+		ThreatMap.Add(ThreatTarget, ThreatValue);
+		return;
+	}
+
+	//if the target is in the map, add the threat value to the existing threat
+	*ThreatPtr += ThreatValue;
+}
+
+void UAggroSystemComponent::ClearThreat(AActor* ThreatTarget)
+{
+	if (!ThreatTarget)
+	{
+		return;
+	}
+
+	ThreatMap.Remove(ThreatTarget);
+}
+
+
+bool UAggroSystemComponent::GetThreat(AActor* ThreatTarget, int32& OutThreat) const
+{
+	if (!ThreatTarget)
+	{
+		return false;
+	}
+
+	const int32* ThreatPtr = ThreatMap.Find(ThreatTarget);
+
+	if (!ThreatPtr)
+	{
+		return false;
+	}
+
+	OutThreat = *ThreatPtr;
+
+	return true;
+}
 
 #pragma endregion

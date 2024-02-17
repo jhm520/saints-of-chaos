@@ -22,7 +22,7 @@ bool USOCAIBehavior_FindEnemy::CalculateCurrentAction(const AActor* InActor, FSO
 		return false;
 	}
 
-	AActor* ClosestEnemy = AggroSystemComponent->FindClosestTarget();
+	AActor* ClosestEnemy = AggroSystemComponent->FindAggroTarget();
 
 	if (!ClosestEnemy)
 	{
