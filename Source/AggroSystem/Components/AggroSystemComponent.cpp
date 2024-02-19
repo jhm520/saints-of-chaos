@@ -61,7 +61,7 @@ AActor* UAggroSystemComponent::FindAggroTarget()
 		int32 Threat = 0;
 		const bool bGotThreat = GetThreat(Target, Threat);
 
-		if (Threat > MaxThreat)
+		if (bGotThreat && Threat > MaxThreat)
 		{
 			MaxThreat = Threat;
 			AggroTarget = Target;
@@ -172,7 +172,7 @@ void UAggroSystemComponent::AddThreat(AActor* ThreatTarget, int32 ThreatValue)
 
 	int32* ThreatPtr = ThreatMap.Find(ThreatTarget);
 
-	//if the target is not in the map, add it
+	//if the target is not in the map, add it and return
 	if (!ThreatPtr)
 	{
 		ThreatMap.Add(ThreatTarget, ThreatValue);
