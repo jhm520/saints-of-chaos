@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
+#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 // Sets default values
 ASOCAICharacter::ASOCAICharacter()
@@ -16,6 +17,8 @@ ASOCAICharacter::ASOCAICharacter()
 
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 100.0f;
+
+	AvatarComponent = CreateDefaultSubobject<USOCAIAvatarComponent>(TEXT("AvatarComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -112,6 +115,11 @@ USOCAIBehaviorComponent* ASOCAICharacter::GetBehaviorComponent() const
 	}
 
 	return ControllerBehaviorInterface->GetBehaviorComponent();
+}
+
+USOCAIAvatarComponent* ASOCAICharacter::GetAvatarComponent() const
+{
+	return AvatarComponent;
 }
 
 void ASOCAICharacter::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const

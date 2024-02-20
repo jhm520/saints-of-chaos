@@ -53,7 +53,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag RootBehaviorState = SOCAIBehaviorTags::Behavior;
 
-	UPROPERTY(Transient, BlueprintReadOnly, ReplicatedUsing = "OnRep_CurrentAction", Category = "AI|Behavior")
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "AI|Behavior")
 	FSOCAIAction CurrentAction;
 	
 public:

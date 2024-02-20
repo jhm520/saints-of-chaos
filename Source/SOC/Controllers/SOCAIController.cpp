@@ -52,6 +52,19 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 	}
 }
 
+USOCAIAvatarComponent* ASOCAIController::GetAvatarComponent() const
+{
+	const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetAvatarActor());
+
+	if (!BehaviorInterface)
+	{
+		return nullptr;
+	}
+
+	return BehaviorInterface->GetAvatarComponent();
+}
+
+
 void ASOCAIController::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const
 {
 	if (!GetPawn() || !GetPawn()->Implements<USOCAIBehaviorInterface>())

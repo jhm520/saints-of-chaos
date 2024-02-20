@@ -9,6 +9,7 @@
 
 class UGameplayAbility;
 
+
 //struct to represent an AIController's current action
 USTRUCT(BlueprintType)
 struct SOCAI_API FSOCAIAction
@@ -77,7 +78,7 @@ struct SOCAI_API FBehaviorAnimInstance
 	TSubclassOf<UAnimInstance> AnimInstanceClass;
 };
 
-/**
+/** TODO: Change this to a data asset, USOCAIBehavior
  * 
  */
 UCLASS(Blueprintable, Abstract)

@@ -5,11 +5,13 @@
 
 #include "SOCAIBehavior.h"
 #include "SOCAI/Data/SOCAIDataAsset.h"
+#include "SOCAI/Subsystem/SOCAIBehaviorSubsystem.h"
 
 #pragma region Framework
 ASOCAIBehaviorManager::ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer)
 {
 	bAlwaysRelevant = true;
+	SetReplicates(true);
 }
 
 void ASOCAIBehaviorManager::BeginPlay()
@@ -17,12 +19,25 @@ void ASOCAIBehaviorManager::BeginPlay()
 	SetupBehaviorTree();
 	
 	Super::BeginPlay();
-}
 
+	USOCAIBehaviorSubsystem* BehaviorSubsystem = USOCAIBehaviorSubsystem::Get(this);
+
+	if (BehaviorSubsystem)
+	{
+		BehaviorSubsystem->Register(this);
+	}
+}
 
 void ASOCAIBehaviorManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+
+	USOCAIBehaviorSubsystem* BehaviorSubsystem = USOCAIBehaviorSubsystem::Get(this);
+
+	if (BehaviorSubsystem)
+	{
+		BehaviorSubsystem->Unregister(this);
+	}
 
 	TArray<TObjectPtr<USOCAIBehavior>> Behaviors;
 	BehaviorMap.GenerateValueArray(Behaviors);

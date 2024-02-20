@@ -59,6 +59,8 @@ public:
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
 
+	virtual USOCAIAvatarComponent* GetAvatarComponent() const override;
+	
 	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
 
 	virtual void OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const override;

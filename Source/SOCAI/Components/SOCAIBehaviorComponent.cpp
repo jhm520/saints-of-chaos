@@ -8,6 +8,7 @@
 #include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAI/Behavior/SOCAIBehaviorManager.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 #pragma region Framework
 
@@ -17,7 +18,7 @@ USOCAIBehaviorComponent::USOCAIBehaviorComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	SetIsReplicatedByDefault(true);
+	//SetIsReplicatedByDefault(true);
 	// ...
 	
 	CurrentAction = FSOCAIAction();
@@ -34,14 +35,6 @@ void USOCAIBehaviorComponent::BeginPlay()
 	SetBehaviorState(GetRootBehaviorState());
 	// ...
 	
-}
-
-void USOCAIBehaviorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
-	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, CurrentAction, COND_None, REPNOTIFY_Always);
-
 }
 
 // Called every frame
@@ -113,6 +106,22 @@ void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentActio
 	{
 		CurrentActionBehavior->OnEnteredBehavior(GetOwner(), InCurrentAction, InPreviousAction);
 	}
+
+	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
+
+	if (!BehaviorInterface)
+	{
+		return;
+	}
+	
+	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
+
+	if (!AvatarComponent)
+	{
+		return;
+	}
+
+	AvatarComponent->SetCurrentAction(InCurrentAction);
 }
 
 
@@ -190,7 +199,7 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 	}
 
 	TArray<AActor*> BehaviorManagers;
-	UGameplayStatics::GetAllActorsOfClass(this, ASOCAIBehaviorManager::StaticClass(),BehaviorManagers);
+	UGameplayStatics::GetAllActorsOfClass(this, BehaviorManagerClass,BehaviorManagers);
 
 	if (BehaviorManagers.Num() > 0)
 	{

@@ -4,6 +4,7 @@
 #include "SOCAIAvatarComponent.h"
 
 #include "Net/UnrealNetwork.h"
+#include "SOCAI/Subsystem/SOCAIBehaviorSubsystem.h"
 
 #pragma region Framework
 
@@ -47,6 +48,15 @@ void USOCAIAvatarComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 #pragma region Action
 
+void USOCAIAvatarComponent::SetCurrentAction(const FSOCAIAction& InAction)
+{
+	const FSOCAIAction PreviousAction = CurrentAction;
+	
+	CurrentAction = InAction;
+	
+	OnRep_CurrentAction(PreviousAction);
+}
+
 void USOCAIAvatarComponent::OnRep_CurrentAction(const FSOCAIAction& PreviousAction)
 {
 	OnActionChanged(CurrentAction, PreviousAction);
@@ -54,7 +64,25 @@ void USOCAIAvatarComponent::OnRep_CurrentAction(const FSOCAIAction& PreviousActi
 
 void USOCAIAvatarComponent::OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
 {
+	USOCAIBehaviorSubsystem* BehaviorSubsystem = USOCAIBehaviorSubsystem::Get(this);
 	
+	if (!BehaviorSubsystem)
+	{
+		return;
+	}
+	
+	USOCAIBehavior* CurrentBehavior = BehaviorSubsystem->GetBehavior(InCurrentAction.BehaviorTag);
+	USOCAIBehavior* PreviousBehavior = BehaviorSubsystem->GetBehavior(InPreviousAction.BehaviorTag);
+
+	if (PreviousBehavior)
+	{
+		PreviousBehavior->OnExitedBehavior(GetOwner(), InPreviousAction, InCurrentAction);
+	}
+	
+	if (CurrentBehavior)
+	{
+		CurrentBehavior->OnEnteredBehavior(GetOwner(), InCurrentAction, InPreviousAction);
+	}
 }
 
 #pragma endregion

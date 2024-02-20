@@ -7,7 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "SOCAIBehaviorManager.generated.h"
 
-/**
+/** TODO: Change this to a data asset, USOCAIBehaviorTree
  * 
  */
 class USOCAIDataAsset;

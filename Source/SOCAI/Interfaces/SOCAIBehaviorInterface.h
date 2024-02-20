@@ -8,6 +8,7 @@
 #include "SOCAIBehaviorInterface.generated.h"
 
 class USOCAIBehaviorComponent;
+class USOCAIAvatarComponent;
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class USOCAIBehaviorInterface : public UInterface
@@ -26,6 +27,8 @@ class SOCAI_API ISOCAIBehaviorInterface
 public:
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const = 0;
+
+	virtual USOCAIAvatarComponent* GetAvatarComponent() const = 0;
 
 	virtual const AActor* GetAvatarActor() const = 0;
 	

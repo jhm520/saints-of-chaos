@@ -12,6 +12,7 @@ class SOCAI_API USOCAIAvatarComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+	friend class USOCAIBehaviorComponent;
 #pragma region Framework
 public:	
 	// Sets default values for this component's properties
@@ -28,6 +29,9 @@ public:
 
 #pragma region Action
 protected:
+	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
+	void SetCurrentAction(const FSOCAIAction& InAction);
+	
 	UPROPERTY(Transient, BlueprintReadOnly, ReplicatedUsing = "OnRep_CurrentAction", Category = "AI|Behavior")
 	FSOCAIAction CurrentAction;
 

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/Subsystem.h"
+#include "Subsystems/WorldSubsystem.h"
 #include "BuildingSubsystem.generated.h"
 
 class ASOCBuilding;

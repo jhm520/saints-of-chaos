@@ -45,11 +45,16 @@ public:
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override;
 
+	virtual USOCAIAvatarComponent* GetAvatarComponent() const override;
+
 	virtual const AActor* GetAvatarActor() const override {return this;};
 
 	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
 
 	virtual void OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TObjectPtr<USOCAIAvatarComponent> AvatarComponent;
 
 #pragma endregion
 
