@@ -4,10 +4,12 @@
 #include "SOCAIBehaviorComponent.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAI/Behavior/SOCAIBehaviorManager.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
+#pragma region Framework
 
 // Sets default values for this component's properties
 USOCAIBehaviorComponent::USOCAIBehaviorComponent()
@@ -15,7 +17,7 @@ USOCAIBehaviorComponent::USOCAIBehaviorComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	// SetIsReplicatedByDefault(true);
+	SetIsReplicatedByDefault(true);
 	// ...
 	
 	CurrentAction = FSOCAIAction();
@@ -34,6 +36,13 @@ void USOCAIBehaviorComponent::BeginPlay()
 	
 }
 
+void USOCAIBehaviorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, CurrentAction, COND_None, REPNOTIFY_Always);
+
+}
 
 // Called every frame
 void USOCAIBehaviorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -44,6 +53,9 @@ void USOCAIBehaviorComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 	// ...
 }
+#pragma endregion
+
+#pragma region Behavior
 
 void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 {
@@ -81,10 +93,14 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 
 }
 
+void USOCAIBehaviorComponent::OnRep_CurrentAction(const FSOCAIAction& PreviousAction)
+{
+	OnActionChanged(CurrentAction, PreviousAction);
+}
+
 void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
 {
 	USOCAIBehavior* PreviousActionBehavior = GetBehavior(InPreviousAction.BehaviorTag);
-
 	
 	if (PreviousActionBehavior)
 	{
@@ -187,3 +203,5 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 
 	return true;
 }
+
+#pragma endregion
