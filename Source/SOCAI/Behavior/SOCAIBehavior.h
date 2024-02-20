@@ -33,25 +33,13 @@ public:
 };
 
 UENUM(BlueprintType)
-enum class EBehaviorGameplayAbilityActivationMode : uint8
+enum class EBehaviorActivationMode : uint8
 {
 	//The ability will be activated when the behavior is entered
 	OnEnter,
 	//The ability will be activated when the behavior is exited
 	OnExit,
 	//The ability will be activated when the behavior is entered and exited
-	OnEnterAndExit,
-	None
-};
-
-UENUM(BlueprintType)
-enum class EBehaviorGameplayAbilityDeactivationMode : uint8
-{
-	//The ability will be deactivated when the behavior is entered
-	OnEnter,
-	//The ability will be deactivated when the behavior is exited
-	OnExit,
-	//The ability will be deactivated when the behavior is entered and exited
 	OnEnterAndExit,
 	None
 };
@@ -63,14 +51,30 @@ struct SOCAI_API FBehaviorGameplayAbility
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	EBehaviorGameplayAbilityActivationMode ActivationMode = EBehaviorGameplayAbilityActivationMode::OnEnter;
+	EBehaviorActivationMode ActivationMode = EBehaviorActivationMode::OnEnter;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	EBehaviorGameplayAbilityDeactivationMode DeactivationMode = EBehaviorGameplayAbilityDeactivationMode::OnExit;
+	EBehaviorActivationMode DeactivationMode = EBehaviorActivationMode::OnExit;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TSubclassOf<UGameplayAbility> GameplayAbilityClass;
 
+};
+
+//struct containing information about an animation instance to be applied to the AI character when this behavior is active
+USTRUCT(BlueprintType)
+struct SOCAI_API FBehaviorAnimInstance
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	EBehaviorActivationMode ActivationMode = EBehaviorActivationMode::OnEnter;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	EBehaviorActivationMode DeactivationMode = EBehaviorActivationMode::OnExit;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TSubclassOf<UAnimInstance> AnimInstanceClass;
 };
 
 /**
@@ -155,9 +159,25 @@ public:
 #pragma endregion
 
 #pragma region Gameplay Ability System
-
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TArray<FBehaviorGameplayAbility> BehaviorGameplayAbilities;
+
+	virtual void OnEnteredBehavior_GameplayAbilities(AActor* InBehaviorActor, const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const;
+
+	virtual void OnExitedBehavior_GameplayAbilities(AActor* InBehaviorActor, const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const;
+#pragma endregion
+
+#pragma region Animation
+protected:
+	
+	// Linked animation instance to be applied to the AI character when this behavior is active
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animation")
+	TArray<FBehaviorAnimInstance> BehaviorAnimInstances;
+
+	virtual void OnEnteredBehavior_AnimInstances(AActor* InBehaviorActor, const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const;
+
+	virtual void OnExitedBehavior_AnimInstances(AActor* InBehaviorActor, const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const;
 
 #pragma endregion
 
