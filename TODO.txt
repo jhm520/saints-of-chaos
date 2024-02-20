@@ -20,3 +20,5 @@ Assuming we go with the Auto-RTS route, what kind of units should we have?
 Spear guy		50
 Sword and shield guy	65
 Rifle/Bow/Crossbow guy	lyra anims free
+
+TODO: Replicate when an AI character enters/exits behaviors so that AnimInstances can be applied
