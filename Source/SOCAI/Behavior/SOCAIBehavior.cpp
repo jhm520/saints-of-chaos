@@ -32,8 +32,7 @@ bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction&
 		}
 	}
 
-	TArray<FGameplayTag> GameplayTagArray;
-	GetChildBehaviorTags().GetGameplayTagArray(GameplayTagArray);
+	const TArray<FGameplayTag>& GameplayTagArray = GetChildBehaviorTagList();
 	
 	//Check each of this node's children and check if we should do that action instead
 	for (const FGameplayTag& LocalBehaviorTag : GameplayTagArray)
@@ -121,9 +120,24 @@ USOCAIBehavior* USOCAIBehavior::GetChildBehavior(const FGameplayTag& InBehaviorT
 	return *BehaviorPtr;
 }
 
+const FGameplayTagContainer& USOCAIBehavior::GetChildBehaviorTags() const
+{
+	return ChildBehaviorTags;
+}
+
 USOCAIBehavior::USOCAIBehavior()
 {
 	
+}
+
+void USOCAIBehavior::PostInitProperties()
+{
+	Super::PostInitProperties();
+	
+	for (const FGameplayTag& LocalTag : ChildBehaviorTagList)
+	{
+		ChildBehaviorTags.AddTag(LocalTag);
+	}
 }
 
 void USOCAIBehavior::OnEnteredBehavior(AActor* InBehaviorActor, const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const

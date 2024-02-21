@@ -89,6 +89,9 @@ class SOCAI_API USOCAIBehavior : public UObject
 #pragma region Framework
 protected:
 	USOCAIBehavior();
+
+	virtual void PostInitProperties() override;
+
 #pragma endregion
 
 #pragma region Initialization
@@ -111,8 +114,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	const FGameplayTag& GetParentBehaviorTag() const {return ParentBehaviorTag;};
 
+	//returns an unordered list of behavior tags that are children of this behavior
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
-	const FGameplayTagContainer& GetChildBehaviorTags() const{return ChildBehaviorTags;};
+	const FGameplayTagContainer& GetChildBehaviorTags() const;
+
+	//returns an unordered list of behavior tags that are children of this behavior
+	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
+	const TArray<FGameplayTag>& GetChildBehaviorTagList() const { return ChildBehaviorTagList; };
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag ParentBehaviorTag;
@@ -120,8 +128,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag BehaviorTag;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	//an unordered list of behavior tags that are children of this behavior, maintained by the behavior itself
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTagContainer ChildBehaviorTags;
+
+	//An ordered list of behavior tags that are children of this behavior
+	//It is an array, not a gameplay tag container, because we need to maintain the order of the behaviors
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TArray<FGameplayTag> ChildBehaviorTagList;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TObjectPtr<USOCAIBehavior> ParentBehavior = nullptr;

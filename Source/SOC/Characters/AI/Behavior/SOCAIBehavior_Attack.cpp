@@ -27,32 +27,32 @@ bool USOCAIBehavior_Attack::CalculateCurrentAction(const AActor* InActor, FSOCAI
 		return false;
 	}
 
-	const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(InActor);
-
-	if (!BehaviorInterface)
-	{
-		return false;
-	}
-
-	const AActor* AvatarActor = BehaviorInterface->GetAvatarActor();
-
-	if (!AvatarActor)
-	{
-		return false;
-	}
-
-	const FVector& CurrentLocation = AvatarActor->GetActorLocation();
-
-	const FVector TargetLocation = TargetActor->GetActorLocation();
-	
-	const float CurrentDistance = (CurrentLocation - TargetLocation).Size();
-
-	// If we are outside the distance threshold, we can't attack
-	//TODO: We should make this logic generic and move it to the base class
-	if (CurrentDistance > DistanceThreshold)
-	{
-		return false;
-	}
+	// const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(InActor);
+	//
+	// if (!BehaviorInterface)
+	// {
+	// 	return false;
+	// }
+	//
+	// const AActor* AvatarActor = BehaviorInterface->GetAvatarActor();
+	//
+	// if (!AvatarActor)
+	// {
+	// 	return false;
+	// }
+	//
+	// const FVector& CurrentLocation = AvatarActor->GetActorLocation();
+	//
+	// const FVector TargetLocation = TargetActor->GetActorLocation();
+	//
+	// const float CurrentDistance = (CurrentLocation - TargetLocation).Size();
+	//
+	// // If we are outside the distance threshold, we can't attack
+	// //TODO: We should make this logic generic and move it to the base class
+	// if (CurrentDistance > DistanceThreshold)
+	// {
+	// 	return false;
+	// }
 	
 	OutAction.BehaviorTag = SOCAIBehaviorTags::Attack;
 	OutAction.ActionTag = SOCAIActionTags::Attack;
