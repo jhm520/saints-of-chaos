@@ -25,6 +25,15 @@ bool USOCGameplayAbility_AutoCast::CanActivateAbility(const FGameplayAbilitySpec
 {
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
+
+/** Native function, called if an ability ends normally or abnormally. If bReplicate is set to true, try to replicate the ending to the client/server */
+void USOCGameplayAbility_AutoCast::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	CancelAutoCast();
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
 	
 #pragma endregion
 
@@ -122,5 +131,16 @@ void USOCGameplayAbility_AutoCast::OnCooldownRemoved(const FActiveGameplayEffect
 	
 }
 
+void USOCGameplayAbility_AutoCast::CancelAutoCast()
+{
+	UAbilitySystemComponent* AbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
+
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+	
+	AbilitySystemComponent->OnAnyGameplayEffectRemovedDelegate().RemoveAll(this);
+}
 
 #pragma endregion 
