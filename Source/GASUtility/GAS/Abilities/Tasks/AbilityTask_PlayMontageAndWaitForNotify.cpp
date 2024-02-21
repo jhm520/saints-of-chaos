@@ -42,14 +42,14 @@ void UAbilityTask_PlayMontageAndWaitForNotify::OnMontageBlendingOut(UAnimMontage
 	{
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
-			OnInterrupted.Broadcast();
+			OnInterrupted.Broadcast(FGameplayTag());
 		}
 	}
 	else
 	{
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
-			OnBlendOut.Broadcast();
+			OnBlendOut.Broadcast(FGameplayTag());
 		}
 	}
 }
@@ -61,7 +61,7 @@ void UAbilityTask_PlayMontageAndWaitForNotify::OnMontageInterrupted()
 		// Let the BP handle the interrupt as well
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
-			OnInterrupted.Broadcast();
+			OnInterrupted.Broadcast(FGameplayTag());
 		}
 	}
 }
@@ -72,7 +72,7 @@ void UAbilityTask_PlayMontageAndWaitForNotify::OnMontageEnded(UAnimMontage* Mont
 	{
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
-			OnCompleted.Broadcast();
+			OnCompleted.Broadcast(FGameplayTag());
 		}
 	}
 
@@ -154,7 +154,7 @@ void UAbilityTask_PlayMontageAndWaitForNotify::Activate()
 		ABILITY_LOG(Warning, TEXT("UAbilityTask_PlayMontageAndWait called in Ability %s failed to play montage %s; Task Instance Name %s."), *Ability->GetName(), *GetNameSafe(MontageToPlay),*InstanceName.ToString());
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{
-			OnCancelled.Broadcast();
+			OnCancelled.Broadcast(FGameplayTag());
 		}
 	}
 
@@ -165,7 +165,7 @@ void UAbilityTask_PlayMontageAndWaitForNotify::ExternalCancel()
 {
 	if (ShouldBroadcastAbilityTaskDelegates())
 	{
-		OnCancelled.Broadcast();
+		OnCancelled.Broadcast(FGameplayTag());
 	}
 	Super::ExternalCancel();
 }

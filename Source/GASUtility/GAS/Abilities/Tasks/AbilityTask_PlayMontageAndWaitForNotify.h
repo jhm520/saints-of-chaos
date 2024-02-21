@@ -7,8 +7,7 @@
 #include "Abilities/Tasks/AbilityTask.h"
 #include "AbilityTask_PlayMontageAndWaitForNotify.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMontageWaitComplexDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMontageNotifyDelegate, FGameplayEventData, Payload);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMontageNotifyDelegate, FGameplayTag, Tag);
 
 
 /** Ability task to simply play a montage. Many games will want to make a modified version of this task that looks for game-specific events */
@@ -18,16 +17,16 @@ class GASUTILITY_API UAbilityTask_PlayMontageAndWaitForNotify : public UAbilityT
 	GENERATED_UCLASS_BODY()
 
 	UPROPERTY(BlueprintAssignable)
-	FMontageWaitComplexDelegate	OnCompleted;
+	FMontageNotifyDelegate	OnCompleted;
 	
 	UPROPERTY(BlueprintAssignable)
-	FMontageWaitComplexDelegate	OnBlendOut;
+	FMontageNotifyDelegate	OnBlendOut;
 	
 	UPROPERTY(BlueprintAssignable)
-	FMontageWaitComplexDelegate	OnInterrupted;
+	FMontageNotifyDelegate	OnInterrupted;
 	
 	UPROPERTY(BlueprintAssignable)
-	FMontageWaitComplexDelegate	OnCancelled;
+	FMontageNotifyDelegate	OnCancelled;
 
 	UPROPERTY(BlueprintAssignable)
 	FMontageNotifyDelegate OnNotifyTriggered;
