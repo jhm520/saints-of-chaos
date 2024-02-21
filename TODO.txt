@@ -23,3 +23,4 @@ Rifle/Bow/Crossbow guy	lyra anims free
 
 TODO: Replicate when an AI character enters/exits behaviors so that AnimInstances can be applied
 TODO: Add the other attack montages from CloseCombatSwordsman to SOC and activate them when attacking
+TODO: Explicitly define the order of child activation in Behavior tree. I think Attack is triggering before MoveToCombatRange

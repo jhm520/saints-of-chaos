@@ -17,6 +17,7 @@ class SOC_API USOCAIBehavior_Attack : public USOCAIBehavior
 #pragma region Behavior
 
 public:
+	USOCAIBehavior_Attack();
 
 	//CalculateCurrentAction: Decide the action that this actor should be engaging in at this time
 	//InActor is the actor we are deciding the action for (an AIController/Character)
@@ -24,5 +25,10 @@ public:
 	//BehaviorPath is the path of behaviors that we have taken to get to this point
 	//InParentAction is the action that the parent behavior has decided on, used to override behaviors of children
 	virtual bool CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction = FSOCAIAction()) const override;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
+	float DistanceThreshold;
+
 #pragma endregion
 };
