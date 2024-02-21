@@ -147,7 +147,7 @@ void USOCAIBehavior::OnExitedBehavior(AActor* InBehaviorActor, const FSOCAIActio
 	{
 		return;
 	}
-
+	
 	OnExitedBehavior_GameplayAbilities(InBehaviorActor, InExitedBehaviorAction, InEnteredBehaviorAction);
 	OnExitedBehavior_AnimInstances(InBehaviorActor, InExitedBehaviorAction, InEnteredBehaviorAction);
     	
