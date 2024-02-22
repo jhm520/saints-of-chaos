@@ -45,14 +45,12 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 		if (CurrentMoveDestination != Action.TargetLocation)
 		{
 			MoveToLocation(Action.TargetLocation, MovementAcceptanceRadius);
-			SetFocalPoint(Action.TargetLocation);
 		}
 	}
 
 	if (Action.ActionTag == SOCAIActionTags::MoveToActor)
 	{
 		MoveToActor(Action.TargetActor, MovementAcceptanceRadius);
-		SetFocus(Action.TargetActor);
 	}
 
 	if (Action.ActionTag == SOCAIActionTags::Attack)
