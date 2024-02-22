@@ -3,12 +3,14 @@
 #pragma region Include
 #include "SOCAIController.h"
 
+#include "Navigation/CrowdFollowingComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 #pragma endregion
 
 #pragma region Framework
-ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("PathFollowingComponent")))
 {
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
 	MovementAcceptanceRadius = 50.0f;
@@ -43,12 +45,14 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 		if (CurrentMoveDestination != Action.TargetLocation)
 		{
 			MoveToLocation(Action.TargetLocation, MovementAcceptanceRadius);
+			SetFocalPoint(Action.TargetLocation);
 		}
 	}
 
 	if (Action.ActionTag == SOCAIActionTags::MoveToActor)
 	{
 		MoveToActor(Action.TargetActor, MovementAcceptanceRadius);
+		SetFocus(Action.TargetActor);
 	}
 }
 
