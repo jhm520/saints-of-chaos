@@ -5,7 +5,26 @@
 #include "UObject/ObjectMacros.h"
 #include "Animation/AnimInstance.h"
 #include "Abilities/Tasks/AbilityTask.h"
+#include "CoreUtility/Animation/Notifies/AnimNotify_GameplayTag.h"
+#include "CoreUtility/Timer/TimerHelper.h"
 #include "AbilityTask_PlayMontageAndWaitForNotify.generated.h"
+
+//struct to represent an AIController's current action
+USTRUCT(BlueprintType)
+struct GASUTILITY_API FMontageNotifyTrigger
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Notify")
+	FGameplayTag GameplayTag = FGameplayTag::EmptyTag;
+
+	UPROPERTY()
+	FTimerHandle TimerHandle = FTimerHandle();
+
+	FMontageNotifyTrigger(){}
+};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMontageNotifyDelegate, FGameplayTag, Tag);
 
@@ -66,6 +85,8 @@ class GASUTILITY_API UAbilityTask_PlayMontageAndWaitForNotify : public UAbilityT
 
 	virtual FString GetDebugString() const override;
 
+	void QueueNotifyEvents();
+
 protected:
 
 	virtual void OnDestroy(bool AbilityEnded) override;
@@ -79,6 +100,9 @@ protected:
 
 	UPROPERTY()
 	FGameplayTagContainer NotifyTags;
+
+	UPROPERTY()
+	TSubclassOf<UAnimNotify> NotifyClass;
 	
 	UPROPERTY()
 	TObjectPtr<UAnimMontage> MontageToPlay;
@@ -97,4 +121,15 @@ protected:
 
 	UPROPERTY()
 	bool bStopWhenAbilityEnds;
+	
+	UPROPERTY()
+	TArray<FMontageNotifyTrigger> NotifyTriggers;
+
+	FOnTimerHelperFinishedDelegate TimerHelperDelegate;
+
+	UPROPERTY()
+	TArray<TObjectPtr<UTimerHelper>> TimerHelpers;
+
+	UFUNCTION()
+	void OnTimerHelperNotify(UTimerHelper* TimerHelper);
 };

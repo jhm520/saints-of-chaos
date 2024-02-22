@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemLog.h"
 #include "AbilitySystemGlobals.h"
+#include "CoreUtility/Timer/TimerHelper.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(AbilityTask_PlayMontageAndWaitForNotify)
 
@@ -137,6 +138,9 @@ void UAbilityTask_PlayMontageAndWaitForNotify::Activate()
 				}
 
 				bPlayedMontage = true;
+
+
+				QueueNotifyEvents();
 			}
 		}
 		else
@@ -170,6 +174,58 @@ void UAbilityTask_PlayMontageAndWaitForNotify::ExternalCancel()
 	Super::ExternalCancel();
 }
 
+void UAbilityTask_PlayMontageAndWaitForNotify::OnTimerHelperNotify(UTimerHelper* TimerHelper)
+{
+	if (!TimerHelper)
+	{
+		return;
+	}
+	
+	if (ShouldBroadcastAbilityTaskDelegates())
+	{
+		OnNotifyTriggered.Broadcast(TimerHelper->GetTag());
+	}
+}
+
+void UAbilityTask_PlayMontageAndWaitForNotify::QueueNotifyEvents()
+{
+	UWorld* World = GetWorld();
+
+	if (!World)
+	{
+		return;
+	}
+	
+	TArray<FAnimNotifyEvent> Notifies = MontageToPlay->Notifies;
+	//TArray<FAnimNotifyEvent> Notifies;
+	for (const FAnimNotifyEvent& NotifyEvent : Notifies)
+	{
+		//make sure the notify is of the correct type
+		UAnimNotify_GameplayTag* TagNotify = Cast<UAnimNotify_GameplayTag>(NotifyEvent.Notify);
+
+		if (!TagNotify)
+		{
+			return;
+		}
+		
+		//make sure the notify has a tag that we are interested in
+		const FGameplayTag& NotifyTag = TagNotify->GameplayTag;
+
+		if (!NotifyTags.HasTagExact(NotifyTag))
+		{
+			continue;
+		}
+		
+		const float NotifyTime = NotifyEvent.GetTime();
+
+		TimerHelperDelegate.AddDynamic(this, &UAbilityTask_PlayMontageAndWaitForNotify::OnTimerHelperNotify);
+
+		UTimerHelper* NewTimerHelper = UTimerHelper::CreateTimerHelper(this, NotifyTime, NotifyTag,TimerHelperDelegate, true);
+
+		TimerHelpers.Add(NewTimerHelper);
+	}
+}
+
 void UAbilityTask_PlayMontageAndWaitForNotify::OnDestroy(bool AbilityEnded)
 {
 	// Note: Clearing montage end delegate isn't necessary since its not a multicast and will be cleared when the next montage plays.
@@ -183,6 +239,11 @@ void UAbilityTask_PlayMontageAndWaitForNotify::OnDestroy(bool AbilityEnded)
 		{
 			StopPlayingMontage();
 		}
+	}
+
+	for (UTimerHelper* TimerHelper : TimerHelpers)
+	{
+		TimerHelper->DestroyTimerHelper(this);
 	}
 
 	Super::OnDestroy(AbilityEnded);

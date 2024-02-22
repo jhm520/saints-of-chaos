@@ -1,0 +1,42 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "UObject/NoExportTypes.h"
+#include "GameplayTagContainer.h"
+#include "TimerHelper.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimerHelperFinishedDelegate, UTimerHelper*, TimerHelper);
+
+/**
+ * 
+ */
+UCLASS()
+class COREUTILITY_API UTimerHelper : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	static UTimerHelper* CreateTimerHelper(UObject* WorldContextObject, float Time, FGameplayTag Tag, FOnTimerHelperFinishedDelegate TimerHelperDelegate, bool bDestroyWhenFinished = true);
+	
+	void DestroyTimerHelper(UObject* WorldContextObject);
+
+	const FGameplayTag& GetTag() const { return Tag; }
+protected:
+
+	UFUNCTION()
+	void OnTimerFinished();
+
+	UPROPERTY()
+	FGameplayTag Tag;
+
+	UPROPERTY()
+	FTimerHandle TimerHandle;
+
+	UPROPERTY()
+	bool bDestroyWhenFinished;
+
+	FOnTimerHelperFinishedDelegate OnTimerHelperFinishedDelegate;
+	
+};
