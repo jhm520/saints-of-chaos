@@ -3,7 +3,6 @@
 
 #include "TimerHelper.h"
 
-UE_DISABLE_OPTIMIZATION
 UTimerHelper* UTimerHelper::CreateTimerHelper(UObject* WorldContextObject, float Time, FGameplayTag Tag, FOnTimerHelperFinishedDelegate TimerHelperDelegate, bool bDestroyWhenFinished)
 {
 	if (!WorldContextObject)
@@ -65,5 +64,3 @@ void UTimerHelper::OnTimerFinished()
 		this->ConditionalBeginDestroy();
 	}
 }
-
-UE_ENABLE_OPTIMIZATION

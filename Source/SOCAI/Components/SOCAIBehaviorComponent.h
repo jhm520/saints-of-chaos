@@ -35,9 +35,6 @@ protected:
 	UPROPERTY(Transient)
 	FGameplayTag CurrentBehaviorState = SOCAIBehaviorTags::Behavior;
 
-	UFUNCTION()
-	void OnRep_CurrentAction(const FSOCAIAction& PreviousAction);
-
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Behavior")
 	TObjectPtr<ASOCAIBehaviorManager> BehaviorManager = nullptr;
 
@@ -47,6 +44,8 @@ protected:
 	virtual void TickUpdateBehavior(const float DeltaSeconds);
 
 	virtual void DoAction(const FSOCAIAction& InAction);
+
+	virtual void OnBehaviorChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction);
 
 	virtual void OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction);
 

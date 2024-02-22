@@ -30,6 +30,22 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI|Behavior")
 	TObjectPtr<AActor> TargetActor = nullptr;
 
+	friend bool operator==(const FSOCAIAction& A, const FSOCAIAction& B)
+	{
+		return A.ActionTag == B.ActionTag
+		&& A.BehaviorTag == B.BehaviorTag
+		&& A.TargetLocation == B.TargetLocation
+		&& A.TargetActor == B.TargetActor;
+	}
+	
+	friend bool operator!=(const FSOCAIAction& A, const FSOCAIAction& B)
+	{
+		return A.ActionTag != B.ActionTag
+		|| A.BehaviorTag != B.BehaviorTag
+		|| A.TargetLocation != B.TargetLocation
+		|| A.TargetActor != B.TargetActor;
+	}
+
 	FSOCAIAction(){}
 };
 

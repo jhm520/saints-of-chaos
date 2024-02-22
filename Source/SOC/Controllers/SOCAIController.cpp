@@ -61,6 +61,12 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 	}
 }
 
+void ASOCAIController::DoAIAction_MoveToLocation(const FSOCAIAction& Action) const
+{
+	
+}
+
+
 USOCAIAvatarComponent* ASOCAIController::GetAvatarComponent() const
 {
 	const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetAvatarActor());

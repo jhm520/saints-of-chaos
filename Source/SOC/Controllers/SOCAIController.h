@@ -55,6 +55,8 @@ public:
 
 	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;
 
+	virtual void DoAIAction_MoveToLocation(const FSOCAIAction& Action) const;
+
 	virtual const AActor* GetAvatarActor() const override {return GetPawn();};
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};

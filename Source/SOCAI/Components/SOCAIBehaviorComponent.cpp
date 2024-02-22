@@ -86,12 +86,7 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 
 }
 
-void USOCAIBehaviorComponent::OnRep_CurrentAction(const FSOCAIAction& PreviousAction)
-{
-	OnActionChanged(CurrentAction, PreviousAction);
-}
-
-void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
+void USOCAIBehaviorComponent::OnBehaviorChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
 {
 	USOCAIBehavior* PreviousActionBehavior = GetBehavior(InPreviousAction.BehaviorTag);
 	
@@ -106,7 +101,16 @@ void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentActio
 	{
 		CurrentActionBehavior->OnEnteredBehavior(GetOwner(), InCurrentAction, InPreviousAction);
 	}
+}
 
+void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
+{
+	if (GetOwner()->Implements<USOCAIBehaviorInterface>())
+	{
+		ISOCAIBehaviorInterface::Execute_DoAIAction(GetOwner(), InCurrentAction);
+	}
+	
+	//replicate the action to the avatar component
 	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
 
 	if (!BehaviorInterface)
@@ -139,14 +143,14 @@ void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
 
 	if (PreviousAction.BehaviorTag != CurrentAction.BehaviorTag)
 	{
-		OnActionChanged(CurrentAction, PreviousAction);
+		OnBehaviorChanged(CurrentAction, PreviousAction);
 	}
 
 	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
-	
-	if (GetOwner()->Implements<USOCAIBehaviorInterface>())
+
+	if (CurrentAction != PreviousAction)
 	{
-		ISOCAIBehaviorInterface::Execute_DoAIAction(GetOwner(), InAction);
+		OnActionChanged(CurrentAction, PreviousAction);
 	}
 }
 
