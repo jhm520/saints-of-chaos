@@ -54,6 +54,11 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 		MoveToActor(Action.TargetActor, MovementAcceptanceRadius);
 		SetFocus(Action.TargetActor);
 	}
+
+	if (Action.ActionTag == SOCAIActionTags::Attack)
+	{
+		SetFocus(Action.TargetActor);
+	}
 }
 
 USOCAIAvatarComponent* ASOCAIController::GetAvatarComponent() const
