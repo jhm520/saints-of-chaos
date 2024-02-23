@@ -96,3 +96,19 @@ EAttitude ASOCPlayerController::GetAttitudeTowards_Implementation(AActor* Other)
 }
 
 #pragma endregion
+
+#pragma region Selection System
+
+USelectorComponent* ASOCPlayerController::GetSelectorComponent() const
+{
+	ISelectorInterface* SelectorInterface = Cast<ISelectorInterface>(GetPawn());
+
+	if (!SelectorInterface)
+	{
+		return nullptr;
+	}
+
+	return SelectorInterface->GetSelectorComponent();
+}
+
+#pragma endregion

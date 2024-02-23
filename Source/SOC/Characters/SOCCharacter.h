@@ -10,6 +10,7 @@
 #include "AggroSystem/Interfaces/AggroInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "SOC/Attributes/Health/HealthInterface.h"
+#include "SelectionSystem/Interfaces/SelectableInterface.h"
 #include "SOCCharacter.generated.h"
 
 /**
@@ -21,9 +22,10 @@ class UAggroSytemComponent;
 class UHealthAttributeSet;
 class UWidgetComponent;
 class UCharacterInfoWidget;
+class USelectableComponent;
 
 UCLASS()
-class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface, public IHealthInterface
+class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface, public IHealthInterface, public ISelectableInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -120,6 +122,19 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Info")
 	TObjectPtr<UWidgetComponent> CharacterInfoWidgetComponent;
+
+#pragma endregion
+
+#pragma region Selection System
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Selection")
+	TObjectPtr<USelectableComponent> SelectableComponent;
+
+public:
+
+	virtual USelectableComponent* GetSelectableComponent() const override {return SelectableComponent;};
 
 #pragma endregion
 

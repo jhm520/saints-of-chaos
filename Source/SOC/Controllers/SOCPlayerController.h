@@ -6,6 +6,7 @@
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "SelectionSystem/Interfaces/SelectorInterface.h"
 #include "SOCPlayerController.generated.h"
 
 class UAutoOwnershipComponent;
@@ -15,7 +16,7 @@ class UAutoOwnershipComponent;
  */
 
 UCLASS()
-class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface
+class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -48,6 +49,13 @@ protected:
 #pragma region Attitude
 
 	EAttitude GetAttitudeTowards_Implementation(AActor* Other) const;
+
+#pragma endregion
+
+#pragma region Selection System
+
+public:
+	virtual USelectorComponent* GetSelectorComponent() const override;
 
 #pragma endregion
 

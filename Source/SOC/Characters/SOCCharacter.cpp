@@ -10,6 +10,7 @@
 #include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "SOC/HUD/Widgets/CharacterInfoWidget.h"
+#include "SelectionSystem/Components/SelectableComponent.h"
 
 ASOCCharacter::ASOCCharacter()
 {
@@ -22,6 +23,8 @@ ASOCCharacter::ASOCCharacter()
 	AggroSystemComponent = CreateDefaultSubobject<UAggroSystemComponent>(TEXT("AggroSystemComponent"));
 
 	HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttribute"));
+
+	SelectableComponent = CreateDefaultSubobject<USelectableComponent>(TEXT("SelectableComponent"));
 
 }
 
