@@ -9,8 +9,10 @@
 #include "AggroSystem/Components/AggroSystemComponent.h"
 #include "AggroSystem/Interfaces/AggroInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
+#include "CoreUtility/Clicking/ClickableActorInterface.h"
 #include "SOC/Attributes/Health/HealthInterface.h"
 #include "SelectionSystem/Interfaces/SelectableInterface.h"
+#include "GameplayTagContainer.h"
 #include "SOCCharacter.generated.h"
 
 /**
@@ -25,7 +27,8 @@ class UCharacterInfoWidget;
 class USelectableComponent;
 
 UCLASS()
-class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface, public IAggroInterface, public IHealthInterface, public ISelectableInterface
+class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface,
+public IAggroInterface, public IHealthInterface, public ISelectableInterface, public IClickableActorInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -135,6 +138,22 @@ protected:
 public:
 
 	virtual USelectableComponent* GetSelectableComponent() const override {return SelectableComponent;};
+
+#pragma endregion
+	
+#pragma region Clickable Actor Interface
+protected:
+	void SetupClickable();
+
+	UFUNCTION()
+	void OnCharacterClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
+
+public:
+
+	virtual UPrimitiveComponent* GetClickableComponent() const override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Selection")
+	FGameplayTag GameplayAbilityTag_SelectActor;
 
 #pragma endregion
 

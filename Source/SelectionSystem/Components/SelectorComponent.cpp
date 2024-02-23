@@ -2,6 +2,8 @@
 
 
 #include "SelectorComponent.h"
+#include "SelectableComponent.h"
+#include "Net/UnrealNetwork.h"
 
 #pragma region Framework
 
@@ -11,6 +13,7 @@ USelectorComponent::USelectorComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	SetIsReplicatedByDefault(true);
 
 	// ...
 }
@@ -34,12 +37,25 @@ void USelectorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
+void USelectorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(USelectorComponent, SelectedComponents, COND_SkipOwner, REPNOTIFY_Always);
+
+}
+
 #pragma endregion
 
 #pragma region Selection
 
-void USelectorComponent::Select(USelectableComponent* SelectableComponent)
+void USelectorComponent::Select(USelectableComponent* SelectableComponent, bool bRepToServer)
 {
+	if (bRepToServer && !GetOwner()->HasAuthority())
+	{
+		ServerSelect(SelectableComponent);
+	}
+	
 	if (!SelectableComponent)
 	{
 		return;
@@ -48,8 +64,13 @@ void USelectorComponent::Select(USelectableComponent* SelectableComponent)
 	SelectedComponents.AddUnique(SelectableComponent);
 }
 
-void USelectorComponent::Deselect(USelectableComponent* SelectableComponent)
+void USelectorComponent::Deselect(USelectableComponent* SelectableComponent, bool bRepToServer)
 {
+	if (bRepToServer && !GetOwner()->HasAuthority())
+	{
+		ServerDeselect(SelectableComponent);
+	}
+	
 	if (!SelectableComponent)
 	{
 		return;
@@ -61,6 +82,21 @@ void USelectorComponent::Deselect(USelectableComponent* SelectableComponent)
 void USelectorComponent::ClearSelection()
 {
 	SelectedComponents.Empty();
+}
+
+void USelectorComponent::OnRep_SelectedComponents()
+{
+	
+}
+
+void USelectorComponent::ServerSelect_Implementation(USelectableComponent* SelectableComponent)
+{
+	Select(SelectableComponent);
+}
+
+void USelectorComponent::ServerDeselect_Implementation(USelectableComponent* SelectableComponent)
+{
+	Deselect(SelectableComponent);
 }
 
 #pragma endregion

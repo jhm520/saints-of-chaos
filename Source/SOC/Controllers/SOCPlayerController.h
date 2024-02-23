@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
 #include "GameFramework/PlayerController.h"
@@ -16,7 +17,7 @@ class UAutoOwnershipComponent;
  */
 
 UCLASS()
-class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface
+class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -44,6 +45,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug Commands")
 	TSubclassOf<class UGameplayAbility> MobSpawnAbilityClass;
+#pragma endregion
+
+#pragma region Gameplay Abilities
+public:
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 #pragma endregion
 
 #pragma region Attitude

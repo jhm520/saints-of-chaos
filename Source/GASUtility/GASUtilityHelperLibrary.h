@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "GameplayAbilitySpec.h"
+#include "Abilities/GameplayAbility.h"
 #include "GASUtilityHelperLibrary.generated.h"
 
+class UAbilitySystemComponent;
 /**
  * 
  */
@@ -22,5 +25,9 @@ public:
 	//CooldownDuration is the total duration of the cooldown tag
 	UFUNCTION(BlueprintCallable, Category = "GAS")
 	static bool GetCooldownRemainingForTag(UAbilitySystemComponent* Target, FGameplayTagContainer InCooldownTags, float& TimeRemaining, float& CooldownDuration);
- 
+
+	/** Returns an ability spec that corresponds to a superclass of the given ability class. If modifying call MarkAbilitySpecDirty */
+	static FGameplayAbilitySpec* FindAbilitySpecFromSuperClass(UAbilitySystemComponent* InASC, TSubclassOf<UGameplayAbility> InAbilitySuperClass);
+
+
 };

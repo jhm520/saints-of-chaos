@@ -63,6 +63,26 @@ void ASOCPlayerController::Server_DebugSpawnMobs_Implementation()
 
 #pragma endregion
 
+#pragma region Gameplay Abilities
+UAbilitySystemComponent* ASOCPlayerController::GetAbilitySystemComponent() const
+{
+	if (!GetPawn())
+	{
+		return nullptr;
+	}
+
+	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(GetPawn());
+
+	if (!AbilitySystemInterface)
+	{
+		return nullptr;
+	}
+
+	return AbilitySystemInterface->GetAbilitySystemComponent();
+}
+
+#pragma endregion
+
 #pragma region Attitude
 
 EAttitude ASOCPlayerController::GetAttitudeTowards_Implementation(AActor* Other) const

@@ -2,8 +2,11 @@
 
 
 #include "SOCCharacter.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilityCollection.h"
+#include "GASUtilityHelperLibrary.h"
 #include "SOCAI/SOCAIGameplayTags.h"
 #include "SOC/Attributes/Health/HealthAttributeSet.h"
 #include "AggroSystem/Components/AggroSystemComponent.h"
@@ -11,6 +14,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "SOC/HUD/Widgets/CharacterInfoWidget.h"
 #include "SelectionSystem/Components/SelectableComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "SelectionSystem/Components/SelectorComponent.h"
+#include "SelectionSystem/Interfaces/SelectorInterface.h"
+#include "SOC/Abilities/SOCGameplayAbility_SelectActor.h"
 
 ASOCCharacter::ASOCCharacter()
 {
@@ -42,6 +49,8 @@ void ASOCCharacter::BeginPlay()
 	SetupGameplayTags();
 
 	InitializeCharacterInfoWidget();
+
+	SetupClickable();
 
 }
 
@@ -297,6 +306,59 @@ void ASOCCharacter::UpdateCharacterInfoWidget_Health()
 	const float MaxHealth = IHealthInterface::Execute_GetMaxHealth(this);
 	
 	CharacterInfoWidget->OnHealthChanged(CurrentHealth, MaxHealth);
+}
+
+#pragma endregion
+
+#pragma region Clickable Actor Interface
+
+UPrimitiveComponent* ASOCCharacter::GetClickableComponent() const
+{
+	return GetCapsuleComponent();
+}
+
+void ASOCCharacter::SetupClickable()
+{
+	UPrimitiveComponent* ClickableComponent = GetClickableComponent();
+
+	if (!ClickableComponent)
+	{
+		return;
+	}
+
+	ClickableComponent->OnClicked.AddDynamic(this, &ASOCCharacter::OnCharacterClicked);
+}
+
+void ASOCCharacter::OnCharacterClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
+{
+	//get the player controller that clicked on this character, the local player
+	APlayerController* ClickPC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (!ClickPC)
+	{
+		return;
+	}
+
+	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(ClickPC);
+
+	if (!AbilitySystemInterface)
+	{
+		return;
+	}
+
+	UAbilitySystemComponent* ClickPCASC = AbilitySystemInterface->GetAbilitySystemComponent();
+
+	if (!ClickPCASC)
+	{
+		return;
+	}
+
+	FGameplayEventData Payload = FGameplayEventData();
+
+	Payload.Instigator = ClickPC;
+	Payload.Target = this;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ClickPC, GameplayAbilityTag_SelectActor, Payload);
 }
 
 #pragma endregion

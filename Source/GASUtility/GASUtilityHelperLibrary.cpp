@@ -37,3 +37,23 @@ bool UGASUtilityHelperLibrary::GetCooldownRemainingForTag(UAbilitySystemComponen
 
 	return false;
 }
+
+FGameplayAbilitySpec* UGASUtilityHelperLibrary::FindAbilitySpecFromSuperClass(UAbilitySystemComponent* InASC, TSubclassOf<UGameplayAbility> InAbilityClass)
+{
+	if (!InASC)
+	{
+		return nullptr;
+	}
+	
+	TArray<FGameplayAbilitySpec>& ActivatableAbilities = InASC->GetActivatableAbilities();
+	
+	for (FGameplayAbilitySpec& Spec : ActivatableAbilities)
+	{
+		if (Spec.Ability.IsA(InAbilityClass))
+		{
+			return &Spec;
+		}
+	}
+
+	return nullptr;
+}
