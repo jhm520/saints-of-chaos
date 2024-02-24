@@ -127,6 +127,8 @@ protected:
 	void UpdateCharacterInfoWidget();
 
 	void UpdateCharacterInfoWidget_Health();
+	void UpdateCharacterInfoWidget_Attitude();
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Info")
 	TObjectPtr<UWidgetComponent> CharacterInfoWidgetComponent;

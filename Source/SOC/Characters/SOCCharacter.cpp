@@ -284,6 +284,7 @@ void ASOCCharacter::UpdateCharacterInfoWidget()
 	InitializeCharacterInfoWidget();
 
 	UpdateCharacterInfoWidget_Health();
+	UpdateCharacterInfoWidget_Attitude();
 }
 
 void ASOCCharacter::TickCharacterInfoWidgetOrientation()
@@ -320,6 +321,26 @@ void ASOCCharacter::UpdateCharacterInfoWidget_Health()
 	const float MaxHealth = IHealthInterface::Execute_GetMaxHealth(this);
 	
 	CharacterInfoWidget->OnHealthChanged(CurrentHealth, MaxHealth);
+}
+
+void ASOCCharacter::UpdateCharacterInfoWidget_Attitude()
+{
+	if (!CharacterInfoWidget)
+	{
+		InitializeCharacterInfoWidget();
+		return;
+	}
+	
+	APlayerController* LocalPlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (!LocalPlayerController)
+	{
+		return;
+	}
+
+	const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(this, LocalPlayerController);
+
+	CharacterInfoWidget->UpdatePlayerAttitude(Attitude);
 }
 
 #pragma endregion

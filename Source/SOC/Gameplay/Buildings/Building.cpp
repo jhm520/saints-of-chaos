@@ -218,3 +218,12 @@ bool ASOCBuilding::CanTakeOwnership(AActor* InOwner) const
 
 #pragma endregion
 
+#pragma region Attitude
+
+EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
+{
+	return EAttitude::Neutral;
+}
+
+#pragma endregion
+

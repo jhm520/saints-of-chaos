@@ -86,4 +86,10 @@ public:
 
 #pragma endregion
 
+#pragma region Attitude
+
+	EAttitude GetAttitudeTowards_Implementation(AActor* Other) const;
+
+#pragma endregion
+
 };

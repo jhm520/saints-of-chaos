@@ -83,6 +83,16 @@ EAttitude ASOCRTSPlayerPawn::GetAttitudeTowards_Implementation(AActor* Other) co
 		return EAttitude::Neutral;
 	}
 
+	if (Other == this)
+	{
+		return EAttitude::Friendly;
+	}
+
+	if (Other == GetController())
+	{
+		return EAttitude::Friendly;
+	}
+
 	ISOCAIBehaviorInterface* OtherBehaviorInterface = Cast<ISOCAIBehaviorInterface>(Other);
 
 	if (!OtherBehaviorInterface)
