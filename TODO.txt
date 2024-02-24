@@ -25,3 +25,5 @@ TODO: Replicate when an AI character enters/exits behaviors so that AnimInstance
 TODO: Add the other attack montages from CloseCombatSwordsman to SOC and activate them when attacking
 TODO: Explicitly define the order of child activation in Behavior tree. I think Attack is triggering before MoveToCombatRange
 TODO: Targeting system for RTS player pawn
+TODO: SelectionSystem
+TODO: Use ProjectWorldToScreen and DeprojectScreenToWorld to create a box selection
