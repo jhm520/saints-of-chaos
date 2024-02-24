@@ -18,6 +18,7 @@ ARTSPlayerPawn::ARTSPlayerPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	SetReplicates(true);
 
 	SceneRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRootComponent"));
 	SetRootComponent(SceneRootComponent);
@@ -197,22 +198,7 @@ void ARTSPlayerPawn::OnPlayerMouseScreenEdgeScroll(const FVector2D& Direction)
 
 EAttitude ARTSPlayerPawn::GetAttitudeTowards_Implementation(AActor* Other) const
 {
-	if (!Other)
-	{
-		return EAttitude::Neutral;
-	}
-
-	if (!GetController())
-	{
-		return EAttitude::Neutral;
-	}
-
-	if (!GetController()->Implements<UAttitudeInterface>())
-	{
-		return EAttitude::Neutral;
-	}
-
-	return IAttitudeInterface::Execute_GetAttitudeTowards(Other, GetController());
+	return EAttitude::Neutral;
 }
 
 #pragma endregion

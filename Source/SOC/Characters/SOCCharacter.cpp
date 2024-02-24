@@ -124,9 +124,22 @@ UAbilitySystemComponent* ASOCCharacter::GetAbilitySystemComponent() const
 #pragma region Aggro System
 bool ASOCCharacter::ShouldAggro(AActor* AggroTarget) const
 {
+	if (!AggroTarget || !AggroTarget->Implements<UAttitudeInterface>())
+	{
+		return false;
+	}
+	
 	const EAttitude AttitudeTowardTarget = IAttitudeInterface::Execute_GetAttitudeTowards(this, AggroTarget);
 
 	return AttitudeTowardTarget == EAttitude::Hostile;
+}
+
+#pragma endregion
+
+#pragma region Attitude System
+EAttitude ASOCCharacter::GetAttitudeTowards_Implementation(AActor* Other) const
+{
+	return EAttitude::Neutral;
 }
 
 #pragma endregion

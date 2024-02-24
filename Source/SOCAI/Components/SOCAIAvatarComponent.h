@@ -42,4 +42,21 @@ protected:
 
 #pragma endregion
 
+#pragma region Director Pawn
+public:
+	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
+	void SetDirectorPawn(APawn* InDirectorPawn);
+
+	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
+	APawn* GetDirectorPawn();
+protected:
+
+	UPROPERTY(ReplicatedUsing=OnRep_DirectorPawn, Transient, BlueprintReadOnly, Category = "AI|Behavior")
+	APawn* DirectorPawn = nullptr;
+
+	UFUNCTION()
+	void OnRep_DirectorPawn();
+
+#pragma endregion
+
 };

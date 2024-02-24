@@ -41,7 +41,7 @@ void USOCAIAvatarComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIAvatarComponent, CurrentAction, COND_None, REPNOTIFY_Always);
-
+	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIAvatarComponent, DirectorPawn, COND_None, REPNOTIFY_Always);
 }
 
 #pragma endregion
@@ -83,6 +83,26 @@ void USOCAIAvatarComponent::OnActionChanged(const FSOCAIAction& InCurrentAction,
 	{
 		CurrentBehavior->OnEnteredBehavior(GetOwner(), InCurrentAction, InPreviousAction);
 	}
+}
+
+#pragma endregion
+
+#pragma region Director Pawn
+
+void USOCAIAvatarComponent::SetDirectorPawn(APawn* InDirectorPawn)
+{
+	DirectorPawn = InDirectorPawn;
+	OnRep_DirectorPawn();
+}
+
+APawn* USOCAIAvatarComponent::GetDirectorPawn()
+{
+	return DirectorPawn;
+}
+
+void USOCAIAvatarComponent::OnRep_DirectorPawn()
+{
+	
 }
 
 #pragma endregion

@@ -5,6 +5,8 @@
 #include "SelectionSystem/Components/SelectorComponent.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilityCollection.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 #pragma region Framework
 
@@ -32,6 +34,8 @@ void ASOCRTSPlayerPawn::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	InitAbilitySystem();
+	
+	
 }
 
 
@@ -66,6 +70,46 @@ void ASOCRTSPlayerPawn::InitAbilitySystem()
 
 		Collection->GiveAbilities(AbilitySystemComponent, BoundHandles, DefaultBoundHandles);
 	}
+}
+
+#pragma endregion
+
+#pragma region Attitude System
+
+EAttitude ASOCRTSPlayerPawn::GetAttitudeTowards_Implementation(AActor* Other) const
+{
+	if (!Other)
+	{
+		return EAttitude::Neutral;
+	}
+
+	ISOCAIBehaviorInterface* OtherBehaviorInterface = Cast<ISOCAIBehaviorInterface>(Other);
+
+	if (!OtherBehaviorInterface)
+	{
+		return EAttitude::Neutral;
+	}
+
+	USOCAIAvatarComponent* AvatarComponent = OtherBehaviorInterface->GetAvatarComponent();
+
+	if (!AvatarComponent)
+	{
+		return EAttitude::Neutral;
+	}
+
+	APawn* OtherDirectorPawn = AvatarComponent->GetDirectorPawn();
+
+	if (!OtherDirectorPawn)
+	{
+		return EAttitude::Neutral;
+	}
+
+	if (this != OtherDirectorPawn)
+	{
+		return EAttitude::Hostile;
+	}
+
+	return EAttitude::Friendly;
 }
 
 #pragma endregion

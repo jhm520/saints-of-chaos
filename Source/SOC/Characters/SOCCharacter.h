@@ -81,6 +81,11 @@ protected:
 	TObjectPtr<UAggroSystemComponent> AggroSystemComponent;
 #pragma endregion
 
+#pragma region Attitude System
+	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
+
+#pragma endregion
+
 #pragma region Health Interface
 
 	virtual float GetHealth_Implementation() const override;

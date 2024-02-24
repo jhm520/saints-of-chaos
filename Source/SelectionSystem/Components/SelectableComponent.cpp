@@ -82,7 +82,7 @@ void USelectableComponent::OnDeselected(AActor* Selector)
 			continue;
 		}
 
-		ISelectionInterface::Execute_OnSelected(ChildActor, Selector, GetOwner());
+		ISelectionInterface::Execute_OnDeselected(ChildActor, Selector, GetOwner());
 	}
 }
 

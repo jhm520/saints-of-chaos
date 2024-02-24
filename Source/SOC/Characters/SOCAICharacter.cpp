@@ -13,6 +13,7 @@ ASOCAICharacter::ASOCAICharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	SetReplicates(true);
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	GetCharacterMovement()->bUseRVOAvoidance = true;
@@ -39,6 +40,15 @@ void ASOCAICharacter::SpawnDefaultController()
 	//if so, we take that owner and set it to be the director of the behavior component
 	
 	AActor* OldOwner = GetOwner();
+
+	AController* LocalDirectorController = Cast<AController>(OldOwner);
+
+	if (!LocalDirectorController)
+	{
+		return;
+	}
+
+	LocalDirectorController->OnPossessedPawnChanged.AddDynamic(this, &ASOCAICharacter::OnDirectorPossessedPawnChanged);
 	
 	Super::SpawnDefaultController();
 
@@ -62,9 +72,11 @@ void ASOCAICharacter::SpawnDefaultController()
 	{
 		return;
 	}
-
+	
 	//set the previous owner to be the director of the behavior component
 	BehaviorComponent->SetDirector(OldOwner);
+
+	BehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
 }
 
 // Called every frame
@@ -89,17 +101,24 @@ EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) cons
 		return EAttitude::Neutral;
 	}
 
-	if (!GetController())
+	if (!GetAvatarComponent())
 	{
 		return EAttitude::Neutral;
 	}
 
-	if (!GetController()->Implements<UAttitudeInterface>())
+	APawn* DirectorPawn = GetAvatarComponent()->GetDirectorPawn();
+
+	if (!DirectorPawn)
 	{
 		return EAttitude::Neutral;
 	}
 
-	return IAttitudeInterface::Execute_GetAttitudeTowards(GetController(), Other);
+	if (!DirectorPawn->Implements<UAttitudeInterface>())
+	{
+		return EAttitude::Neutral;
+	}
+
+	return IAttitudeInterface::Execute_GetAttitudeTowards(DirectorPawn, Other);
 }
 #pragma endregion
 
@@ -133,6 +152,44 @@ void ASOCAICharacter::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnt
 void ASOCAICharacter::OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const
 {
 	
+}
+
+void ASOCAICharacter::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
+{
+	if (!NewPawn)
+	{
+		return;
+	}
+	
+	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(this);
+
+	if (!BehaviorInterface)
+	{
+		return;
+	}
+
+	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
+
+	if (!BehaviorComponent)
+	{
+		return;
+	}
+
+	AActor* Director = BehaviorComponent->GetDirector();
+
+	if (!Director)
+	{
+		return;
+	}
+	
+	AController* LocalDirectorController = Cast<AController>(Director);
+
+	if (!LocalDirectorController)
+	{
+		return;
+	}
+	
+	BehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
 }
 
 

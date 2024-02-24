@@ -218,3 +218,49 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 }
 
 #pragma endregion
+
+#pragma region Director
+
+//returns the actor that is directing the behavior of this actor
+APawn* USOCAIBehaviorComponent::GetDirectorPawn() const
+{
+	//replicate the action to the avatar component
+	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
+
+	if (!BehaviorInterface)
+	{
+		return nullptr;
+	}
+	
+	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
+
+	if (!AvatarComponent)
+	{
+		return nullptr;
+	}
+	
+	return AvatarComponent->GetDirectorPawn();
+}
+
+//sets the actor that directs the behavior of this actor
+void USOCAIBehaviorComponent::SetDirectorPawn(APawn* InDirectorPawn)
+{
+	//replicate the action to the avatar component
+	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
+
+	if (!BehaviorInterface)
+	{
+		return;
+	}
+	
+	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
+
+	if (!AvatarComponent)
+	{
+		return;
+	}
+	
+	AvatarComponent->SetDirectorPawn(InDirectorPawn);
+}
+
+#pragma endregion

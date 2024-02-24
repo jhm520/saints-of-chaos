@@ -56,6 +56,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	TObjectPtr<USOCAIAvatarComponent> AvatarComponent;
 
+	UFUNCTION()
+	void OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn);
+
 #pragma endregion
 
 #pragma region Target Actors

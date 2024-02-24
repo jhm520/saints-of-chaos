@@ -1,12 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#pragma region Include
 #include "SOCAIController.h"
 
 #include "Navigation/CrowdFollowingComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
-#pragma endregion
+#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 #pragma region Framework
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)
@@ -148,9 +147,9 @@ EAttitude ASOCAIController::GetAttitudeTowards_Implementation(AActor* Other) con
 		return EAttitude::Neutral;
 	}
 
-	AActor* Director = LocalBehaviorComponent->GetDirector();
+	APawn* DirectorPawn = LocalBehaviorComponent->GetDirectorPawn();
 
-	if (!Director)
+	if (!DirectorPawn)
 	{
 		return EAttitude::Neutral;
 	}
@@ -162,21 +161,21 @@ EAttitude ASOCAIController::GetAttitudeTowards_Implementation(AActor* Other) con
 		return EAttitude::Neutral;
 	}
 	
-	USOCAIBehaviorComponent* OtherBehaviorComponent = OtherBehaviorInterface->GetBehaviorComponent();
+	USOCAIAvatarComponent* OtherAvatarComponent = OtherBehaviorInterface->GetAvatarComponent();
 
-	if (!OtherBehaviorComponent)
+	if (!OtherAvatarComponent)
 	{
 		return EAttitude::Neutral;
 	}
 
-	AActor* OtherDirector = OtherBehaviorComponent->GetDirector();
+	APawn* OtherDirectorPawn = OtherAvatarComponent->GetDirectorPawn();
 
-	if (!OtherDirector)
+	if (!OtherDirectorPawn)
 	{
 		return EAttitude::Neutral;
 	}
 
-	if (Director == OtherDirector)
+	if (DirectorPawn == OtherDirectorPawn)
 	{
 		return EAttitude::Friendly;
 	}

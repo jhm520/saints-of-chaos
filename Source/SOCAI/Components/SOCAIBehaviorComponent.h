@@ -93,6 +93,12 @@ public:
 
 	//sets the actor that directs the behavior of this actor
 	AActor* SetDirector(AActor* InDirector) { return Director = InDirector; }
+
+	//returns the actor that is directing the behavior of this actor
+	APawn* GetDirectorPawn() const;
+
+	//sets the actor that directs the behavior of this actor
+	void SetDirectorPawn(APawn* InDirectorPawn);
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Director")
 	TObjectPtr<AActor> Director = nullptr;

@@ -64,4 +64,8 @@ public:
 
 #pragma endregion
 
+#pragma region Attitude System
+public:
+	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
+#pragma endregion
 };
