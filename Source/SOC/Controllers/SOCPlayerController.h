@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
+#include "CoreUtility/Clicking/Interfaces/ClickingInterface.h"
 #include "GameFramework/PlayerController.h"
 #include "SelectionSystem/Interfaces/SelectorInterface.h"
 #include "SOCPlayerController.generated.h"
@@ -17,7 +18,7 @@ class UAutoOwnershipComponent;
  */
 
 UCLASS()
-class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface
+class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface, public IClickingInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -63,6 +64,18 @@ public:
 
 public:
 	virtual USelectorComponent* GetSelectorComponent() const override;
+
+#pragma endregion
+
+#pragma region Clicking
+protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Clicking")
+	TObjectPtr<UClickingComponent> ClickingComponent;
+	
+public:
+
+	virtual UClickingComponent* GetClickingComponent() const;
 
 #pragma endregion
 

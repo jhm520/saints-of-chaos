@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CoreUtility/Clicking/Components/ClickableActorComponent.h"
 #include "UObject/Interface.h"
 #include "ClickableActorInterface.generated.h"
 
@@ -24,4 +25,6 @@ class COREUTILITY_API IClickableActorInterface
 public:
 
 	virtual UPrimitiveComponent* GetClickableComponent() const = 0;
+
+	virtual UClickableActorComponent* GetClickableActorComponent() const = 0;
 };

@@ -45,4 +45,28 @@ void USelectionSystemBlueprintLibrary::SelectActor(AActor* Selector, const AActo
 	//tell the selector component to select this character
 	SelectorComponent->Select(SelectableComponent, bRepToServer);
 }
+
+void USelectionSystemBlueprintLibrary::ClearSelection(AActor* Selector, bool bRepToServer)
+{
+	if (!Selector)
+	{
+		return;
+	}
+
+	ISelectorInterface* SelectorInterface = Cast<ISelectorInterface>(Selector);
+
+	if (!SelectorInterface)
+	{
+		return;
+	}
+
+	USelectorComponent* SelectorComponent = SelectorInterface->GetSelectorComponent();
+
+	if (!SelectorComponent)
+	{
+		return;
+	}
 	
+	//tell the selector component to select this character
+	SelectorComponent->ClearSelection(bRepToServer);
+}

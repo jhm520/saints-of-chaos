@@ -18,6 +18,7 @@
 #include "SelectionSystem/Components/SelectorComponent.h"
 #include "SelectionSystem/Interfaces/SelectorInterface.h"
 #include "SOC/Abilities/SOCGameplayAbility_SelectActor.h"
+#include "CoreUtility/Clicking/Components/ClickableActorComponent.h"
 
 ASOCCharacter::ASOCCharacter()
 {
@@ -32,6 +33,8 @@ ASOCCharacter::ASOCCharacter()
 	HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttribute"));
 
 	SelectableComponent = CreateDefaultSubobject<USelectableComponent>(TEXT("SelectableComponent"));
+
+	ClickableActorComponent = CreateDefaultSubobject<UClickableActorComponent>(TEXT("ClickableActorComponent"));
 
 }
 
@@ -49,9 +52,7 @@ void ASOCCharacter::BeginPlay()
 	SetupGameplayTags();
 
 	InitializeCharacterInfoWidget();
-
-	SetupClickable();
-
+	
 }
 
 void ASOCCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -316,49 +317,4 @@ UPrimitiveComponent* ASOCCharacter::GetClickableComponent() const
 {
 	return GetCapsuleComponent();
 }
-
-void ASOCCharacter::SetupClickable()
-{
-	UPrimitiveComponent* ClickableComponent = GetClickableComponent();
-
-	if (!ClickableComponent)
-	{
-		return;
-	}
-
-	ClickableComponent->OnClicked.AddDynamic(this, &ASOCCharacter::OnCharacterClicked);
-}
-
-void ASOCCharacter::OnCharacterClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
-{
-	//get the player controller that clicked on this character, the local player
-	APlayerController* ClickPC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-	if (!ClickPC)
-	{
-		return;
-	}
-
-	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(ClickPC);
-
-	if (!AbilitySystemInterface)
-	{
-		return;
-	}
-
-	UAbilitySystemComponent* ClickPCASC = AbilitySystemInterface->GetAbilitySystemComponent();
-
-	if (!ClickPCASC)
-	{
-		return;
-	}
-
-	FGameplayEventData Payload = FGameplayEventData();
-
-	Payload.Instigator = ClickPC;
-	Payload.Target = this;
-
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(ClickPC, GameplayAbilityTag_SelectActor, Payload);
-}
-
 #pragma endregion

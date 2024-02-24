@@ -9,7 +9,7 @@
 #include "AggroSystem/Components/AggroSystemComponent.h"
 #include "AggroSystem/Interfaces/AggroInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
-#include "CoreUtility/Clicking/ClickableActorInterface.h"
+#include "CoreUtility/Clicking/Interfaces/ClickableActorInterface.h"
 #include "SOC/Attributes/Health/HealthInterface.h"
 #include "SelectionSystem/Interfaces/SelectableInterface.h"
 #include "GameplayTagContainer.h"
@@ -143,17 +143,15 @@ public:
 	
 #pragma region Clickable Actor Interface
 protected:
-	void SetupClickable();
 
-	UFUNCTION()
-	void OnCharacterClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Selection")
+	TObjectPtr<UClickableActorComponent> ClickableActorComponent;
 
 public:
 
 	virtual UPrimitiveComponent* GetClickableComponent() const override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Selection")
-	FGameplayTag GameplayAbilityTag_SelectActor;
+	virtual UClickableActorComponent* GetClickableActorComponent() const override {return ClickableActorComponent;};
 
 #pragma endregion
 

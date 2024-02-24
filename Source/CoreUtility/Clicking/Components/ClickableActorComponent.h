@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "SelectableComponent.generated.h"
+#include "ClickableActorComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SELECTIONSYSTEM_API USelectableComponent : public UActorComponent
+class COREUTILITY_API UClickableActorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+	friend class UClickingComponent;
+	
 #pragma region Framework
-
-	friend class USelectorComponent;
+	
 public:	
 	// Sets default values for this component's properties
-	USelectableComponent();
+	UClickableActorComponent();
 
 protected:
 	// Called when the game starts
@@ -25,17 +26,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-#pragma endregion
-
-#pragma region Selectable
-
-	UFUNCTION()
-	void OnSelected();
-
-	UFUNCTION()
-	void OnDeselected();
 
 #pragma endregion
 
+#pragma region Clickable
 
+	void SetupClickable();
+
+	UFUNCTION()
+	void OnActorClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
+
+#pragma endregion
+	
 };

@@ -36,3 +36,17 @@ void USelectableComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 #pragma endregion
+
+#pragma region Selectable
+
+void USelectableComponent::OnSelected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetOwner()->GetName() + TEXT(" Selected"));
+}
+
+void USelectableComponent::OnDeselected()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetOwner()->GetName() + TEXT(" Deselected"));
+}
+
+#pragma endregion

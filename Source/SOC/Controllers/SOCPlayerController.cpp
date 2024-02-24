@@ -5,7 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "EngineUtils.h"
-
+#include "CoreUtility/Clicking/Components/ClickingComponent.h"
 #include "SOC/Gameplay/Buildings/Building.h"
 
 
@@ -14,7 +14,8 @@
 ASOCPlayerController::ASOCPlayerController()
 {
 	AutoOwnershipComponent = CreateDefaultSubobject<UAutoOwnershipComponent>(TEXT("AutoOwnershipComponent"));
-	
+
+	ClickingComponent = CreateDefaultSubobject<UClickingComponent>(TEXT("ClickingComponent"));
 }
 
 #pragma endregion
@@ -129,6 +130,15 @@ USelectorComponent* ASOCPlayerController::GetSelectorComponent() const
 	}
 
 	return SelectorInterface->GetSelectorComponent();
+}
+
+#pragma endregion
+
+#pragma region Clicking
+
+UClickingComponent* ASOCPlayerController::GetClickingComponent() const
+{
+	return ClickingComponent;
 }
 
 #pragma endregion

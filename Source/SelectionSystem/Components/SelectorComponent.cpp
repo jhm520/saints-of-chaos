@@ -61,7 +61,11 @@ void USelectorComponent::Select(USelectableComponent* SelectableComponent, bool 
 		return;
 	}
 
+	const TArray<USelectableComponent*> OldSelectedComponents = SelectedComponents;
+	
 	SelectedComponents.AddUnique(SelectableComponent);
+	
+	OnRep_SelectedComponents(OldSelectedComponents);
 }
 
 void USelectorComponent::Deselect(USelectableComponent* SelectableComponent, bool bRepToServer)
@@ -76,17 +80,44 @@ void USelectorComponent::Deselect(USelectableComponent* SelectableComponent, boo
 		return;
 	}
 
+	const TArray<USelectableComponent*> OldSelectedComponents = SelectedComponents;
+
 	SelectedComponents.Remove(SelectableComponent);
-}
-
-void USelectorComponent::ClearSelection()
-{
-	SelectedComponents.Empty();
-}
-
-void USelectorComponent::OnRep_SelectedComponents()
-{
 	
+	OnRep_SelectedComponents(OldSelectedComponents);
+}
+
+void USelectorComponent::ClearSelection(bool bRepToServer)
+{
+	if (bRepToServer && !GetOwner()->HasAuthority())
+	{
+		ServerClearSelection();
+	}
+	
+	const TArray<USelectableComponent*> OldSelectedComponents = SelectedComponents;
+
+	SelectedComponents.Empty();
+	
+	OnRep_SelectedComponents(OldSelectedComponents);
+}
+
+void USelectorComponent::OnRep_SelectedComponents(const TArray<USelectableComponent*>& OldSelectedComponents)
+{
+	for (USelectableComponent* OldSelectedComponent : OldSelectedComponents)
+	{
+		if (!SelectedComponents.Contains(OldSelectedComponent))
+		{
+			OldSelectedComponent->OnDeselected();
+		}
+	}
+
+	for (USelectableComponent* SelectedComponent : SelectedComponents)
+	{
+		if (!OldSelectedComponents.Contains(SelectedComponent))
+		{
+			SelectedComponent->OnSelected();
+		}
+	}
 }
 
 void USelectorComponent::ServerSelect_Implementation(USelectableComponent* SelectableComponent)
@@ -97,6 +128,11 @@ void USelectorComponent::ServerSelect_Implementation(USelectableComponent* Selec
 void USelectorComponent::ServerDeselect_Implementation(USelectableComponent* SelectableComponent)
 {
 	Deselect(SelectableComponent);
+}
+
+void USelectorComponent::ServerClearSelection_Implementation()
+{
+	ClearSelection();
 }
 
 #pragma endregion

@@ -15,9 +15,13 @@ void USOCGameplayAbility_SelectActor::ActivateAbility(const FGameplayAbilitySpec
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	CommitAbility(Handle, ActorInfo, ActivationInfo);
+
 	const AActor* Actor = TriggerEventData->Target;
 
 	USelectionSystemBlueprintLibrary::SelectActor(GetOwningActorFromActorInfo(), Actor, false);
+
+	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 }
 	
 /** Returns true if this ability can be activated right now. Has no side effects */

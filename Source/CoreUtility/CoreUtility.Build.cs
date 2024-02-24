@@ -25,7 +25,8 @@ public class CoreUtility : ModuleRules
             "DeveloperSettings",
             "UMG",
             "AudioExtensions",
-            "EnhancedInput"
+            "EnhancedInput",
+            "InputCore",
             
             // This module should have no other dependencies other than the engine itself!
         });

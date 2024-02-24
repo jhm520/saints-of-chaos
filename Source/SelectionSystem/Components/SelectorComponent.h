@@ -35,13 +35,16 @@ protected:
 	TArray<USelectableComponent*> SelectedComponents;
 
 	UFUNCTION()
-	void OnRep_SelectedComponents();
+	void OnRep_SelectedComponents(const TArray<USelectableComponent*>& OldSelectedComponents);
 
 	UFUNCTION(Server, Reliable)
 	void ServerSelect(USelectableComponent* SelectableComponent);
 
 	UFUNCTION(Server, Reliable)
 	void ServerDeselect(USelectableComponent* SelectableComponent);
+
+	UFUNCTION(Server, Reliable)
+	void ServerClearSelection();
 	
 public:
 
@@ -52,7 +55,7 @@ public:
 	void Deselect(USelectableComponent* SelectableComponent, bool bRepToServer = true);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Selection")
-	void ClearSelection();
+	void ClearSelection(bool bRepToServer = true);
 
 	UFUNCTION(BlueprintPure, Category = "Selection")
 	TArray<USelectableComponent*> GetSelectedComponents() const {return SelectedComponents;};

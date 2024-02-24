@@ -17,5 +17,8 @@ class SELECTIONSYSTEM_API USelectionSystemBlueprintLibrary : public UBlueprintFu
 public:
 	UFUNCTION(BlueprintCallable, Category = "Selection")
 	static void SelectActor(AActor* Selector, const AActor* SelectedActor, bool bRepToServer = true);
+
+	UFUNCTION(BlueprintCallable, Category = "Selection")
+	static void ClearSelection(AActor* Selector, bool bRepToServer = true);
 	
 };
