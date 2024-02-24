@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "GameFramework/Pawn.h"
 #include "RTSPlayerPawn.generated.h"
 
@@ -13,7 +14,7 @@ class UFloatingPawnMovement;
 class URTSPlayerMouseComponent;
 
 UCLASS()
-class RTSUTILITY_API ARTSPlayerPawn : public APawn
+class RTSUTILITY_API ARTSPlayerPawn : public APawn, public IAttitudeInterface
 {
 	GENERATED_BODY()
 
@@ -102,5 +103,10 @@ protected:
 	UFUNCTION()
 	void OnPlayerMouseScreenEdgeScroll(const FVector2D& Direction);
 
+#pragma endregion
+
+#pragma region Attitude System
+public:
+	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
 #pragma endregion
 };

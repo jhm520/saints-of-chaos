@@ -14,7 +14,7 @@ class USelectableInterface : public UInterface
 };
 
 class USelectableComponent;
-/**
+/** This is an interface for actors that are selectable
  * 
  */
 class SELECTIONSYSTEM_API ISelectableInterface

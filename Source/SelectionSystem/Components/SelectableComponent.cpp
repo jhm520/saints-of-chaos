@@ -4,6 +4,7 @@
 #include "SelectableComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "SelectionSystem/Interfaces/SelectionInterface.h"
 
 #pragma region Framework
 
@@ -42,11 +43,47 @@ void USelectableComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void USelectableComponent::OnSelected(AActor* Selector)
 {
 	OnSelectedDelegate.Broadcast(Selector);
+
+	TArray<AActor*> ChildActors;
+	GetOwner()->GetAllChildActors(ChildActors);
+
+	for (AActor* ChildActor : ChildActors)
+	{
+		if (!ChildActor)
+		{
+			continue;
+		}
+
+		if (!ChildActor->Implements<USelectionInterface>())
+		{
+			continue;
+		}
+
+		ISelectionInterface::Execute_OnSelected(ChildActor, Selector, GetOwner());
+	}
 }
 
 void USelectableComponent::OnDeselected(AActor* Selector)
 {
 	OnDeselectedDelegate.Broadcast(Selector);
+
+	TArray<AActor*> ChildActors;
+	GetOwner()->GetAllChildActors(ChildActors);
+
+	for (AActor* ChildActor : ChildActors)
+	{
+		if (!ChildActor)
+		{
+			continue;
+		}
+
+		if (!ChildActor->Implements<USelectionInterface>())
+		{
+			continue;
+		}
+
+		ISelectionInterface::Execute_OnSelected(ChildActor, Selector, GetOwner());
+	}
 }
 
 #pragma endregion

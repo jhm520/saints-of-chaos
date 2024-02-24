@@ -192,3 +192,27 @@ void ARTSPlayerPawn::OnPlayerMouseScreenEdgeScroll(const FVector2D& Direction)
 }
 
 #pragma endregion
+
+#pragma region Attitude System
+
+EAttitude ARTSPlayerPawn::GetAttitudeTowards_Implementation(AActor* Other) const
+{
+	if (!Other)
+	{
+		return EAttitude::Neutral;
+	}
+
+	if (!GetController())
+	{
+		return EAttitude::Neutral;
+	}
+
+	if (!GetController()->Implements<UAttitudeInterface>())
+	{
+		return EAttitude::Neutral;
+	}
+
+	return IAttitudeInterface::Execute_GetAttitudeTowards(Other, GetController());
+}
+
+#pragma endregion

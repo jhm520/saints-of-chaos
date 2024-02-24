@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 
 #include "AggroSystemComponent.generated.h"
-
+	
 //component for actors that are controlled by the SOCAI system and AI Behaviors
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class AGGROSYSTEM_API UAggroSystemComponent : public UActorComponent

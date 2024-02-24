@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectedDelegate, AActor*, Selector);
 
+//this is a component that is meant to be added to actors that are selectable by selectors
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SELECTIONSYSTEM_API USelectableComponent : public UActorComponent
 {

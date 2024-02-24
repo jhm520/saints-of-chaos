@@ -8,6 +8,9 @@
 
 class USelectableComponent;
 
+
+//this is a component that is meant to be added to actors that care about selecting things
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SELECTIONSYSTEM_API USelectorComponent : public UActorComponent
 {

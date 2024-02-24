@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "SelectorInterface.generated.h"
 
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class USelectorInterface : public UInterface
@@ -15,7 +16,7 @@ class USelectorInterface : public UInterface
 
 class USelectorComponent;
 
-/**
+/** This is an interface for actors that care about selecting
  * 
  */
 class SELECTIONSYSTEM_API ISelectorInterface
