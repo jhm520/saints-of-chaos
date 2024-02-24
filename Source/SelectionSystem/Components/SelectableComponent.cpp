@@ -39,14 +39,14 @@ void USelectableComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 #pragma region Selectable
 
-void USelectableComponent::OnSelected()
+void USelectableComponent::OnSelected(AActor* Selector)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetOwner()->GetName() + TEXT(" Selected"));
+	OnSelectedDelegate.Broadcast(Selector);
 }
 
-void USelectableComponent::OnDeselected()
+void USelectableComponent::OnDeselected(AActor* Selector)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, GetOwner()->GetName() + TEXT(" Deselected"));
+	OnDeselectedDelegate.Broadcast(Selector);
 }
 
 #pragma endregion

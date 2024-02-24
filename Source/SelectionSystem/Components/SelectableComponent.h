@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "SelectableComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectedDelegate, AActor*, Selector);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SELECTIONSYSTEM_API USelectableComponent : public UActorComponent
 {
@@ -30,10 +32,16 @@ public:
 #pragma region Selectable
 
 	UFUNCTION()
-	void OnSelected();
+	void OnSelected(AActor* Selector);
+
+	UPROPERTY(BlueprintAssignable, Category = "Selection")
+	FOnSelectedDelegate OnSelectedDelegate;
 
 	UFUNCTION()
-	void OnDeselected();
+	void OnDeselected(AActor* Selector);
+
+	UPROPERTY(BlueprintAssignable, Category = "Selection")
+	FOnSelectedDelegate OnDeselectedDelegate;
 
 #pragma endregion
 

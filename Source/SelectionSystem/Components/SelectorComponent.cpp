@@ -41,7 +41,7 @@ void USelectorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(USelectorComponent, SelectedComponents, COND_SkipOwner, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(USelectorComponent, SelectedComponents, COND_None, REPNOTIFY_Always);
 
 }
 
@@ -107,7 +107,7 @@ void USelectorComponent::OnRep_SelectedComponents(const TArray<USelectableCompon
 	{
 		if (!SelectedComponents.Contains(OldSelectedComponent))
 		{
-			OldSelectedComponent->OnDeselected();
+			OldSelectedComponent->OnDeselected(GetOwner());
 		}
 	}
 
@@ -115,7 +115,7 @@ void USelectorComponent::OnRep_SelectedComponents(const TArray<USelectableCompon
 	{
 		if (!OldSelectedComponents.Contains(SelectedComponent))
 		{
-			SelectedComponent->OnSelected();
+			SelectedComponent->OnSelected(GetOwner());
 		}
 	}
 }
