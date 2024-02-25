@@ -11,7 +11,6 @@
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("PathFollowingComponent")))
 {
-	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
 	MovementAcceptanceRadius = 50.0f;
 }
 
@@ -34,6 +33,18 @@ void ASOCAIController::Tick(const float DeltaSeconds)
 #pragma endregion
 
 #pragma region Behavior Inteface
+
+
+USOCAIBehaviorComponent* ASOCAIController::GetBehaviorComponent() const
+{
+	ISOCAIBehaviorInterface* PawnBehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetPawn());
+	if (!PawnBehaviorInterface)
+	{
+		return nullptr;
+	}
+
+	return PawnBehaviorInterface->GetBehaviorComponent();
+}
 
 void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 {

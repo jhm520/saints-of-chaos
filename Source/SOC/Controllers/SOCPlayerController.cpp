@@ -7,6 +7,7 @@
 #include "EngineUtils.h"
 #include "CoreUtility/Clicking/Components/ClickingComponent.h"
 #include "SOC/Gameplay/Buildings/Building.h"
+#include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
 
@@ -93,8 +94,15 @@ EAttitude ASOCPlayerController::GetAttitudeTowards_Implementation(AActor* Other)
 	{
 		return IAttitudeInterface::Execute_GetAttitudeTowards(GetPawn(), Other);
 	}
+
+	const bool bIsDirectedByMe = USOCAIFunctionLibrary::IsActorDirectedBy(Other, this);
+
+	if (bIsDirectedByMe)
+	{
+		return EAttitude::Friendly;
+	}
 	
-	return EAttitude::Neutral;
+	return EAttitude::Hostile;
 }
 
 #pragma endregion

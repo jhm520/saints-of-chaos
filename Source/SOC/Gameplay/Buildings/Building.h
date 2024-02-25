@@ -8,13 +8,14 @@
 #include "GameFramework/Pawn.h"
 #include "GameplayTagContainer.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "Building.generated.h"
 
 class UGameplayAbilityCollection;
 class UAbilitySystemComponent;
 
 UCLASS()
-class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface
+class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -89,6 +90,28 @@ public:
 #pragma region Attitude
 
 	EAttitude GetAttitudeTowards_Implementation(AActor* Other) const;
+
+#pragma endregion
+
+#pragma region Behavior
+
+protected:
+	UPROPERTY()
+	TObjectPtr<USOCAIBehaviorComponent> BehaviorComponent;
+
+	UPROPERTY()
+	TObjectPtr<USOCAIAvatarComponent> AvatarComponent;
+
+public:
+
+	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;}
+
+	virtual USOCAIAvatarComponent* GetAvatarComponent() const override {return AvatarComponent;}
+
+	virtual const AActor* GetAvatarActor() const override {return this;}
+
+	UFUNCTION()
+	void OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn);
 
 #pragma endregion
 

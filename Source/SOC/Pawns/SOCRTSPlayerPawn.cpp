@@ -86,32 +86,34 @@ EAttitude ASOCRTSPlayerPawn::GetAttitudeTowards_Implementation(AActor* Other) co
 		return EAttitude::Friendly;
 	}
 
-	//if its null, it's neutral
-	if (!Other)
-	{
-		return EAttitude::Neutral;
-	}
-	
-	AActor* OtherOwner = Other->GetOwner();
-
-	//if it doesn't have an owner, it's neutral
-	if (!OtherOwner)
-	{
-		return EAttitude::Neutral;
-	}
-
-	//follow the chain of ownership up to the top
-	while (OtherOwner->GetOwner())
-	{
-		OtherOwner = OtherOwner->GetOwner();
-	}
-
-	if (OtherOwner == GetOwner())
-	{
-		return EAttitude::Friendly;
-	}
-
 	return EAttitude::Hostile;
+
+	// //if its null, it's neutral
+	// if (!Other)
+	// {
+	// 	return EAttitude::Neutral;
+	// }
+	//
+	// AActor* OtherOwner = Other->GetOwner();
+	//
+	// //if it doesn't have an owner, it's neutral
+	// if (!OtherOwner)
+	// {
+	// 	return EAttitude::Neutral;
+	// }
+	//
+	// //follow the chain of ownership up to the top
+	// while (OtherOwner->GetOwner())
+	// {
+	// 	OtherOwner = OtherOwner->GetOwner();
+	// }
+	//
+	// if (OtherOwner == GetOwner())
+	// {
+	// 	return EAttitude::Friendly;
+	// }
+	//
+	// return EAttitude::Hostile;
 }
 
 #pragma endregion

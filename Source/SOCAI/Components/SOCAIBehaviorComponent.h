@@ -27,6 +27,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 #pragma endregion
 
 #pragma region Behavior
@@ -56,11 +59,11 @@ protected:
 	FSOCAIAction CurrentAction;
 	
 public:
+
+	void InitBehaviorSystem(AActor* InDirector, APawn* InDirectorPawn);
 	
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	ASOCAIBehaviorManager* GetBehaviorManager(){return BehaviorManager;};
-	
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	UFUNCTION(BlueprintCallable, Category = "AI|Behavior")
 	bool SetBehaviorState(const FGameplayTag& InBehaviorTag);

@@ -34,6 +34,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void PossessedBy(AController* NewController) override;
 #pragma endregion
 
 #pragma region Attitude System
@@ -42,12 +44,19 @@ public:
 #pragma endregion
 
 #pragma region Behavior
+protected:
+	//
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Behavior")
+	TObjectPtr<USOCAIBehaviorComponent> BehaviorComponent;
 
-	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override;
+public:
+	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
 
 	virtual USOCAIAvatarComponent* GetAvatarComponent() const override;
 
 	virtual const AActor* GetAvatarActor() const override {return this;};
+
+	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;
 
 	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
 

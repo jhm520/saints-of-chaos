@@ -14,6 +14,9 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
+#include "SOCAI/SOCAIFunctionLibrary.h"
+#include "SOCAI/Components/SOCAIAvatarComponent.h"
+#include "SOCAI/Components/SOCAIBehaviorComponent.h"
 
 #pragma region Framework
 // Sets default values
@@ -25,6 +28,9 @@ ASOCBuilding::ASOCBuilding()
 	AbilitySystemComponent->SetIsReplicated(true);
 
 	OwningControllerId = -1;
+
+	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
+	AvatarComponent = CreateDefaultSubobject<USOCAIAvatarComponent>(TEXT("AvatarComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -64,6 +70,17 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 		InitAbilitySystem();
 
 		StartSpawningMobs();
+		
+		AController* ControllerDirector = Cast<AController>(NewOwner);
+
+		if (!ControllerDirector)
+		{
+			return;
+		}
+		
+		ControllerDirector->OnPossessedPawnChanged.AddDynamic(this, &ASOCBuilding::OnDirectorPossessedPawnChanged);
+	
+		BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
 	}
 }
 
@@ -73,8 +90,15 @@ void ASOCBuilding::OnRep_Owner()
 	
 	InitAbilitySystem();
 
-}
+	AController* ControllerDirector = Cast<AController>(GetOwner());
 
+	if (!ControllerDirector)
+	{
+		return;
+	}
+	
+	BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
+}
 
 // Called every frame
 void ASOCBuilding::Tick(float DeltaTime)
@@ -222,8 +246,29 @@ bool ASOCBuilding::CanTakeOwnership(AActor* InOwner) const
 
 EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
 {
+	const bool bIsDirectedByMe = USOCAIFunctionLibrary::IsActorDirectedBy(Other, GetBehaviorComponent()->GetDirectorPawn());
+
+	if (bIsDirectedByMe)
+	{
+		return EAttitude::Friendly;
+	}
 	return EAttitude::Neutral;
 }
 
 #pragma endregion
 
+#pragma region Behavior
+
+void ASOCBuilding::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
+{
+	AController* ControllerDirector = Cast<AController>(GetOwner());
+
+	if (!ControllerDirector)
+	{
+		return;
+	}
+	
+	BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
+}
+
+#pragma endregion

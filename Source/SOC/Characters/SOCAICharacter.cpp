@@ -19,6 +19,7 @@ ASOCAICharacter::ASOCAICharacter()
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 100.0f;
 
+	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
 	AvatarComponent = CreateDefaultSubobject<USOCAIAvatarComponent>(TEXT("AvatarComponent"));
 }
 
@@ -66,17 +67,17 @@ void ASOCAICharacter::SpawnDefaultController()
 		return;
 	}
 
-	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
+	USOCAIBehaviorComponent* LocalBehaviorComponent = BehaviorInterface->GetBehaviorComponent();
 
-	if (!BehaviorComponent)
+	if (!LocalBehaviorComponent)
 	{
 		return;
 	}
 	
 	//set the previous owner to be the director of the behavior component
-	BehaviorComponent->SetDirector(OldOwner);
+	LocalBehaviorComponent->SetDirector(OldOwner);
 
-	BehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
+	LocalBehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
 }
 
 // Called every frame
@@ -92,6 +93,12 @@ void ASOCAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+void ASOCAICharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+}
+
 
 #pragma region Attitude System
 EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) const
@@ -124,18 +131,6 @@ EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) cons
 
 #pragma region Behavior
 
-USOCAIBehaviorComponent* ASOCAICharacter::GetBehaviorComponent() const
-{
-	ISOCAIBehaviorInterface* ControllerBehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetController());
-
-	if (!ControllerBehaviorInterface)
-	{
-		return nullptr;
-	}
-
-	return ControllerBehaviorInterface->GetBehaviorComponent();
-}
-
 USOCAIAvatarComponent* ASOCAICharacter::GetAvatarComponent() const
 {
 	return AvatarComponent;
@@ -146,6 +141,14 @@ void ASOCAICharacter::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnt
 	if (InEnteredBehaviorAction.ActionTag == SOCAIActionTags::Attack)
 	{
 		
+	}
+}
+
+void ASOCAICharacter::DoAIAction_Implementation(const FSOCAIAction& Action)
+{
+	if (GetController() && GetController()->Implements<USOCAIBehaviorInterface>())
+	{
+		ISOCAIBehaviorInterface::Execute_DoAIAction(GetController(), Action);
 	}
 }
 
@@ -168,14 +171,14 @@ void ASOCAICharacter::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewP
 		return;
 	}
 
-	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
+	USOCAIBehaviorComponent* LocalBehaviorComponent = BehaviorInterface->GetBehaviorComponent();
 
-	if (!BehaviorComponent)
+	if (!LocalBehaviorComponent)
 	{
 		return;
 	}
 
-	AActor* Director = BehaviorComponent->GetDirector();
+	AActor* Director = LocalBehaviorComponent->GetDirector();
 
 	if (!Director)
 	{
@@ -189,7 +192,7 @@ void ASOCAICharacter::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewP
 		return;
 	}
 	
-	BehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
+	LocalBehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
 }
 
 
@@ -212,14 +215,14 @@ AActor* ASOCAICharacter::GetTargetActor() const
 		return nullptr;
 	}
 
-	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
+	USOCAIBehaviorComponent* LocalBehaviorComponent = BehaviorInterface->GetBehaviorComponent();
 
-	if (!BehaviorComponent)
+	if (!LocalBehaviorComponent)
 	{
 		return nullptr;
 	}
 
-	const FSOCAIAction& CurrentAction = BehaviorComponent->GetCurrentAction();
+	const FSOCAIAction& CurrentAction = LocalBehaviorComponent->GetCurrentAction();
 
 	return CurrentAction.TargetActor;
 }

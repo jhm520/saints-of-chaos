@@ -59,7 +59,7 @@ public:
 
 	virtual const AActor* GetAvatarActor() const override {return GetPawn();};
 
-	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
+	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override;
 
 	virtual USOCAIAvatarComponent* GetAvatarComponent() const override;
 	

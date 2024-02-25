@@ -159,6 +159,24 @@ void USOCAIBehaviorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
+void USOCAIBehaviorComponent::InitBehaviorSystem(AActor* InDirector, APawn* InDirectorPawn)
+{
+	if (!InDirector)
+	{
+		return;
+	}
+	
+	SetDirector(InDirector);
+
+	if (!InDirectorPawn)
+	{
+		return;
+	}
+
+	SetDirectorPawn(InDirectorPawn);
+}
+
+
 bool USOCAIBehaviorComponent::SetBehaviorState(const FGameplayTag& InBehaviorTag)
 {
 	if (GetOwner()->GetLocalRole() != ROLE_Authority)
