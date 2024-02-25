@@ -60,8 +60,6 @@ public:
 	virtual const AActor* GetAvatarActor() const override {return GetPawn();};
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override;
-
-	virtual USOCAIAvatarComponent* GetAvatarComponent() const override;
 	
 	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
 

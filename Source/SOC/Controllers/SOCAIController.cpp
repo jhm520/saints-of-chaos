@@ -74,20 +74,6 @@ void ASOCAIController::DoAIAction_MoveToLocation(const FSOCAIAction& Action) con
 	
 }
 
-
-USOCAIAvatarComponent* ASOCAIController::GetAvatarComponent() const
-{
-	const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetAvatarActor());
-
-	if (!BehaviorInterface)
-	{
-		return nullptr;
-	}
-
-	return BehaviorInterface->GetAvatarComponent();
-}
-
-
 void ASOCAIController::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const
 {
 	if (!GetPawn() || !GetPawn()->Implements<USOCAIBehaviorInterface>())

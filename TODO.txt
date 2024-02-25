@@ -27,3 +27,6 @@ TODO: Explicitly define the order of child activation in Behavior tree. I think 
 TODO: Targeting system for RTS player pawn
 TODO: SelectionSystem
 TODO: Use ProjectWorldToScreen and DeprojectScreenToWorld to create a box selection
+TODO: Get rid of avatar component, just replicate the behavior component with the properties transfered over from avatar
+TODO: Rename director pawn to director avatar
+TODO: Have the building call SetDirector and DirectorAvatar when it spawns an AI Character

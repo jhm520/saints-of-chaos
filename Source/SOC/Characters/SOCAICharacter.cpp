@@ -21,7 +21,6 @@ ASOCAICharacter::ASOCAICharacter()
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 100.0f;
 
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
-	AvatarComponent = CreateDefaultSubobject<USOCAIAvatarComponent>(TEXT("AvatarComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -74,11 +73,9 @@ void ASOCAICharacter::SpawnDefaultController()
 	{
 		return;
 	}
-	
-	//set the previous owner to be the director of the behavior component
-	LocalBehaviorComponent->SetDirector(OldOwner);
 
-	LocalBehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
+	//set the previous owner to be the director of the behavior component
+	LocalBehaviorComponent->SetDirector(LocalDirectorController->GetPawn());
 }
 
 // Called every frame
@@ -108,20 +105,16 @@ EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) cons
 	{
 		return EAttitude::Neutral;
 	}
+	
 
-	if (!GetAvatarComponent())
+	AActor* Director = GetBehaviorComponent()->GetDirector();
+
+	if (!Director)
 	{
 		return EAttitude::Neutral;
 	}
 
-	APawn* DirectorPawn = GetAvatarComponent()->GetDirectorPawn();
-
-	if (!DirectorPawn)
-	{
-		return EAttitude::Neutral;
-	}
-
-	const bool bIsDirectedByMyDirector = USOCAIFunctionLibrary::IsActorDirectedBy(Other, DirectorPawn);
+	const bool bIsDirectedByMyDirector = USOCAIFunctionLibrary::IsActorDirectedBy(Other, Director);
 
 	if (bIsDirectedByMyDirector)
 	{
@@ -133,11 +126,6 @@ EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) cons
 #pragma endregion
 
 #pragma region Behavior
-
-USOCAIAvatarComponent* ASOCAICharacter::GetAvatarComponent() const
-{
-	return AvatarComponent;
-}
 
 void ASOCAICharacter::OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const
 {
@@ -162,14 +150,7 @@ void ASOCAICharacter::OnExitedBehavior_Implementation(const FSOCAIAction& InExit
 
 void ASOCAICharacter::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
 {
-	AController* ControllerDirector = Cast<AController>(GetBehaviorComponent()->GetDirector());
-
-	if (!ControllerDirector)
-	{
-		return;
-	}
-	
-	BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
+	BehaviorComponent->InitBehaviorSystem(NewPawn);
 }
 
 

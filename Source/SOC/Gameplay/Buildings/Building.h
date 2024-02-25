@@ -99,15 +99,10 @@ protected:
 	UPROPERTY()
 	TObjectPtr<USOCAIBehaviorComponent> BehaviorComponent;
 
-	UPROPERTY()
-	TObjectPtr<USOCAIAvatarComponent> AvatarComponent;
-
 public:
 
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;}
-
-	virtual USOCAIAvatarComponent* GetAvatarComponent() const override {return AvatarComponent;}
-
+	
 	virtual const AActor* GetAvatarActor() const override {return this;}
 
 	UFUNCTION()

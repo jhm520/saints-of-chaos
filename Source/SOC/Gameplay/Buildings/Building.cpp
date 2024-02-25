@@ -30,7 +30,6 @@ ASOCBuilding::ASOCBuilding()
 	OwningControllerId = -1;
 
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
-	AvatarComponent = CreateDefaultSubobject<USOCAIAvatarComponent>(TEXT("AvatarComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -80,7 +79,7 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 		
 		ControllerDirector->OnPossessedPawnChanged.AddDynamic(this, &ASOCBuilding::OnDirectorPossessedPawnChanged);
 	
-		BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
+		BehaviorComponent->InitBehaviorSystem(ControllerDirector->GetPawn());
 	}
 }
 
@@ -97,7 +96,7 @@ void ASOCBuilding::OnRep_Owner()
 		return;
 	}
 	
-	BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
+	BehaviorComponent->InitBehaviorSystem(ControllerDirector->GetPawn());
 }
 
 // Called every frame
@@ -251,19 +250,14 @@ EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
 		return EAttitude::Neutral;
 	}
 
-	if (!GetAvatarComponent())
+	AActor* Director = GetBehaviorComponent()->GetDirector();
+
+	if (!Director)
 	{
 		return EAttitude::Neutral;
 	}
 
-	APawn* DirectorPawn = GetAvatarComponent()->GetDirectorPawn();
-
-	if (!DirectorPawn)
-	{
-		return EAttitude::Neutral;
-	}
-
-	const bool bIsDirectedByMyDirector = USOCAIFunctionLibrary::IsActorDirectedBy(Other, DirectorPawn);
+	const bool bIsDirectedByMyDirector = USOCAIFunctionLibrary::IsActorDirectedBy(Other, Director);
 
 	if (bIsDirectedByMyDirector)
 	{
@@ -279,14 +273,7 @@ EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
 
 void ASOCBuilding::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
 {
-	AController* ControllerDirector = Cast<AController>(GetBehaviorComponent()->GetDirector());
-
-	if (!ControllerDirector)
-	{
-		return;
-	}
-	
-	BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
+	BehaviorComponent->InitBehaviorSystem(NewPawn);
 }
 
 #pragma endregion

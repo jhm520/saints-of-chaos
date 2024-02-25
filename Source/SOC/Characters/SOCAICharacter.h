@@ -51,9 +51,7 @@ protected:
 
 public:
 	virtual USOCAIBehaviorComponent* GetBehaviorComponent() const override {return BehaviorComponent;};
-
-	virtual USOCAIAvatarComponent* GetAvatarComponent() const override;
-
+	
 	virtual const AActor* GetAvatarActor() const override {return this;};
 
 	virtual void DoAIAction_Implementation(const FSOCAIAction& Action) override;
@@ -61,10 +59,6 @@ public:
 	virtual void OnEnteredBehavior_Implementation(const FSOCAIAction& InEnteredBehaviorAction, const FSOCAIAction& InExitedBehaviorAction) const override;
 
 	virtual void OnExitedBehavior_Implementation(const FSOCAIAction& InExitedBehaviorAction, const FSOCAIAction& InEnteredBehaviorAction) const override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	TObjectPtr<USOCAIAvatarComponent> AvatarComponent;
-
 	UFUNCTION()
 	void OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn);
 

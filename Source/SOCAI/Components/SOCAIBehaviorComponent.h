@@ -55,12 +55,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
 	FGameplayTag RootBehaviorState = SOCAIBehaviorTags::Behavior;
 
-	UPROPERTY(Transient, BlueprintReadOnly, Category = "AI|Behavior")
+	UPROPERTY(ReplicatedUsing="OnRep_CurrentAction", Transient, BlueprintReadOnly, Category = "AI|Behavior")
 	FSOCAIAction CurrentAction;
+
+	UFUNCTION()
+	void OnRep_CurrentAction(const FSOCAIAction& PreviousAction);
+
 	
 public:
 
-	void InitBehaviorSystem(AActor* InDirector, APawn* InDirectorPawn);
+	void InitBehaviorSystem(AActor* InDirector);
 	
 	UFUNCTION(BlueprintPure, Category = "AI|Behavior")
 	ASOCAIBehaviorManager* GetBehaviorManager(){return BehaviorManager;};
@@ -95,16 +99,14 @@ public:
 	AActor* GetDirector() const { return Director; }
 
 	//sets the actor that directs the behavior of this actor
-	AActor* SetDirector(AActor* InDirector) { return Director = InDirector; }
+	void SetDirector(AActor* InDirector);
 
-	//returns the actor that is directing the behavior of this actor
-	APawn* GetDirectorPawn() const;
-
-	//sets the actor that directs the behavior of this actor
-	void SetDirectorPawn(APawn* InDirectorPawn);
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "AI|Director")
+	UPROPERTY(ReplicatedUsing="OnRep_Director", BlueprintReadOnly, Category = "AI|Director")
 	TObjectPtr<AActor> Director = nullptr;
+
+	UFUNCTION()
+	void OnRep_Director();
 
 #pragma endregion
 

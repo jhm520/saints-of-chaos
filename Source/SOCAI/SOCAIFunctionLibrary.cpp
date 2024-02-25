@@ -4,6 +4,7 @@
 #include "SOCAIFunctionLibrary.h"
 
 #include "Components/SOCAIAvatarComponent.h"
+#include "Components/SOCAIBehaviorComponent.h"
 #include "Interfaces/SOCAIBehaviorInterface.h"
 
 bool USOCAIFunctionLibrary::IsActorDirectedBy(const AActor* Actor, const AActor* Director)
@@ -20,26 +21,21 @@ bool USOCAIFunctionLibrary::IsActorDirectedBy(const AActor* Actor, const AActor*
 		return false;
 	}
 
-	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
+	USOCAIBehaviorComponent* BehaviorComponent = BehaviorInterface->GetBehaviorComponent();
 
-	if (!AvatarComponent)
+	if (!BehaviorComponent)
 	{
 		return false;
 	}
 
-	APawn* DirectorPawn = AvatarComponent->GetDirectorPawn();
+	AActor* LocalDirector = BehaviorComponent->GetDirector();
 
-	if (!DirectorPawn)
+	if (!LocalDirector)
 	{
 		return false;
 	}
 
-	if (DirectorPawn == Director)
-	{
-		return true;
-	}
-
-	if (DirectorPawn->GetOwner() == Director)
+	if (LocalDirector == Director)
 	{
 		return true;
 	}

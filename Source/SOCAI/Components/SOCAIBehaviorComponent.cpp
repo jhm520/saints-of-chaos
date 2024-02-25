@@ -18,7 +18,7 @@ USOCAIBehaviorComponent::USOCAIBehaviorComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	//SetIsReplicatedByDefault(true);
+	SetIsReplicatedByDefault(true);
 	// ...
 	
 	CurrentAction = FSOCAIAction();
@@ -46,6 +46,15 @@ void USOCAIBehaviorComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 	// ...
 }
+
+void USOCAIBehaviorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, CurrentAction, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, Director, COND_None, REPNOTIFY_Always);
+}
+
 #pragma endregion
 
 #pragma region Behavior
@@ -109,25 +118,22 @@ void USOCAIBehaviorComponent::OnActionChanged(const FSOCAIAction& InCurrentActio
 	{
 		ISOCAIBehaviorInterface::Execute_DoAIAction(GetOwner(), InCurrentAction);
 	}
-	
-	//replicate the action to the avatar component
-	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
-
-	if (!BehaviorInterface)
-	{
-		return;
-	}
-	
-	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
-
-	if (!AvatarComponent)
-	{
-		return;
-	}
-
-	AvatarComponent->SetCurrentAction(InCurrentAction);
 }
 
+void USOCAIBehaviorComponent::OnRep_CurrentAction(const FSOCAIAction& PreviousAction)
+{
+	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
+
+	if (PreviousAction.BehaviorTag != CurrentAction.BehaviorTag)
+	{
+		OnBehaviorChanged(CurrentAction, PreviousAction);
+	}
+	
+	if (CurrentAction != PreviousAction)
+	{
+		OnActionChanged(CurrentAction, PreviousAction);
+	}
+}
 
 void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
 {
@@ -141,17 +147,8 @@ void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)
 		SetBehaviorState(InAction.BehaviorTag);
 	}
 
-	if (PreviousAction.BehaviorTag != CurrentAction.BehaviorTag)
-	{
-		OnBehaviorChanged(CurrentAction, PreviousAction);
-	}
-
-	//do any moves, attacks, targetings, spells that are passed in through the SOCAIAction
-
-	if (CurrentAction != PreviousAction)
-	{
-		OnActionChanged(CurrentAction, PreviousAction);
-	}
+	OnRep_CurrentAction(PreviousAction);
+	
 }
 
 void USOCAIBehaviorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -159,7 +156,7 @@ void USOCAIBehaviorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-void USOCAIBehaviorComponent::InitBehaviorSystem(AActor* InDirector, APawn* InDirectorPawn)
+void USOCAIBehaviorComponent::InitBehaviorSystem(AActor* InDirector)
 {
 	if (!InDirector)
 	{
@@ -167,13 +164,7 @@ void USOCAIBehaviorComponent::InitBehaviorSystem(AActor* InDirector, APawn* InDi
 	}
 	
 	SetDirector(InDirector);
-
-	if (!InDirectorPawn)
-	{
-		return;
-	}
-
-	SetDirectorPawn(InDirectorPawn);
+	
 }
 
 
@@ -239,46 +230,15 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 
 #pragma region Director
 
-//returns the actor that is directing the behavior of this actor
-APawn* USOCAIBehaviorComponent::GetDirectorPawn() const
+void USOCAIBehaviorComponent::SetDirector(AActor* InDirector)
 {
-	//replicate the action to the avatar component
-	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
-
-	if (!BehaviorInterface)
-	{
-		return nullptr;
-	}
-	
-	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
-
-	if (!AvatarComponent)
-	{
-		return nullptr;
-	}
-	
-	return AvatarComponent->GetDirectorPawn();
+	Director = InDirector;
+	OnRep_Director();
 }
 
-//sets the actor that directs the behavior of this actor
-void USOCAIBehaviorComponent::SetDirectorPawn(APawn* InDirectorPawn)
+void USOCAIBehaviorComponent::OnRep_Director()
 {
-	//replicate the action to the avatar component
-	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetOwner());
-
-	if (!BehaviorInterface)
-	{
-		return;
-	}
 	
-	USOCAIAvatarComponent* AvatarComponent = BehaviorInterface->GetAvatarComponent();
-
-	if (!AvatarComponent)
-	{
-		return;
-	}
-	
-	AvatarComponent->SetDirectorPawn(InDirectorPawn);
 }
 
 #pragma endregion
