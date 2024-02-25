@@ -5,6 +5,7 @@
 
 #include "AIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 #include "SOCAI/Components/SOCAIAvatarComponent.h"
 
@@ -120,12 +121,14 @@ EAttitude ASOCAICharacter::GetAttitudeTowards_Implementation(AActor* Other) cons
 		return EAttitude::Neutral;
 	}
 
-	if (!DirectorPawn->Implements<UAttitudeInterface>())
+	const bool bIsDirectedByMyDirector = USOCAIFunctionLibrary::IsActorDirectedBy(Other, DirectorPawn);
+
+	if (bIsDirectedByMyDirector)
 	{
-		return EAttitude::Neutral;
+		return EAttitude::Friendly;
 	}
 
-	return IAttitudeInterface::Execute_GetAttitudeTowards(DirectorPawn, Other);
+	return EAttitude::Hostile;
 }
 #pragma endregion
 
@@ -159,40 +162,14 @@ void ASOCAICharacter::OnExitedBehavior_Implementation(const FSOCAIAction& InExit
 
 void ASOCAICharacter::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
 {
-	if (!NewPawn)
+	AController* ControllerDirector = Cast<AController>(GetBehaviorComponent()->GetDirector());
+
+	if (!ControllerDirector)
 	{
 		return;
 	}
 	
-	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(this);
-
-	if (!BehaviorInterface)
-	{
-		return;
-	}
-
-	USOCAIBehaviorComponent* LocalBehaviorComponent = BehaviorInterface->GetBehaviorComponent();
-
-	if (!LocalBehaviorComponent)
-	{
-		return;
-	}
-
-	AActor* Director = LocalBehaviorComponent->GetDirector();
-
-	if (!Director)
-	{
-		return;
-	}
-	
-	AController* LocalDirectorController = Cast<AController>(Director);
-
-	if (!LocalDirectorController)
-	{
-		return;
-	}
-	
-	LocalBehaviorComponent->SetDirectorPawn(LocalDirectorController->GetPawn());
+	BehaviorComponent->InitBehaviorSystem(ControllerDirector, ControllerDirector->GetPawn());
 }
 
 

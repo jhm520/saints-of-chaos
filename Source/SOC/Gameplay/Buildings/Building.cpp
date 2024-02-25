@@ -246,13 +246,31 @@ bool ASOCBuilding::CanTakeOwnership(AActor* InOwner) const
 
 EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
 {
-	const bool bIsDirectedByMe = USOCAIFunctionLibrary::IsActorDirectedBy(Other, GetBehaviorComponent()->GetDirectorPawn());
+	if (!Other)
+	{
+		return EAttitude::Neutral;
+	}
 
-	if (bIsDirectedByMe)
+	if (!GetAvatarComponent())
+	{
+		return EAttitude::Neutral;
+	}
+
+	APawn* DirectorPawn = GetAvatarComponent()->GetDirectorPawn();
+
+	if (!DirectorPawn)
+	{
+		return EAttitude::Neutral;
+	}
+
+	const bool bIsDirectedByMyDirector = USOCAIFunctionLibrary::IsActorDirectedBy(Other, DirectorPawn);
+
+	if (bIsDirectedByMyDirector)
 	{
 		return EAttitude::Friendly;
 	}
-	return EAttitude::Neutral;
+
+	return EAttitude::Hostile;
 }
 
 #pragma endregion
@@ -261,7 +279,7 @@ EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
 
 void ASOCBuilding::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
 {
-	AController* ControllerDirector = Cast<AController>(GetOwner());
+	AController* ControllerDirector = Cast<AController>(GetBehaviorComponent()->GetDirector());
 
 	if (!ControllerDirector)
 	{
