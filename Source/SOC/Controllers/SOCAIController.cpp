@@ -135,52 +135,17 @@ bool ASOCAIController::ShouldAggro(AActor* AggroTarget) const
 #pragma region Attitude System
 EAttitude ASOCAIController::GetAttitudeTowards_Implementation(AActor* Other) const
 {
-	if (!Other)
+	if (!GetPawn())
 	{
 		return EAttitude::Neutral;
 	}
 
-	USOCAIBehaviorComponent* LocalBehaviorComponent = GetBehaviorComponent();
-
-	if (!LocalBehaviorComponent)
+	if (!GetPawn()->Implements<UAttitudeInterface>())
 	{
 		return EAttitude::Neutral;
 	}
 
-	APawn* DirectorPawn = LocalBehaviorComponent->GetDirectorPawn();
-
-	if (!DirectorPawn)
-	{
-		return EAttitude::Neutral;
-	}
-
-	ISOCAIBehaviorInterface* OtherBehaviorInterface = Cast<ISOCAIBehaviorInterface>(Other);
-
-	if (!OtherBehaviorInterface)
-	{
-		return EAttitude::Neutral;
-	}
-	
-	USOCAIAvatarComponent* OtherAvatarComponent = OtherBehaviorInterface->GetAvatarComponent();
-
-	if (!OtherAvatarComponent)
-	{
-		return EAttitude::Neutral;
-	}
-
-	APawn* OtherDirectorPawn = OtherAvatarComponent->GetDirectorPawn();
-
-	if (!OtherDirectorPawn)
-	{
-		return EAttitude::Neutral;
-	}
-
-	if (DirectorPawn == OtherDirectorPawn)
-	{
-		return EAttitude::Friendly;
-	}
-
-	return EAttitude::Hostile;
+	return IAttitudeInterface::Execute_GetAttitudeTowards(GetPawn(), Other);
 }
 #pragma endregion
 

@@ -5,6 +5,7 @@
 #include "SelectionSystem/Components/SelectorComponent.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilityCollection.h"
+#include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "SOCAI/Components/SOCAIAvatarComponent.h"
 
@@ -78,48 +79,39 @@ void ASOCRTSPlayerPawn::InitAbilitySystem()
 
 EAttitude ASOCRTSPlayerPawn::GetAttitudeTowards_Implementation(AActor* Other) const
 {
+	const bool bIsDirectedByMe = USOCAIFunctionLibrary::IsActorDirectedBy(Other, this);
+
+	if (bIsDirectedByMe)
+	{
+		return EAttitude::Friendly;
+	}
+
+	//if its null, it's neutral
 	if (!Other)
 	{
 		return EAttitude::Neutral;
 	}
+	
+	AActor* OtherOwner = Other->GetOwner();
 
-	if (Other == this)
+	//if it doesn't have an owner, it's neutral
+	if (!OtherOwner)
+	{
+		return EAttitude::Neutral;
+	}
+
+	//follow the chain of ownership up to the top
+	while (OtherOwner->GetOwner())
+	{
+		OtherOwner = OtherOwner->GetOwner();
+	}
+
+	if (OtherOwner == GetOwner())
 	{
 		return EAttitude::Friendly;
 	}
 
-	if (Other == GetController())
-	{
-		return EAttitude::Friendly;
-	}
-
-	ISOCAIBehaviorInterface* OtherBehaviorInterface = Cast<ISOCAIBehaviorInterface>(Other);
-
-	if (!OtherBehaviorInterface)
-	{
-		return EAttitude::Neutral;
-	}
-
-	USOCAIAvatarComponent* AvatarComponent = OtherBehaviorInterface->GetAvatarComponent();
-
-	if (!AvatarComponent)
-	{
-		return EAttitude::Neutral;
-	}
-
-	APawn* OtherDirectorPawn = AvatarComponent->GetDirectorPawn();
-
-	if (!OtherDirectorPawn)
-	{
-		return EAttitude::Neutral;
-	}
-
-	if (this != OtherDirectorPawn)
-	{
-		return EAttitude::Hostile;
-	}
-
-	return EAttitude::Friendly;
+	return EAttitude::Hostile;
 }
 
 #pragma endregion

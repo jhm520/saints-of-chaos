@@ -338,7 +338,7 @@ void ASOCCharacter::UpdateCharacterInfoWidget_Attitude()
 		return;
 	}
 
-	const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(this, LocalPlayerController);
+	const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(LocalPlayerController, this);
 
 	CharacterInfoWidget->UpdatePlayerAttitude(Attitude);
 }

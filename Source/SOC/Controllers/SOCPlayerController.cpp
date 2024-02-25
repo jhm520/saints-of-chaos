@@ -7,6 +7,7 @@
 #include "EngineUtils.h"
 #include "CoreUtility/Clicking/Components/ClickingComponent.h"
 #include "SOC/Gameplay/Buildings/Building.h"
+#include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
 
 #pragma region Framework
@@ -88,32 +89,12 @@ UAbilitySystemComponent* ASOCPlayerController::GetAbilitySystemComponent() const
 
 EAttitude ASOCPlayerController::GetAttitudeTowards_Implementation(AActor* Other) const
 {
-	//if its null, it's neutral
-	if (!Other)
+	if (GetPawn() && GetPawn()->Implements<UAttitudeInterface>())
 	{
-		return EAttitude::Neutral;
+		return IAttitudeInterface::Execute_GetAttitudeTowards(GetPawn(), Other);
 	}
 	
-	AActor* OtherOwner = Other->GetOwner();
-
-	//if it doesn't have an owner, it's neutral
-	if (!OtherOwner)
-	{
-		return EAttitude::Neutral;
-	}
-
-	//follow the chain of ownership up to the top
-	while (OtherOwner->GetOwner())
-	{
-		OtherOwner = OtherOwner->GetOwner();
-	}
-
-	if (OtherOwner == this)
-	{
-		return EAttitude::Friendly;
-	}
-
-	return EAttitude::Hostile;
+	return EAttitude::Neutral;
 }
 
 #pragma endregion
