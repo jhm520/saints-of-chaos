@@ -7,7 +7,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
-#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 // Sets default values
 ASOCAICharacter::ASOCAICharacter()

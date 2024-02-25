@@ -8,7 +8,6 @@
 #include "SOCAI/Behavior/SOCAIBehavior.h"
 #include "SOCAI/Behavior/SOCAIBehaviorManager.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
-#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 #pragma region Framework
 
@@ -53,6 +52,8 @@ void USOCAIBehaviorComponent::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, CurrentAction, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, Director, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(USOCAIBehaviorComponent, BehaviorManager, COND_None, REPNOTIFY_Always);
+
 }
 
 #pragma endregion
@@ -93,6 +94,11 @@ void USOCAIBehaviorComponent::TickUpdateBehavior(const float DeltaSeconds)
 	//TODO: figure out more elegant way to reset the behavior state to the root of the tree
 	SetBehaviorState(GetRootBehaviorState());
 
+}
+
+void USOCAIBehaviorComponent::OnRep_BehaviorManager()
+{
+	
 }
 
 void USOCAIBehaviorComponent::OnBehaviorChanged(const FSOCAIAction& InCurrentAction, const FSOCAIAction& InPreviousAction)
@@ -217,6 +223,7 @@ bool USOCAIBehaviorComponent::TryCreateBehaviorManager()
 	if (BehaviorManagers.Num() > 0)
 	{
 		BehaviorManager = Cast<ASOCAIBehaviorManager>(BehaviorManagers[0]);
+		OnRep_BehaviorManager();
 	}
 	else
 	{

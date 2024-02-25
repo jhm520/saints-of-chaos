@@ -3,7 +3,6 @@
 
 #include "SOCAIFunctionLibrary.h"
 
-#include "Components/SOCAIAvatarComponent.h"
 #include "Components/SOCAIBehaviorComponent.h"
 #include "Interfaces/SOCAIBehaviorInterface.h"
 

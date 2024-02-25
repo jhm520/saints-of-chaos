@@ -5,7 +5,6 @@
 #include "Navigation/CrowdFollowingComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
-#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 #pragma region Framework
 ASOCAIController::ASOCAIController(const FObjectInitializer& ObjectInitializer)

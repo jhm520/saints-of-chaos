@@ -15,7 +15,6 @@
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
-#include "SOCAI/Components/SOCAIAvatarComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 
 #pragma region Framework

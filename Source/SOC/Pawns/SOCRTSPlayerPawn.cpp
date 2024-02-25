@@ -7,7 +7,6 @@
 #include "GameplayAbilityCollection.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
-#include "SOCAI/Components/SOCAIAvatarComponent.h"
 
 #pragma region Framework
 
