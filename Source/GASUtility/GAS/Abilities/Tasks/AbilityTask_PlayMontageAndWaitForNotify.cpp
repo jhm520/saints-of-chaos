@@ -216,7 +216,7 @@ void UAbilityTask_PlayMontageAndWaitForNotify::QueueNotifyEvents()
 			continue;
 		}
 		
-		const float NotifyTime = NotifyEvent.GetTime();
+		const float NotifyTime = NotifyEvent.GetTime()/Rate;
 
 		TimerHelperDelegate.AddDynamic(this, &UAbilityTask_PlayMontageAndWaitForNotify::OnTimerHelperNotify);
 
