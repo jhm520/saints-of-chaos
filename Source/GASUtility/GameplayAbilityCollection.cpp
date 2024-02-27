@@ -2,6 +2,8 @@
 
 
 #include "GameplayAbilityCollection.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 
 void UGameplayAbilityCollection::GiveAbilities(UAbilitySystemComponent* AbilitySystemComponent, TArray<FGameplayAbilitySpecHandle>& BoundHandles, TArray<FGameplayAbilitySpecHandle>& DefaultBoundHandles) const
@@ -15,7 +17,9 @@ void UGameplayAbilityCollection::GiveAbilities(UAbilitySystemComponent* AbilityS
 	{
 		if (AbilityInfo.GameplayAbilityClass)
 		{
-			BoundHandles.Add(AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilityInfo.GameplayAbilityClass, AbilityInfo.Level, (int32)AbilityInfo.Command)));
+			const FGameplayAbilitySpec& NewBoundSpec = FGameplayAbilitySpec(AbilityInfo.GameplayAbilityClass, AbilityInfo.Level, GetTypeHash(AbilityInfo.InputAction));
+			
+			BoundHandles.Add(AbilitySystemComponent->GiveAbility(NewBoundSpec));
 		}
 	}
 

@@ -3,6 +3,8 @@
 
 #include "RTSPlayerPawn.h"
 
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
@@ -97,6 +99,8 @@ void ARTSPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	
 		// You can bind to any of the trigger events here by changing the "ETriggerEvent" enum value
 		Input->BindAction(Binding.InputAction, ETriggerEvent::Triggered, this, &ARTSPlayerPawn::InputAction, Binding.InputActionBinding, Binding.InputAction.Get());
+		// You can bind to any of the trigger events here by changing the "ETriggerEvent" enum value
+		Input->BindAction(Binding.InputAction, ETriggerEvent::Completed, this, &ARTSPlayerPawn::InputAction, Binding.InputActionBinding, Binding.InputAction.Get());
 	}
 }
 
@@ -126,6 +130,11 @@ void ARTSPlayerPawn::InputAction(const FInputActionInstance& Instance, EInputAct
 			InputAction_CameraZoom(Instance, AbilityInput, InputAction);
 			break;
 		}
+		default:
+		{
+			InputAction_Ability(Instance, AbilityInput, InputAction);
+			break;
+		}
 	}
 }
 #pragma endregion
@@ -150,6 +159,45 @@ void ARTSPlayerPawn::DoCameraZoom(float ZoomValue)
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("NewTargetArmLength: %f"), NewTargetArmLength));
 }
 
+UE_DISABLE_OPTIMIZATION
+void ARTSPlayerPawn::InputAction_Ability(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction)
+{
+	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(this);
+	
+	if (!AbilitySystemInterface)
+	{
+		return;
+	}
+
+	UAbilitySystemComponent* AbilitySystemComponent = AbilitySystemInterface->GetAbilitySystemComponent();
+
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+
+	if (!InputAction)
+	{
+		return;
+	}
+	
+	const bool bIsPressed = Instance.GetValue().Get<bool>();
+	
+	if (bIsPressed)
+	{
+		AbilitySystemComponent->PressInputID(GetTypeHash(InputAction));
+	}
+	else
+	{
+		AbilitySystemComponent->ReleaseInputID(GetTypeHash(InputAction));
+	}
+}
+
+void ARTSPlayerPawn::DoContextCommand()
+{
+	
+}
+UE_ENABLE_OPTIMIZATION
 
 #pragma endregion
 

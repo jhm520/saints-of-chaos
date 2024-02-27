@@ -10,6 +10,7 @@
 
 
 class UGameplayAbility;
+class UInputAction;
 // /**
 //  *	Example struct that pairs a enum input command to a GameplayAbilityClass.6
 //  */
@@ -68,9 +69,10 @@ struct GASUTILITY_API FInputGameplayAbilityInfo
 {
 	GENERATED_BODY()
 
+	//the input action that will trigger this gameplay ability
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category =  "Ability")
-	EAbilityInputBindingKey Command = EAbilityInputBindingKey::Ability1;;
-
+	TObjectPtr<UInputAction> InputAction;
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category =  "Ability")
 	int32 Level = 1;
 	

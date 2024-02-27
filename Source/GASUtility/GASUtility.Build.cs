@@ -24,7 +24,9 @@ public class GASUtility : ModuleRules
             "DeveloperSettings",
             "UMG",
             "AudioExtensions",
-            
+            "InputCore",
+            "EnhancedInput"
+
             // This module should have no other dependencies other than the engine itself!
         });
 		

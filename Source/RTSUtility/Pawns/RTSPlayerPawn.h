@@ -49,6 +49,11 @@ protected:
 
 	void DoCameraZoom(float ZoomValue);
 
+	UFUNCTION()
+	void InputAction_Ability(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction);
+	
+	void DoContextCommand();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	float CameraZoomDistanceIncrement;
 

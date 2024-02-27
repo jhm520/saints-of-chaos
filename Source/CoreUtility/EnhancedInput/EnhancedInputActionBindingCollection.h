@@ -12,7 +12,9 @@ enum class EInputActionBinding : uint8
 {
 	None UMETA(DisplayName = "None"),
 	Movement UMETA(DisplayName = "Movement"),
-	CameraZoom UMETA(DisplayName = "CameraZoom")
+	CameraZoom UMETA(DisplayName = "CameraZoom"),
+	Selection UMETA(DisplayName = "Selection"),
+	ContextCommand UMETA(DisplayName = "ContextCommand")
 	
 	// Add your own bindings if you need to.
 };
