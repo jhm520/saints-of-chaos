@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SelectionSystemBlueprintLibrary.generated.h"
 
+class USelectableComponent;
 /**
  * 
  */
@@ -20,5 +21,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Selection")
 	static void ClearSelection(AActor* Selector, bool bRepToServer = true);
+
+	UFUNCTION(BlueprintCallable, Category = "Selection")
+	static void GetSelectedComponents(AActor* Selector, TArray<USelectableComponent*>& OutSelectedComponents);
 	
 };

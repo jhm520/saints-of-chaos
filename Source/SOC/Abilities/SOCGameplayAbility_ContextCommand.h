@@ -6,6 +6,8 @@
 #include "SOCGameplayAbility.h"
 #include "SOCGameplayAbility_ContextCommand.generated.h"
 
+class AGameplayAbilityTargetActor;
+
 /**
  * 
  */
@@ -16,6 +18,8 @@ class SOC_API USOCGameplayAbility_ContextCommand : public USOCGameplayAbility
 	
 #pragma region Framework
 public:
+
+	USOCGameplayAbility_ContextCommand();
 
 	/** Actually activate ability, do not call this directly */
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
@@ -29,4 +33,18 @@ public:
 	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
 
 #pragma endregion
+
+#pragma region Targeting
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Targeting")
+	TSubclassOf<AGameplayAbilityTargetActor> TargetActorClass;
+
+	UFUNCTION()
+	void OnTargetDataReady(const FGameplayAbilityTargetDataHandle& Data);
+
+	UFUNCTION()
+	void OnTargetDataCancelled(const FGameplayAbilityTargetDataHandle& Data);
+
+#pragma endregion
+
 };

@@ -13,7 +13,11 @@
 // Sets default values for this pawn's properties
 ASOCRTSPlayerPawn::ASOCRTSPlayerPawn()
 {
+	SetReplicates(true);
+
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+
 	SelectorComponent = CreateDefaultSubobject<USelectorComponent>(TEXT("SelectorComponent"));
 }
 
@@ -37,6 +41,14 @@ void ASOCRTSPlayerPawn::PossessedBy(AController* NewController)
 	
 	
 }
+
+void ASOCRTSPlayerPawn::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	InitAbilitySystem();
+}
+
 
 
 #pragma endregion

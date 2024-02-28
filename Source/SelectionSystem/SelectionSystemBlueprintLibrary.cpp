@@ -70,3 +70,23 @@ void USelectionSystemBlueprintLibrary::ClearSelection(AActor* Selector, bool bRe
 	//tell the selector component to select this character
 	SelectorComponent->ClearSelection(bRepToServer);
 }
+
+void USelectionSystemBlueprintLibrary::GetSelectedComponents(AActor* Selector, TArray<USelectableComponent*>& OutSelectedComponents)
+{
+	ISelectorInterface* SelectorInterface = Cast<ISelectorInterface>(Selector);
+
+	if (!SelectorInterface)
+	{
+		return;
+	}
+	
+	USelectorComponent* SelectorComponent = SelectorInterface->GetSelectorComponent();
+
+	if (!SelectorComponent)
+	{
+		return;
+	}
+
+	//Get the selected units
+	OutSelectedComponents = SelectorComponent->GetSelectedComponents();
+}
