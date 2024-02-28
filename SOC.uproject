@@ -72,6 +72,15 @@
 				"Engine",
 				"GameplayAbilities"
 			]
+		},
+		{
+			"Name": "CommandSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"GameplayAbilities"
+			]
 		}
 	],
 	"Plugins": [
