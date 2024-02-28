@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
+#include "CommandSystem/CommandSystemBlueprintLibrary.h"
 #include "GAS/Abilities/TargetActors/GameplayAbilityTargetActor_InstantCursor.h"
 #include "SelectionSystem/SelectionSystemBlueprintLibrary.h"
 #include "SelectionSystem/Components/SelectableComponent.h"
@@ -110,6 +111,10 @@ void USOCGameplayAbility_ContextCommand::OnTargetDataReady(const FGameplayAbilit
 		}
 		
 		//Order the selected unit
+
+		const FCommandInfo& NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), CommandTag, HitResult.GetActor(), HitResult.Location);
+		
+		UCommandSystemBlueprintLibrary::CommandActor(GetCurrentActorInfo()->AvatarActor.Get(), SelectedActor, NewCommand);
 	}
 }
 

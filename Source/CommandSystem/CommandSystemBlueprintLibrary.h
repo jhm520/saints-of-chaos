@@ -19,4 +19,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Selection")
 	static bool CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInfo& Command);
 	
+	UFUNCTION(BlueprintCallable, Category = "Selection")
+	static FCommandInfo MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor = nullptr, const FVector& TargetLocation = FVector::ZeroVector);
+	
 };

@@ -34,6 +34,14 @@ public:
 
 #pragma endregion
 
+#pragma region Command
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
+
+#pragma endregion
+
+
 #pragma region Targeting
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Targeting")

@@ -14,8 +14,10 @@ struct COMMANDSYSTEM_API FCommandInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
+	AActor* Commander = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	AActor* TargetActor = nullptr;
@@ -23,6 +25,11 @@ struct COMMANDSYSTEM_API FCommandInfo
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	FVector TargetLocation = FVector::ZeroVector;
 
+	bool IsValid() const
+	{
+		return Commander != nullptr && CommandTag.IsValid();
+	}
+	
 	FCommandInfo(){}
 };
 
@@ -32,6 +39,7 @@ class COMMANDSYSTEM_API UCommandableComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+	friend class UCommandComponent;
 #pragma region Framework
 
 public:	
@@ -45,6 +53,37 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+#pragma endregion
+
+#pragma region Command
+public:
+	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Command")
+	bool GiveCommand(const FCommandInfo& Command);
+
+	UFUNCTION(BlueprintPure, Category = "Command")
+	const FCommandInfo& GetCurrentCommand() const { return CurrentCommand; }
+
+protected:
+
+	void QueueCommand(const FCommandInfo& Command);
+	
+	void DequeueCommand();
+
+	//the current command that this commandable actor is carrying out
+	UPROPERTY(Transient, ReplicatedUsing = "OnRep_CurrentCommand")
+	FCommandInfo CurrentCommand;
+	
+	UFUNCTION()
+	void OnRep_CurrentCommand(const FCommandInfo& PreviousCommand);
+	
+	//a list of commands that will be executed in order
+	UPROPERTY(Transient, ReplicatedUsing = "OnRep_CommandQueue")
+	TArray<FCommandInfo> CommandQueue;
+
+	UFUNCTION()
+	void OnRep_CommandQueue(const TArray<FCommandInfo>& OldCommandQueue);
+	
+
 #pragma endregion
 
 };
