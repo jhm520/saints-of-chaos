@@ -5,41 +5,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GameplayTagContainer.h"
+#include "CommandSystem/CommandSystemBlueprintLibrary.h"
 #include "CommandableComponent.generated.h"
-
-//struct to represent an AIController's current action
-USTRUCT(BlueprintType)
-struct COMMANDSYSTEM_API FCommandInstance
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	AActor* Commander = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	AActor* TargetActor = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	FVector TargetLocation = FVector::ZeroVector;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	FGuid Guid = FGuid();
-
-	bool IsValid() const
-	{
-		return Commander != nullptr && CommandTag.IsValid();
-	}
-
-	friend bool operator==(const FCommandInstance& A, const FCommandInstance& B)
-	{
-		return A.Guid == B.Guid;
-	}
-	
-	FCommandInstance(){}
-};
 
 //this is a component that is meant to be added to actors that are selectable by selectors
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

@@ -3,6 +3,7 @@
 
 #include "CommandSystemBlueprintLibrary.h"
 
+#include "CommandSubsystem.h"
 #include "Components/CommandComponent.h"
 #include "Interfaces/CommandableInterface.h"
 #include "Interfaces/CommandInterface.h"
@@ -44,7 +45,14 @@ FCommandInstance UCommandSystemBlueprintLibrary::MakeCommand(AActor* CommanderAc
 {
 	FCommandInstance Command;
 	Command.Commander = CommanderActor;
-	Command.CommandTag = CommandTag;
+
+	UCommandSubsystem* CommandSubsystem = UCommandSubsystem::Get(CommanderActor);
+
+	if (CommandSubsystem)
+	{
+		Command.CommandInfo = CommandSubsystem->GetCommand(CommandTag);
+	}
+	
 	Command.TargetActor = TargetActor;
 	Command.TargetLocation = TargetLocation;
 	Command.Guid = FGuid::NewGuid();

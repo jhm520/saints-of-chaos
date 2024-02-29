@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "CommandComponent.generated.h"
 
+class UCommandInfo;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class COMMANDSYSTEM_API UCommandComponent : public UActorComponent
@@ -29,7 +30,9 @@ public:
 
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Command")
 	bool Command(UCommandableComponent* Commandable, const FCommandInstance& Command);
-
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	TArray<TObjectPtr<UCommandInfo>> CommandInfos;
 #pragma endregion
 		
 };

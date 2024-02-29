@@ -4,6 +4,7 @@
 #include "CommandComponent.h"
 
 #include "CommandableComponent.h"
+#include "CommandSystem/CommandSubsystem.h"
 
 #pragma region Framework
 
@@ -24,7 +25,22 @@ void UCommandComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	UCommandSubsystem* CommandSubsystem = UCommandSubsystem::Get(this);
+
+	if (!CommandSubsystem)
+	{
+		return;
+	}
 	
+	for (UCommandInfo* CommandInfo : CommandInfos)
+	{
+		if (!CommandInfo)
+		{
+			continue;
+		}
+		
+		CommandSubsystem->AddCommand(CommandInfo);
+	}
 }
 
 

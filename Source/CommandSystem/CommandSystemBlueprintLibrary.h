@@ -4,8 +4,45 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "Components/CommandableComponent.h"
+#include "GameplayTagContainer.h"
 #include "CommandSystemBlueprintLibrary.generated.h"
+
+class UCommandInfo;
+class UCommandableComponent;
+
+//struct to represent an AIController's current action
+USTRUCT(BlueprintType)
+struct COMMANDSYSTEM_API FCommandInstance
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	AActor* Commander = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	const UCommandInfo* CommandInfo = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	AActor* TargetActor = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	FVector_NetQuantize TargetLocation = FVector::ZeroVector;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	FGuid Guid = FGuid();
+
+	bool IsValid() const
+	{
+		return Commander != nullptr && CommandInfo != nullptr;
+	}
+
+	friend bool operator==(const FCommandInstance& A, const FCommandInstance& B)
+	{
+		return A.Guid == B.Guid;
+	}
+	
+	FCommandInstance(){}
+};
 
 /**
  * 

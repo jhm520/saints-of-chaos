@@ -15,7 +15,8 @@
 				"GameplayAbilities",
 				"CommonUI",
 				"CoreUtility",
-				"RTSUtility"
+				"RTSUtility",
+				"CommandSystem"
 			]
 		},
 		{

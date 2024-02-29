@@ -5,6 +5,7 @@
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "CommandSystem/Interfaces/CommandableInterface.h"
+#include "CommandSystem/CommandInfo.h"
 #include "Net/UnrealNetwork.h"
 
 #pragma region Framework
@@ -126,7 +127,7 @@ void UCommandableComponent::DequeueCommand()
 	OnRep_CommandQueue(OldCommandQueue);
 }
 
-
+UE_DISABLE_OPTIMIZATION
 void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& PreviousCommand)
 {
 	if (PreviousCommand.IsValid())
@@ -139,7 +140,7 @@ void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& Previou
 		OnCommandBegin(CurrentCommand);
 	}
 }
-
+UE_ENABLE_OPTIMIZATION
 void UCommandableComponent::OnRep_CommandQueue(const TArray<FCommandInstance>& OldCommandQueue)
 {
 	for (const FCommandInstance& Command : CommandQueue)
@@ -160,7 +161,7 @@ void UCommandableComponent::OnCommandBegin(const FCommandInstance& Command)
 {
 	K2_OnCommandBegin(Command);
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Begin");
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Begin" + Command.CommandInfo->GetName());
 
 	if (GetOwner() && GetOwner()->Implements<UCommandableInterface>())
 	{
