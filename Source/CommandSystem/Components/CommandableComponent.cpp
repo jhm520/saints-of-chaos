@@ -96,12 +96,42 @@ void UCommandableComponent::DequeueCommand()
 
 void UCommandableComponent::OnRep_CurrentCommand(const FCommandInfo& PreviousCommand)
 {
+	if (PreviousCommand.IsValid())
+	{
+		OnCommandFinished(PreviousCommand);
+	}
 	
+	if (CurrentCommand.IsValid())
+	{
+		OnCommandBegin(CurrentCommand);
+	}
 }
 
 void UCommandableComponent::OnRep_CommandQueue(const TArray<FCommandInfo>& OldCommandQueue)
 {
-	
+	for (const FCommandInfo& Command : CommandQueue)
+	{
+		if (!OldCommandQueue.Contains(Command))
+		{
+			OnCommandReceived(Command);
+		}
+	}
 }
+
+void UCommandableComponent::OnCommandReceived(const FCommandInfo& Command)
+{
+	K2_OnCommandReceived(Command);
+}
+
+void UCommandableComponent::OnCommandBegin(const FCommandInfo& Command)
+{
+	K2_OnCommandBegin(Command);
+}
+
+void UCommandableComponent::OnCommandFinished(const FCommandInfo& Command)
+{
+	K2_OnCommandFinished(Command);
+}
+
 
 #pragma endregion

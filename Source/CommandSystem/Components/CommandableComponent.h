@@ -25,9 +25,17 @@ struct COMMANDSYSTEM_API FCommandInfo
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	FVector TargetLocation = FVector::ZeroVector;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	FGuid Guid = FGuid();
+
 	bool IsValid() const
 	{
 		return Commander != nullptr && CommandTag.IsValid();
+	}
+
+	friend bool operator==(const FCommandInfo& A, const FCommandInfo& B)
+	{
+		return A.Guid == B.Guid;
 	}
 	
 	FCommandInfo(){}
@@ -83,6 +91,20 @@ protected:
 	UFUNCTION()
 	void OnRep_CommandQueue(const TArray<FCommandInfo>& OldCommandQueue);
 	
+	void OnCommandReceived(const FCommandInfo& Command);
+	
+	void OnCommandBegin(const FCommandInfo& Command);
+	
+	void OnCommandFinished(const FCommandInfo& Command);
+
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandReceived"), Category = "Command")
+	void K2_OnCommandReceived(const FCommandInfo& Command);
+
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandBegin"), Category = "Command")
+	void K2_OnCommandBegin(const FCommandInfo& Command);
+
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandFinished"), Category = "Command")
+	void K2_OnCommandFinished(const FCommandInfo& Command);
 
 #pragma endregion
 

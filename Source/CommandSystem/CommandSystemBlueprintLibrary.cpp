@@ -47,6 +47,7 @@ FCommandInfo UCommandSystemBlueprintLibrary::MakeCommand(AActor* CommanderActor,
 	Command.CommandTag = CommandTag;
 	Command.TargetActor = TargetActor;
 	Command.TargetLocation = TargetLocation;
+	Command.Guid = FGuid::NewGuid();
 
 	return Command;
 }
