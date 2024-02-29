@@ -25,4 +25,10 @@ class COMMANDSYSTEM_API ICommandableInterface
 public:
 
 	virtual UCommandableComponent* GetCommandableComponent() const = 0;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Command", meta=(DisplayName="On Command Begin"))
+	void OnCommandBegin(const FCommandInstance& Command);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Command", meta=(DisplayName="Check Command Finished"))
+	bool CheckCommandFinished(const FCommandInstance& Command) const;
 };

@@ -9,7 +9,7 @@
 
 //struct to represent an AIController's current action
 USTRUCT(BlueprintType)
-struct COMMANDSYSTEM_API FCommandInfo
+struct COMMANDSYSTEM_API FCommandInstance
 {
 	GENERATED_BODY()
 
@@ -33,12 +33,12 @@ struct COMMANDSYSTEM_API FCommandInfo
 		return Commander != nullptr && CommandTag.IsValid();
 	}
 
-	friend bool operator==(const FCommandInfo& A, const FCommandInfo& B)
+	friend bool operator==(const FCommandInstance& A, const FCommandInstance& B)
 	{
 		return A.Guid == B.Guid;
 	}
 	
-	FCommandInfo(){}
+	FCommandInstance(){}
 };
 
 //this is a component that is meant to be added to actors that are selectable by selectors
@@ -66,45 +66,49 @@ public:
 #pragma region Command
 public:
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Command")
-	bool GiveCommand(const FCommandInfo& Command);
+	bool GiveCommand(const FCommandInstance& Command);
 
 	UFUNCTION(BlueprintPure, Category = "Command")
-	const FCommandInfo& GetCurrentCommand() const { return CurrentCommand; }
+	const FCommandInstance& GetCurrentCommand() const { return CurrentCommand; }
 
 protected:
 
-	void QueueCommand(const FCommandInfo& Command);
+	void FinishCurrentCommand();
+
+	void QueueCommand(const FCommandInstance& Command);
 	
 	void DequeueCommand();
 
 	//the current command that this commandable actor is carrying out
 	UPROPERTY(Transient, ReplicatedUsing = "OnRep_CurrentCommand")
-	FCommandInfo CurrentCommand;
+	FCommandInstance CurrentCommand;
 	
 	UFUNCTION()
-	void OnRep_CurrentCommand(const FCommandInfo& PreviousCommand);
+	void OnRep_CurrentCommand(const FCommandInstance& PreviousCommand);
 	
 	//a list of commands that will be executed in order
 	UPROPERTY(Transient, ReplicatedUsing = "OnRep_CommandQueue")
-	TArray<FCommandInfo> CommandQueue;
+	TArray<FCommandInstance> CommandQueue;
 
 	UFUNCTION()
-	void OnRep_CommandQueue(const TArray<FCommandInfo>& OldCommandQueue);
+	void OnRep_CommandQueue(const TArray<FCommandInstance>& OldCommandQueue);
 	
-	void OnCommandReceived(const FCommandInfo& Command);
+	void OnCommandReceived(const FCommandInstance& Command);
 	
-	void OnCommandBegin(const FCommandInfo& Command);
+	void OnCommandBegin(const FCommandInstance& Command);
 	
-	void OnCommandFinished(const FCommandInfo& Command);
+	void OnCommandFinished(const FCommandInstance& Command);
+
+	bool CheckCommandFinished(const FCommandInstance& Command) const;
 
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandReceived"), Category = "Command")
-	void K2_OnCommandReceived(const FCommandInfo& Command);
+	void K2_OnCommandReceived(const FCommandInstance& Command);
 
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandBegin"), Category = "Command")
-	void K2_OnCommandBegin(const FCommandInfo& Command);
+	void K2_OnCommandBegin(const FCommandInstance& Command);
 
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandFinished"), Category = "Command")
-	void K2_OnCommandFinished(const FCommandInfo& Command);
+	void K2_OnCommandFinished(const FCommandInstance& Command);
 
 #pragma endregion
 

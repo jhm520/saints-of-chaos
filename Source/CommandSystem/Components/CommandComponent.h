@@ -28,7 +28,7 @@ public:
 #pragma region Command
 
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Command")
-	bool Command(UCommandableComponent* Commandable, const FCommandInfo& Command);
+	bool Command(UCommandableComponent* Commandable, const FCommandInstance& Command);
 
 #pragma endregion
 		

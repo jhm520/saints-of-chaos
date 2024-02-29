@@ -4,14 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "SOCCharacter.h"
+#include "CommandSystem/Interfaces/CommandableInterface.h"
 #include "GAS/Abilities/TargetActors/GameplayAbilityTargetActorInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+#include "CommandSystem/Interfaces/CommandableInterface.h"
 #include "SOCAICharacter.generated.h"
 
 class USOCAIBehaviorComponent;
+class UCommandableComponent;
 //AI Controlled character
 UCLASS(Blueprintable)
-class SOC_API ASOCAICharacter : public ASOCCharacter, public ISOCAIBehaviorInterface, public IGameplayAbilityTargetActorInterface
+class SOC_API ASOCAICharacter : public ASOCCharacter, public ISOCAIBehaviorInterface, public IGameplayAbilityTargetActorInterface, public ICommandableInterface
 {
 	GENERATED_BODY()
 
@@ -69,6 +72,20 @@ public:
 	/** Returns the actor that is the target of this ability */
 	virtual AActor* GetTargetActor() const override;
 
+#pragma endregion
+
+#pragma region Command
+
+protected:
+	//
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Behavior")
+	TObjectPtr<UCommandableComponent> CommandableComponent;
+public:
+	virtual UCommandableComponent* GetCommandableComponent() const override {return CommandableComponent;};
+
+	virtual void OnCommandBegin_Implementation(const FCommandInstance& Command) override;
+
+	virtual bool CheckCommandFinished_Implementation(const FCommandInstance& Command) const override;
 #pragma endregion
 
 

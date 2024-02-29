@@ -4,17 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "CommandSystem/Interfaces/CommandInterface.h"
 #include "RTSUtility/Pawns/RTSPlayerPawn.h"
 #include "SelectionSystem/Interfaces/SelectorInterface.h"
 #include "SOCRTSPlayerPawn.generated.h"
 
 class USelectorComponent;
 class UGameplayAbilityCollection;
+class UCOmmandComponent;
 /**
  * 
  */
 UCLASS()
-class SOC_API ASOCRTSPlayerPawn : public ARTSPlayerPawn, public IAbilitySystemInterface, public ISelectorInterface
+class SOC_API ASOCRTSPlayerPawn : public ARTSPlayerPawn, public IAbilitySystemInterface, public ISelectorInterface, public ICommandInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -70,5 +72,16 @@ public:
 #pragma region Attitude System
 public:
 	virtual EAttitude GetAttitudeTowards_Implementation(AActor* Other) const override;
+#pragma endregion
+	
+#pragma region Command
+
+protected:
+	//
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI Behavior")
+	TObjectPtr<UCommandComponent> CommandComponent;
+public:
+	virtual UCommandComponent* GetCommandComponent() const override {return CommandComponent;};
+
 #pragma endregion
 };

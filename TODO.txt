@@ -30,3 +30,4 @@ TODO: Use ProjectWorldToScreen and DeprojectScreenToWorld to create a box select
 TODO: Get rid of avatar component, just replicate the behavior component with the properties transfered over from avatar
 TODO: Rename director pawn to director avatar
 TODO: Have the building call SetDirector and DirectorAvatar when it spawns an AI Character
+TODO: Make CommandSystem commands into a DataAsset that has descriptive behavior and logic for each command

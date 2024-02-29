@@ -7,7 +7,7 @@
 #include "Interfaces/CommandableInterface.h"
 #include "Interfaces/CommandInterface.h"
 
-bool UCommandSystemBlueprintLibrary::CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInfo& Command)
+bool UCommandSystemBlueprintLibrary::CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInstance& Command)
 {
 	ICommandInterface * CommandInterface = Cast<ICommandInterface>(CommanderActor);
 
@@ -40,9 +40,9 @@ bool UCommandSystemBlueprintLibrary::CommandActor(AActor* CommanderActor, AActor
 	return CommandComponent->Command(CommandableComponent, Command);
 }
 
-FCommandInfo UCommandSystemBlueprintLibrary::MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor, const FVector& TargetLocation)
+FCommandInstance UCommandSystemBlueprintLibrary::MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor, const FVector& TargetLocation)
 {
-	FCommandInfo Command;
+	FCommandInstance Command;
 	Command.Commander = CommanderActor;
 	Command.CommandTag = CommandTag;
 	Command.TargetActor = TargetActor;

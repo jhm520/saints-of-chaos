@@ -17,9 +17,9 @@ class COMMANDSYSTEM_API UCommandSystemBlueprintLibrary : public UBlueprintFuncti
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Selection")
-	static bool CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInfo& Command);
+	static bool CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInstance& Command);
 	
 	UFUNCTION(BlueprintCallable, Category = "Selection")
-	static FCommandInfo MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor = nullptr, const FVector& TargetLocation = FVector::ZeroVector);
+	static FCommandInstance MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor = nullptr, const FVector& TargetLocation = FVector::ZeroVector);
 	
 };

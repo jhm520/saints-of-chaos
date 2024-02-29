@@ -4,6 +4,7 @@
 #include "CommandableComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "CommandSystem/Interfaces/CommandableInterface.h"
 #include "Net/UnrealNetwork.h"
 
 #pragma region Framework
@@ -34,6 +35,15 @@ void UCommandableComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (GetCurrentCommand().IsValid())
+	{
+		const bool bCommandFinished = CheckCommandFinished(GetCurrentCommand());
+
+		if (bCommandFinished)
+		{
+			FinishCurrentCommand();
+		}
+	}
 	// ...
 }
 
@@ -48,7 +58,7 @@ void UCommandableComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 #pragma region Command
 
-bool UCommandableComponent::GiveCommand(const FCommandInfo& Command)
+bool UCommandableComponent::GiveCommand(const FCommandInstance& Command)
 {
 	if (!GetOwner()->HasAuthority())
 	{
@@ -65,14 +75,25 @@ bool UCommandableComponent::GiveCommand(const FCommandInfo& Command)
 	return true;
 }
 
-void UCommandableComponent::QueueCommand(const FCommandInfo& Command)
+void UCommandableComponent::FinishCurrentCommand()
+{
+	if (!GetCurrentCommand().IsValid())
+	{
+		return;
+	}
+
+	DequeueCommand();
+}
+
+
+void UCommandableComponent::QueueCommand(const FCommandInstance& Command)
 {
 	if (!GetOwner()->HasAuthority())
 	{
 		return;
 	}
 
-	const TArray<FCommandInfo> OldCommandQueue = CommandQueue;
+	const TArray<FCommandInstance> OldCommandQueue = CommandQueue;
 	CommandQueue.Add(Command);
 	OnRep_CommandQueue(OldCommandQueue);
 }
@@ -84,17 +105,29 @@ void UCommandableComponent::DequeueCommand()
 		return;
 	}
 	
-	const FCommandInfo PreviousCommand = CurrentCommand;
-	CurrentCommand = CommandQueue[0];
+	const FCommandInstance PreviousCommand = CurrentCommand;
+	
+	if (CommandQueue.Num() > 0)
+	{
+		CurrentCommand = CommandQueue[0];
+	}
+	else
+	{
+		CurrentCommand = FCommandInstance();
+	}
+	
 	OnRep_CurrentCommand(PreviousCommand);
 
-	const TArray<FCommandInfo> OldCommandQueue = CommandQueue;
-	CommandQueue.RemoveAt(0);
+	const TArray<FCommandInstance> OldCommandQueue = CommandQueue;
+	if (CommandQueue.Num() > 0)
+	{
+		CommandQueue.RemoveAt(0);
+	}
 	OnRep_CommandQueue(OldCommandQueue);
 }
 
 
-void UCommandableComponent::OnRep_CurrentCommand(const FCommandInfo& PreviousCommand)
+void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& PreviousCommand)
 {
 	if (PreviousCommand.IsValid())
 	{
@@ -107,9 +140,9 @@ void UCommandableComponent::OnRep_CurrentCommand(const FCommandInfo& PreviousCom
 	}
 }
 
-void UCommandableComponent::OnRep_CommandQueue(const TArray<FCommandInfo>& OldCommandQueue)
+void UCommandableComponent::OnRep_CommandQueue(const TArray<FCommandInstance>& OldCommandQueue)
 {
-	for (const FCommandInfo& Command : CommandQueue)
+	for (const FCommandInstance& Command : CommandQueue)
 	{
 		if (!OldCommandQueue.Contains(Command))
 		{
@@ -118,20 +151,38 @@ void UCommandableComponent::OnRep_CommandQueue(const TArray<FCommandInfo>& OldCo
 	}
 }
 
-void UCommandableComponent::OnCommandReceived(const FCommandInfo& Command)
+void UCommandableComponent::OnCommandReceived(const FCommandInstance& Command)
 {
 	K2_OnCommandReceived(Command);
 }
 
-void UCommandableComponent::OnCommandBegin(const FCommandInfo& Command)
+void UCommandableComponent::OnCommandBegin(const FCommandInstance& Command)
 {
 	K2_OnCommandBegin(Command);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Begin");
+
+	if (GetOwner() && GetOwner()->Implements<UCommandableInterface>())
+	{
+		ICommandableInterface::Execute_OnCommandBegin(GetOwner(), Command);
+	}
 }
 
-void UCommandableComponent::OnCommandFinished(const FCommandInfo& Command)
+void UCommandableComponent::OnCommandFinished(const FCommandInstance& Command)
 {
 	K2_OnCommandFinished(Command);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Finished");
 }
 
+bool UCommandableComponent::CheckCommandFinished(const FCommandInstance& Command) const
+{
+	if (GetOwner() && GetOwner()->Implements<UCommandableInterface>())
+	{
+		return ICommandableInterface::Execute_CheckCommandFinished(GetOwner(), Command);
+	}
+	
+	return false;
+}
 
 #pragma endregion

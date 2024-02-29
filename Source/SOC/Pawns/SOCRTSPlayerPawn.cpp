@@ -7,6 +7,7 @@
 #include "GameplayAbilityCollection.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+#include "CommandSystem/Components/CommandComponent.h"
 
 #pragma region Framework
 
@@ -19,6 +20,8 @@ ASOCRTSPlayerPawn::ASOCRTSPlayerPawn()
 	AbilitySystemComponent->SetIsReplicated(true);
 
 	SelectorComponent = CreateDefaultSubobject<USelectorComponent>(TEXT("SelectorComponent"));
+
+	CommandComponent = CreateDefaultSubobject<UCommandComponent>(TEXT("CommandComponent"));
 }
 
 // Called when the game starts or when spawned

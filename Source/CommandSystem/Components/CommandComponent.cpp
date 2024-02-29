@@ -39,7 +39,7 @@ void UCommandComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 #pragma region Command
 
-bool UCommandComponent::Command(UCommandableComponent* Commandable, const FCommandInfo& Command)
+bool UCommandComponent::Command(UCommandableComponent* Commandable, const FCommandInstance& Command)
 {
 	if (!Commandable)
 	{

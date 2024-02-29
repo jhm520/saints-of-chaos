@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
+#include "CommandSystem/Components/CommandableComponent.h"
 
 // Sets default values
 ASOCAICharacter::ASOCAICharacter()
@@ -20,6 +21,7 @@ ASOCAICharacter::ASOCAICharacter()
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 100.0f;
 
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
+	CommandableComponent = CreateDefaultSubobject<UCommandableComponent>(TEXT("CommandableComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -182,6 +184,20 @@ AActor* ASOCAICharacter::GetTargetActor() const
 	const FSOCAIAction& CurrentAction = LocalBehaviorComponent->GetCurrentAction();
 
 	return CurrentAction.TargetActor;
+}
+
+#pragma endregion
+
+#pragma region Command
+
+void ASOCAICharacter::OnCommandBegin_Implementation(const FCommandInstance& Command)
+{
+	
+}
+
+bool ASOCAICharacter::CheckCommandFinished_Implementation(const FCommandInstance& Command) const
+{
+	return true;
 }
 
 #pragma endregion
