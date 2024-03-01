@@ -197,7 +197,7 @@ void ASOCAICharacter::OnCommandBegin_Implementation(const FCommandInstance& Comm
 
 bool ASOCAICharacter::CheckCommandFinished_Implementation(const FCommandInstance& Command) const
 {
-	return true;
+	return false;
 }
 
 #pragma endregion

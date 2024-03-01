@@ -10,7 +10,7 @@
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
 #pragma region Behavior
-
+UE_DISABLE_OPTIMIZATION
 bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	//add the tag to the behavior path, letting the other nodes know that we've traversed this node
@@ -73,7 +73,7 @@ bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction&
 	return K2_CalculateCurrentAction(InActor, OutAction,BehaviorPath, InParentAction);
 
 }
-
+UE_ENABLE_OPTIMIZATION
 AActor* USOCAIBehavior::GetDirector(const AActor* InBehaviorActor) const
 {
 	const ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(InBehaviorActor);

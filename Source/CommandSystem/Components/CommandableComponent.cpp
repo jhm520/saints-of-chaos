@@ -9,7 +9,7 @@
 #include "Net/UnrealNetwork.h"
 
 #pragma region Framework
-
+UE_DISABLE_OPTIMIZATION
 // Sets default values for this component's properties
 UCommandableComponent::UCommandableComponent()
 {
@@ -127,7 +127,7 @@ void UCommandableComponent::DequeueCommand()
 	OnRep_CommandQueue(OldCommandQueue);
 }
 
-UE_DISABLE_OPTIMIZATION
+
 void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& PreviousCommand)
 {
 	if (PreviousCommand.IsValid())
@@ -140,7 +140,7 @@ void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& Previou
 		OnCommandBegin(CurrentCommand);
 	}
 }
-UE_ENABLE_OPTIMIZATION
+
 void UCommandableComponent::OnRep_CommandQueue(const TArray<FCommandInstance>& OldCommandQueue)
 {
 	for (const FCommandInstance& Command : CommandQueue)
@@ -163,6 +163,11 @@ void UCommandableComponent::OnCommandBegin(const FCommandInstance& Command)
 	
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Begin" + Command.CommandInfo->GetName());
 
+	if (Command.CommandInfo)
+	{
+		Command.CommandInfo->OnCommandBegin(this, Command);
+	}
+	
 	if (GetOwner() && GetOwner()->Implements<UCommandableInterface>())
 	{
 		ICommandableInterface::Execute_OnCommandBegin(GetOwner(), Command);
@@ -178,12 +183,13 @@ void UCommandableComponent::OnCommandFinished(const FCommandInstance& Command)
 
 bool UCommandableComponent::CheckCommandFinished(const FCommandInstance& Command) const
 {
-	if (GetOwner() && GetOwner()->Implements<UCommandableInterface>())
+	if (Command.IsValid())
 	{
-		return ICommandableInterface::Execute_CheckCommandFinished(GetOwner(), Command);
+		return Command.CommandInfo->CheckCommandFinished(this, Command);
 	}
 	
 	return false;
 }
 
 #pragma endregion
+UE_ENABLE_OPTIMIZATION

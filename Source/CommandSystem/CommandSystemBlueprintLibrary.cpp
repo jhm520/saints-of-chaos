@@ -4,6 +4,7 @@
 #include "CommandSystemBlueprintLibrary.h"
 
 #include "CommandSubsystem.h"
+#include "Components/CommandableComponent.h"
 #include "Components/CommandComponent.h"
 #include "Interfaces/CommandableInterface.h"
 #include "Interfaces/CommandInterface.h"
@@ -58,4 +59,23 @@ FCommandInstance UCommandSystemBlueprintLibrary::MakeCommand(AActor* CommanderAc
 	Command.Guid = FGuid::NewGuid();
 
 	return Command;
+}
+
+void UCommandSystemBlueprintLibrary::GetCurrentCommand(const AActor* CommandableActor, FCommandInstance& OutCommand)
+{
+	const ICommandableInterface* CommandableInterface = Cast<ICommandableInterface>(CommandableActor);
+
+	if (!CommandableInterface)
+	{
+		return;
+	}
+
+	const UCommandableComponent* CommandableComponent = CommandableInterface->GetCommandableComponent();
+
+	if (!CommandableComponent)
+	{
+		return;
+	}
+
+	OutCommand = CommandableComponent->GetCurrentCommand();
 }

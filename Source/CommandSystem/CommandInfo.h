@@ -11,7 +11,7 @@ class UCommandableComponent;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType, Abstract, ClassGroup = (CommandSystem))
 class COMMANDSYSTEM_API UCommandInfo : public UDataAsset
 {
 	GENERATED_BODY()
@@ -24,8 +24,6 @@ class COMMANDSYSTEM_API UCommandInfo : public UDataAsset
 
 	virtual void BeginDestroy() override;
 
-
-
 #pragma endregion
 
 	
@@ -33,11 +31,13 @@ class COMMANDSYSTEM_API UCommandInfo : public UDataAsset
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
+
+	virtual void OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 	
-	virtual bool CheckCommandFinished(UCommandableComponent* Commandable, const FCommandInstance& Command) const;
+	virtual bool CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Check Command Finished", Category = Command))
-	bool K2_CheckCommandFinished(UCommandableComponent* Commandable, const FCommandInstance& Command) const;
+	bool K2_CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 
 #pragma endregion
 	

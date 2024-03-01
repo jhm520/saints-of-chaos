@@ -28,9 +28,15 @@ void UCommandInfo::BeginDestroy()
 
 #pragma region Command
 
-bool UCommandInfo::CheckCommandFinished(UCommandableComponent* Commandable, const FCommandInstance& Command) const
+void UCommandInfo::OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
-	return K2_CheckCommandFinished(Commandable, Command);
+	
+}
+
+
+bool UCommandInfo::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	return false;
 }
 
 #pragma endregion

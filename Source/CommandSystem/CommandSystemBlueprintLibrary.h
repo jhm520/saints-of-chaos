@@ -58,5 +58,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Selection")
 	static FCommandInstance MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor = nullptr, const FVector& TargetLocation = FVector::ZeroVector);
+
+	UFUNCTION(BlueprintCallable, Category = "Selection")
+	static void GetCurrentCommand(const AActor* CommandableActor, FCommandInstance& OutCommand);
 	
 };
