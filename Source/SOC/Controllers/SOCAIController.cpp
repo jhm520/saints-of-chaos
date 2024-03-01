@@ -66,6 +66,11 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 	{
 		SetFocus(Action.TargetActor);
 	}
+
+	if (Action.ActionTag == SOCAIActionTags::None)
+	{
+		ClearFocus(EAIFocusPriority::Gameplay);
+	}
 }
 
 void ASOCAIController::DoAIAction_MoveToLocation(const FSOCAIAction& Action) const
