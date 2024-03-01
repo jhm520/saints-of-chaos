@@ -105,7 +105,7 @@ void USelectorComponent::OnRep_SelectedComponents(const TArray<USelectableCompon
 {
 	for (USelectableComponent* OldSelectedComponent : OldSelectedComponents)
 	{
-		if (!SelectedComponents.Contains(OldSelectedComponent))
+		if (OldSelectedComponent && !SelectedComponents.Contains(OldSelectedComponent))
 		{
 			OldSelectedComponent->OnDeselected(GetOwner());
 		}
@@ -113,7 +113,7 @@ void USelectorComponent::OnRep_SelectedComponents(const TArray<USelectableCompon
 
 	for (USelectableComponent* SelectedComponent : SelectedComponents)
 	{
-		if (!OldSelectedComponents.Contains(SelectedComponent))
+		if (SelectedComponent && !OldSelectedComponents.Contains(SelectedComponent))
 		{
 			SelectedComponent->OnSelected(GetOwner());
 		}

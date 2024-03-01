@@ -6,6 +6,7 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "CommandSystem/Interfaces/CommandableInterface.h"
 #include "CommandSystem/CommandInfo.h"
+#include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 
 #pragma region Framework
@@ -161,8 +162,6 @@ void UCommandableComponent::OnCommandBegin(const FCommandInstance& Command)
 {
 	K2_OnCommandBegin(Command);
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Begin" + Command.CommandInfo->GetName());
-
 	if (Command.CommandInfo)
 	{
 		Command.CommandInfo->OnCommandBegin(this, Command);
@@ -177,8 +176,6 @@ void UCommandableComponent::OnCommandBegin(const FCommandInstance& Command)
 void UCommandableComponent::OnCommandFinished(const FCommandInstance& Command)
 {
 	K2_OnCommandFinished(Command);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "Command Finished");
 }
 
 bool UCommandableComponent::CheckCommandFinished(const FCommandInstance& Command) const
@@ -192,4 +189,30 @@ bool UCommandableComponent::CheckCommandFinished(const FCommandInstance& Command
 }
 
 #pragma endregion
+
+#pragma region Command: Movement
+
+void UCommandableComponent::OnMoveCommandCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
+{
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+
+	if (!CharacterOwner)
+	{
+		return;
+	}
+
+	AAIController* AIController = Cast<AAIController>(CharacterOwner->GetController());
+
+	if (!AIController)
+	{
+		return;
+	}
+	
+	AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UCommandableComponent::OnMoveCommandCompleted);
+	
+	FinishCurrentCommand();
+}
+
+#pragma endregion
+
 UE_ENABLE_OPTIMIZATION

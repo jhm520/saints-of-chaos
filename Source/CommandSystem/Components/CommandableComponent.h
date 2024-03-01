@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIController.h"
 #include "Components/ActorComponent.h"
 #include "GameplayTagContainer.h"
 #include "CommandSystem/CommandSystemBlueprintLibrary.h"
@@ -76,6 +77,13 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandFinished"), Category = "Command")
 	void K2_OnCommandFinished(const FCommandInstance& Command);
+
+#pragma endregion
+
+#pragma region Command: Movement
+public:
+	UFUNCTION()
+	void OnMoveCommandCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result);
 
 #pragma endregion
 

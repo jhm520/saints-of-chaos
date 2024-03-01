@@ -29,6 +29,6 @@ public:
 	virtual bool CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	float AcceptanceRadius = 100.0f;
+	float AcceptanceRadius = 150.0f;
 #pragma endregion
 };

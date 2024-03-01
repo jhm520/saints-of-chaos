@@ -26,7 +26,8 @@ public class CommandSystem : ModuleRules
             "UMG",
             "AudioExtensions",
             "CoreUtility",
-            "GASUtility"
+            "GASUtility",
+            "AIModule"
 		});
 				
 		

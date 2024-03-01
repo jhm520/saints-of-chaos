@@ -74,20 +74,8 @@ void USOCGameplayAbility_ContextCommand::InputReleased(const FGameplayAbilitySpe
 void USOCGameplayAbility_ContextCommand::OnTargetDataReady(const FGameplayAbilityTargetDataHandle& Data)
 {
 	TArray<USelectableComponent*> Selected;
-
-
+	
 	const FHitResult& HitResult = UAbilitySystemBlueprintLibrary::GetHitResultFromTargetData(Data, 0);
-
-	ISelectableInterface* TargetedSelectable = Cast<ISelectableInterface>(HitResult.GetActor());
-
-	if (TargetedSelectable)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("USOCGameplayAbility_ContextCommand::OnTargetDataReady - TargetedSelectable") + HitResult.GetActor()->GetName());
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("USOCGameplayAbility_ContextCommand::OnTargetDataReady - TargetedLocation") + HitResult.Location.ToString());
-	}
 	
 	USelectionSystemBlueprintLibrary::GetSelectedComponents(GetCurrentActorInfo()->AvatarActor.Get(), Selected);
 
