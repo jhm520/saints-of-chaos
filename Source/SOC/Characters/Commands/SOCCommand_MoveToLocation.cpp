@@ -39,6 +39,11 @@ void USOCCommand_MoveToLocation::OnCommandBegin(const UCommandableComponent* Com
 	AIController->ReceiveMoveCompleted.AddDynamic(Commandable, &UCommandableComponent::OnMoveCommandCompleted);
 }
 
+void USOCCommand_MoveToLocation::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	Super::OnCommandFinished(Commandable, Command);
+}
+
 bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	// if (!Commandable)

@@ -5,6 +5,8 @@
 
 #include "CommandSubsystem.h"
 #include "Components/CommandableComponent.h"
+#include "GameFramework/Character.h"
+#include "Interfaces/CommandableInterface.h"
 
 #pragma region Framework
 
@@ -30,13 +32,76 @@ void UCommandInfo::BeginDestroy()
 
 void UCommandInfo::OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
-	
+	OnBegin_AnimInstances(Commandable, Command);
 }
 
+void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	OnComplete_AnimInstances(Commandable, Command);
+}
 
 bool UCommandInfo::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	return false;
+}
+
+#pragma endregion
+
+#pragma region Animation
+void UCommandInfo::OnBegin_AnimInstances(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	if (!Commandable)
+	{
+		return;
+	}
+	
+	const ACharacter* AvatarCharacter = Cast<ACharacter>(Commandable->GetOwner());
+
+	if (!AvatarCharacter)
+	{
+		return;
+	}
+	
+	for (const FCommandAnimInstance& LocalAnimInstance : CommandAnimInstances)
+	{
+		if (LocalAnimInstance.ActivationMode == ECommandTriggerMode::OnBegin)
+		{
+			AvatarCharacter->GetMesh()->GetAnimInstance()->LinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+		}
+
+		if (LocalAnimInstance.DeactivationMode == ECommandTriggerMode::OnBegin)
+		{
+			AvatarCharacter->GetMesh()->GetAnimInstance()->UnlinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+		}
+	}
+}
+
+void UCommandInfo::OnComplete_AnimInstances(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	if (!Commandable)
+	{
+		return;
+	}
+	
+	const ACharacter* AvatarCharacter = Cast<ACharacter>(Commandable->GetOwner());
+
+	if (!AvatarCharacter)
+	{
+		return;
+	}
+	
+	for (const FCommandAnimInstance& LocalAnimInstance : CommandAnimInstances)
+	{
+		if (LocalAnimInstance.ActivationMode == ECommandTriggerMode::OnComplete)
+		{
+			AvatarCharacter->GetMesh()->GetAnimInstance()->LinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+		}
+
+		if (LocalAnimInstance.DeactivationMode == ECommandTriggerMode::OnComplete)
+		{
+			AvatarCharacter->GetMesh()->GetAnimInstance()->UnlinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+		}
+	}
 }
 
 #pragma endregion

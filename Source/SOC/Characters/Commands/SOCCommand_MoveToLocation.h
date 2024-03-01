@@ -25,6 +25,9 @@ public:
 public:
 
 	virtual void OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const override;
+
+	virtual void OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const override;
+
 	
 	virtual bool CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const override;
 
