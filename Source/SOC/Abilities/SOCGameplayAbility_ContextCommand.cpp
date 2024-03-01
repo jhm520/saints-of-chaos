@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
 #include "CommandSystem/CommandSystemBlueprintLibrary.h"
+#include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "GAS/Abilities/TargetActors/GameplayAbilityTargetActor_InstantCursor.h"
 #include "SelectionSystem/SelectionSystemBlueprintLibrary.h"
 #include "SelectionSystem/Components/SelectableComponent.h"
@@ -48,6 +49,43 @@ void USOCGameplayAbility_ContextCommand::ActivateAbility(const FGameplayAbilityS
 /** Returns true if this ability can be activated right now. Has no side effects */
 bool USOCGameplayAbility_ContextCommand::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, OUT FGameplayTagContainer* OptionalRelevantTags) const
 {
+	//Check if the selected units are friendly
+	TArray<USelectableComponent*> Selected;
+
+	USelectionSystemBlueprintLibrary::GetSelectedComponents(GetCurrentActorInfo()->AvatarActor.Get(), Selected);
+
+	if (Selected.IsEmpty())
+	{
+		return false;
+	}
+
+	for (USelectableComponent* Selectable : Selected)
+	{
+		if (!Selectable)
+		{
+			return false;
+		}
+
+		AActor* SelectableOwner = Selectable->GetOwner();
+
+		if (!SelectableOwner)
+		{
+			return false;
+		}
+
+		if (!SelectableOwner->Implements<UAttitudeInterface>())
+		{
+			return false;
+		}
+
+		const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(GetCurrentActorInfo()->AvatarActor.Get(), SelectableOwner);
+
+		if (Attitude != EAttitude::Friendly)
+		{
+			return false;
+		}
+	}
+	
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
