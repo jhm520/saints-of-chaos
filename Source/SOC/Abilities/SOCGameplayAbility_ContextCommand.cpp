@@ -140,7 +140,7 @@ void USOCGameplayAbility_ContextCommand::OnTargetDataReady(const FGameplayAbilit
 
 		const FCommandInstance& NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), CommandTag, HitResult.GetActor(), HitResult.Location);
 		
-		UCommandSystemBlueprintLibrary::CommandActor(GetCurrentActorInfo()->AvatarActor.Get(), SelectedActor, NewCommand, false);
+		UCommandSystemBlueprintLibrary::CommandActor(GetCurrentActorInfo()->AvatarActor.Get(), SelectedActor, NewCommand, bQueueCommand);
 	}
 }
 

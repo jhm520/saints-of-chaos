@@ -39,8 +39,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
 
-#pragma endregion
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	bool bQueueCommand = false;
 
+#pragma endregion
 
 #pragma region Targeting
 

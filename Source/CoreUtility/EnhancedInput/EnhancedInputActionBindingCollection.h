@@ -14,7 +14,9 @@ enum class EInputActionBinding : uint8
 	Movement UMETA(DisplayName = "Movement"),
 	CameraZoom UMETA(DisplayName = "CameraZoom"),
 	Selection UMETA(DisplayName = "Selection"),
-	ContextCommand UMETA(DisplayName = "ContextCommand")
+	ContextCommand UMETA(DisplayName = "ContextCommand"),
+	Modifier_Shift UMETA(DisplayName = "Modifier Shift")
+
 	
 	// Add your own bindings if you need to.
 };
