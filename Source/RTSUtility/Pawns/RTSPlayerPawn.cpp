@@ -159,7 +159,7 @@ void ARTSPlayerPawn::DoCameraZoom(float ZoomValue)
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("NewTargetArmLength: %f"), NewTargetArmLength));
 }
 
-UE_DISABLE_OPTIMIZATION
+
 void ARTSPlayerPawn::InputAction_Ability(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction)
 {
 	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(this);
@@ -197,7 +197,7 @@ void ARTSPlayerPawn::DoContextCommand()
 {
 	
 }
-UE_ENABLE_OPTIMIZATION
+
 
 #pragma endregion
 

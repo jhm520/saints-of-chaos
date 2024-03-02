@@ -8,9 +8,11 @@
 #include "CommandSystem/CommandInfo.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
+#include "AITypes.h"
+#include "Navigation/PathFollowingComponent.h"
 
 #pragma region Framework
-UE_DISABLE_OPTIMIZATION
+
 // Sets default values for this component's properties
 UCommandableComponent::UCommandableComponent()
 {
@@ -60,11 +62,21 @@ void UCommandableComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 #pragma region Command
 
-bool UCommandableComponent::GiveCommand(const FCommandInstance& Command)
+bool UCommandableComponent::GiveCommand(const FCommandInstance& Command, bool bQueue)
 {
 	if (!GetOwner()->HasAuthority())
 	{
 		return false;
+	}
+
+	// If we're not queuing, clear the queue first
+	//this effectively cancels all commands in the queue
+	if (!bQueue)
+	{
+		ClearCommandQueue();
+		SetCurrentCommand(Command);
+
+		return true;
 	}
 
 	QueueCommand(Command);
@@ -85,6 +97,18 @@ void UCommandableComponent::FinishCurrentCommand()
 	}
 
 	DequeueCommand();
+}
+
+void UCommandableComponent::SetCurrentCommand(const FCommandInstance& Command)
+{
+	if (!GetOwner()->HasAuthority())
+	{
+		return;
+	}
+	
+	const FCommandInstance OldCommand = Command;
+	CurrentCommand = Command;
+	OnRep_CurrentCommand(OldCommand);
 }
 
 
@@ -128,6 +152,32 @@ void UCommandableComponent::DequeueCommand()
 	OnRep_CommandQueue(OldCommandQueue);
 }
 
+void UCommandableComponent::ClearCurrentCommand()
+{
+	if (!GetOwner()->HasAuthority())
+	{
+		return;
+	}
+
+	const FCommandInstance OldCommand = CurrentCommand;
+	
+	CurrentCommand = FCommandInstance();
+	
+	OnRep_CurrentCommand(CurrentCommand);
+}
+
+void UCommandableComponent::ClearCommandQueue()
+{
+	if (!GetOwner()->HasAuthority())
+	{
+		return;
+	}
+	
+	const TArray<FCommandInstance> OldCommandQueue = CommandQueue;
+
+	CommandQueue.Empty();
+	OnRep_CommandQueue(OldCommandQueue);
+}
 
 void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& PreviousCommand)
 {
@@ -200,7 +250,7 @@ void UCommandableComponent::OnMoveCommandCompleted(FAIRequestID RequestID, EPath
 	{
 		return;
 	}
-
+	
 	AAIController* AIController = Cast<AAIController>(CharacterOwner->GetController());
 
 	if (!AIController)
@@ -209,10 +259,14 @@ void UCommandableComponent::OnMoveCommandCompleted(FAIRequestID RequestID, EPath
 	}
 	
 	AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UCommandableComponent::OnMoveCommandCompleted);
+
+	
+	if (Result != EPathFollowingResult::Success)
+	{
+		return;
+	}
 	
 	FinishCurrentCommand();
 }
 
 #pragma endregion
-
-UE_ENABLE_OPTIMIZATION

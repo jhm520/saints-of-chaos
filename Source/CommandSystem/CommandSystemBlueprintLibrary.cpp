@@ -9,7 +9,7 @@
 #include "Interfaces/CommandableInterface.h"
 #include "Interfaces/CommandInterface.h"
 
-bool UCommandSystemBlueprintLibrary::CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInstance& Command)
+bool UCommandSystemBlueprintLibrary::CommandActor(AActor* CommanderActor, AActor* CommandedActor, const FCommandInstance& Command, bool bQueue)
 {
 	ICommandInterface * CommandInterface = Cast<ICommandInterface>(CommanderActor);
 
@@ -39,7 +39,7 @@ bool UCommandSystemBlueprintLibrary::CommandActor(AActor* CommanderActor, AActor
 		return false;
 	}
 
-	return CommandComponent->Command(CommandableComponent, Command);
+	return CommandComponent->Command(CommandableComponent, Command, bQueue);
 }
 
 FCommandInstance UCommandSystemBlueprintLibrary::MakeCommand(AActor* CommanderActor, const FGameplayTag& CommandTag, AActor* TargetActor, const FVector& TargetLocation)

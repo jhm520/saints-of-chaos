@@ -18,7 +18,7 @@ USOCAIBehavior_FollowCommands::USOCAIBehavior_FollowCommands()
 #pragma endregion
 
 #pragma region Behavior
-UE_DISABLE_OPTIMIZATION
+
 bool USOCAIBehavior_FollowCommands::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	if (!InActor)
@@ -47,13 +47,12 @@ bool USOCAIBehavior_FollowCommands::CalculateCurrentAction(const AActor* InActor
 	if (CurrentCommand.IsValid())
 	{
 		OutAction.BehaviorTag = GetBehaviorTag();
-		
 		return true;
 	}
 	
 	return Super::CalculateCurrentAction(InActor, OutAction, BehaviorPath, InParentAction);
 }
-UE_ENABLE_OPTIMIZATION
+
 #pragma endregion
 
 #pragma region Enemy Base

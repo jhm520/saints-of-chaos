@@ -55,14 +55,14 @@ void UCommandComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 #pragma region Command
 
-bool UCommandComponent::Command(UCommandableComponent* Commandable, const FCommandInstance& Command)
+bool UCommandComponent::Command(UCommandableComponent* Commandable, const FCommandInstance& Command, bool bQueue)
 {
 	if (!Commandable)
 	{
 		return false;
 	}
 
-	return Commandable->GiveCommand(Command);
+	return Commandable->GiveCommand(Command, bQueue);
 }
 
 #pragma endregion

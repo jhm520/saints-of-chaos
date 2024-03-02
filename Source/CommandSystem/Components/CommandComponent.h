@@ -29,7 +29,7 @@ public:
 #pragma region Command
 
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Command")
-	bool Command(UCommandableComponent* Commandable, const FCommandInstance& Command);
+	bool Command(UCommandableComponent* Commandable, const FCommandInstance& Command, bool bQueue = false);
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	TArray<TObjectPtr<UCommandInfo>> CommandInfos;

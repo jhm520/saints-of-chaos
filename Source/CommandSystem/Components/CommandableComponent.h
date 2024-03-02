@@ -34,7 +34,7 @@ public:
 #pragma region Command
 public:
 	UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, Category = "Command")
-	bool GiveCommand(const FCommandInstance& Command);
+	bool GiveCommand(const FCommandInstance& Command, bool bQueue = false);
 
 	UFUNCTION(BlueprintPure, Category = "Command")
 	const FCommandInstance& GetCurrentCommand() const { return CurrentCommand; }
@@ -44,8 +44,14 @@ protected:
 	void FinishCurrentCommand();
 
 	void QueueCommand(const FCommandInstance& Command);
+
+	void SetCurrentCommand(const FCommandInstance& Command);
 	
 	void DequeueCommand();
+
+	void ClearCurrentCommand();
+	
+	void ClearCommandQueue();
 
 	//the current command that this commandable actor is carrying out
 	UPROPERTY(Transient, ReplicatedUsing = "OnRep_CurrentCommand")

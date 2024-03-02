@@ -6,7 +6,7 @@
 #include "AIController.h"
 #include "CommandSystem/Components/CommandableComponent.h"
 #include "GameFramework/Character.h"
-UE_DISABLE_OPTIMIZATION
+
 USOCCommand_MoveToLocation::USOCCommand_MoveToLocation()
 {
 }
@@ -63,4 +63,3 @@ bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponen
 
 	return Super::CheckCommandFinished(Commandable, Command);
 }
-UE_ENABLE_OPTIMIZATION
