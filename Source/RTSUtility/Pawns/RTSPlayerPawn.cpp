@@ -114,7 +114,7 @@ void ARTSPlayerPawn::InputAction(const FInputActionInstance& Instance, EInputAct
 
 	// Do your cool stuff here!
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("InputAction: %s"), *InputAction->GetName()));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("InputAction: %s"), *InputAction->GetName()));
 	switch (AbilityInput)
 	{
 		case EInputActionBinding::None:

@@ -34,9 +34,17 @@ void USOCCommand_MoveToLocation::OnCommandBegin(const UCommandableComponent* Com
 		return;
 	}
 
-	AIController->MoveToLocation(Command.TargetLocation, 25.0f);
+	 EPathFollowingRequestResult::Type Result = AIController->MoveToLocation(Command.TargetLocation, 25.0f);
+
+	if (Result == EPathFollowingRequestResult::Type::AlreadyAtGoal || Result == EPathFollowingRequestResult::Type::Failed)
+	{
+		return;
+	}
 	
-	AIController->ReceiveMoveCompleted.AddDynamic(Commandable, &UCommandableComponent::OnMoveCommandCompleted);
+	if (!AIController->ReceiveMoveCompleted.Contains(Commandable, FName("OnMoveCommandCompleted")))
+	{
+		AIController->ReceiveMoveCompleted.AddDynamic(Commandable, &UCommandableComponent::OnMoveCommandCompleted);
+	}
 }
 
 void USOCCommand_MoveToLocation::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const

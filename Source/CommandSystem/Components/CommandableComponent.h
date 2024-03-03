@@ -40,7 +40,6 @@ public:
 	const FCommandInstance& GetCurrentCommand() const { return CurrentCommand; }
 
 protected:
-
 	void FinishCurrentCommand();
 
 	void QueueCommand(const FCommandInstance& Command);
@@ -52,6 +51,10 @@ protected:
 	void ClearCurrentCommand();
 	
 	void ClearCommandQueue();
+	
+	void ClearMovementCommand();
+
+	AAIController* GetAIController();
 
 	//the current command that this commandable actor is carrying out
 	UPROPERTY(Transient, ReplicatedUsing = "OnRep_CurrentCommand")

@@ -61,6 +61,16 @@ void UCommandInfo::OnBegin_AnimInstances(const UCommandableComponent* Commandabl
 	{
 		return;
 	}
+
+	if (!AvatarCharacter->GetMesh())
+	{
+		return;
+	}
+
+	if (!AvatarCharacter->GetMesh()->GetAnimInstance())
+	{
+		return;
+	}
 	
 	for (const FCommandAnimInstance& LocalAnimInstance : CommandAnimInstances)
 	{
@@ -86,6 +96,17 @@ void UCommandInfo::OnComplete_AnimInstances(const UCommandableComponent* Command
 	const ACharacter* AvatarCharacter = Cast<ACharacter>(Commandable->GetOwner());
 
 	if (!AvatarCharacter)
+	{
+		return;
+	}
+
+	
+	if (!AvatarCharacter->GetMesh())
+	{
+		return;
+	}
+
+	if (!AvatarCharacter->GetMesh()->GetAnimInstance())
 	{
 		return;
 	}

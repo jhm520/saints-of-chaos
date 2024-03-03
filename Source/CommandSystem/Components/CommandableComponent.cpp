@@ -74,6 +74,7 @@ bool UCommandableComponent::GiveCommand(const FCommandInstance& Command, bool bQ
 	if (!bQueue)
 	{
 		ClearCommandQueue();
+		ClearMovementCommand();
 		SetCurrentCommand(Command);
 
 		return true;
@@ -179,6 +180,47 @@ void UCommandableComponent::ClearCommandQueue()
 	OnRep_CommandQueue(OldCommandQueue);
 }
 
+void UCommandableComponent::ClearMovementCommand()
+{
+	AAIController* AIController = GetAIController();
+
+	if (!AIController)
+	{
+		return;
+	}
+
+	const FCommandInstance& LocalCurrentCommand = GetCurrentCommand();
+
+	if (!LocalCurrentCommand.IsValid())
+	{
+		return;
+	}
+	
+	if (AIController->ReceiveMoveCompleted.Contains(this, FName("OnMoveCommandCompleted")))
+	{
+		AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UCommandableComponent::OnMoveCommandCompleted);
+	}
+}
+
+AAIController* UCommandableComponent::GetAIController()
+{
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+
+	if (!CharacterOwner)
+	{
+		return nullptr;
+	}
+	
+	AAIController* AIController = Cast<AAIController>(CharacterOwner->GetController());
+
+	if (!AIController)
+	{
+		return nullptr;
+	}
+
+	return AIController;
+}
+
 void UCommandableComponent::OnRep_CurrentCommand(const FCommandInstance& PreviousCommand)
 {
 	if (PreviousCommand.IsValid())
@@ -259,7 +301,6 @@ void UCommandableComponent::OnMoveCommandCompleted(FAIRequestID RequestID, EPath
 	}
 	
 	AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UCommandableComponent::OnMoveCommandCompleted);
-
 	
 	if (Result != EPathFollowingResult::Success)
 	{
