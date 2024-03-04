@@ -2,6 +2,7 @@
 
 #include "SOCAIController.h"
 
+#include "NavigationSystem.h"
 #include "Navigation/CrowdFollowingComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
@@ -50,8 +51,10 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 	if (Action.ActionTag == SOCAIActionTags::MoveToLocation)
 	{
 		const FVector& CurrentMoveDestination = GetPathFollowingComponent()->GetCurrentTargetLocation();
-
-		if (CurrentMoveDestination != Action.TargetLocation)
+		FVector ProjectedTargetLocation;
+		UNavigationSystemV1::K2_ProjectPointToNavigation(this, Action.TargetLocation, ProjectedTargetLocation, nullptr, nullptr);
+	
+		if (CurrentMoveDestination != ProjectedTargetLocation)
 		{
 			MoveToLocation(Action.TargetLocation, MovementAcceptanceRadius);
 		}

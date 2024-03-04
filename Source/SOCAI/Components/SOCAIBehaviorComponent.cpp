@@ -134,11 +134,8 @@ void USOCAIBehaviorComponent::OnRep_CurrentAction(const FSOCAIAction& PreviousAc
 	{
 		OnBehaviorChanged(CurrentAction, PreviousAction);
 	}
-	
-	if (CurrentAction != PreviousAction)
-	{
-		OnActionChanged(CurrentAction, PreviousAction);
-	}
+
+	OnActionChanged(CurrentAction, PreviousAction);
 }
 
 void USOCAIBehaviorComponent::DoAction(const FSOCAIAction& InAction)

@@ -4,6 +4,7 @@
 #include "SOCCommand_MoveToLocation.h"
 
 #include "AIController.h"
+#include "NavigationSystem.h"
 #include "CommandSystem/Components/CommandableComponent.h"
 #include "GameFramework/Character.h"
 
@@ -54,20 +55,22 @@ void USOCCommand_MoveToLocation::OnCommandFinished(const UCommandableComponent* 
 
 bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
-	// if (!Commandable)
-	// {
-	// 	return true;
-	// }
-	//
-	// const FVector& OwnerLocation = Commandable->GetOwner()->GetActorLocation();
-	// const FVector& TargetLocation = Command.TargetLocation;
-	//
-	// const float Distance = FVector::Dist(OwnerLocation, TargetLocation);
-	//
-	// if (Distance < AcceptanceRadius)
-	// {
-	// 	return true;
-	// }
+	if (!Commandable)
+	{
+		return true;
+	}
+	
+	FVector OwnerLocation;
+	FVector TargetLocation;
+	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Commandable->GetOwner()->GetActorLocation(), OwnerLocation, nullptr, nullptr);
+	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Command.TargetLocation, OwnerLocation, nullptr, nullptr);
+
+	const float Distance = FVector::Dist(OwnerLocation, TargetLocation);
+	
+	if (Distance < AcceptanceRadius)
+	{
+		return true;
+	}
 
 	return Super::CheckCommandFinished(Commandable, Command);
 }

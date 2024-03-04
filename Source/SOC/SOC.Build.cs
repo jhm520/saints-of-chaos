@@ -22,7 +22,8 @@ public class SOC : ModuleRules
 			"GameplayTags",
 			"AIModule",
 			"UMG",
-			"CommonUI"
+			"CommonUI",
+			"NavigationSystem"
 		});
 
 		//Plugins
