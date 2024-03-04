@@ -8,6 +8,7 @@
 #include "CommandInfo.generated.h"
 
 class UCommandableComponent;
+class UGameplayAbility;
 
 UENUM(BlueprintType)
 enum class ECommandTriggerMode : uint8
@@ -33,6 +34,23 @@ struct COMMANDSYSTEM_API FCommandAnimInstance
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	TSubclassOf<UAnimInstance> AnimInstanceClass;
+};
+
+//struct to represent an AIController's current action
+USTRUCT(BlueprintType)
+struct COMMANDSYSTEM_API FCommandGameplayAbility
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	ECommandTriggerMode ActivationMode = ECommandTriggerMode::None;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	ECommandTriggerMode DeactivationMode = ECommandTriggerMode::None;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TSubclassOf<UGameplayAbility> GameplayAbilityClass;
+
 };
 /**
  * 
@@ -82,6 +100,15 @@ protected:
 	virtual void OnBegin_AnimInstances(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 
 	virtual void OnComplete_AnimInstances(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
+
+#pragma endregion
+
+#pragma region Gameplay Ability System
+	
+protected:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
+	TArray<FCommandGameplayAbility> BehaviorGameplayAbilities;
 
 #pragma endregion
 	

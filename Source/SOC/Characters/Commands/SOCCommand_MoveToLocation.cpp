@@ -8,7 +8,7 @@
 #include "CommandSystem/Components/CommandableComponent.h"
 #include "GameFramework/Character.h"
 #include "Navigation/PathFollowingComponent.h"
-
+UE_DISABLE_OPTIMIZATION
 USOCCommand_MoveToLocation::USOCCommand_MoveToLocation()
 {
 }
@@ -38,15 +38,15 @@ void USOCCommand_MoveToLocation::OnCommandBegin(const UCommandableComponent* Com
 
 	 EPathFollowingRequestResult::Type Result = AIController->MoveToLocation(Command.TargetLocation, 25.0f);
 
-	if (Result == EPathFollowingRequestResult::Type::AlreadyAtGoal || Result == EPathFollowingRequestResult::Type::Failed)
-	{
-		return;
-	}
-	
-	if (!AIController->ReceiveMoveCompleted.Contains(Commandable, FName("OnMoveCommandCompleted")))
-	{
-		AIController->ReceiveMoveCompleted.AddDynamic(Commandable, &UCommandableComponent::OnMoveCommandCompleted);
-	}
+	// if (Result == EPathFollowingRequestResult::Type::AlreadyAtGoal || Result == EPathFollowingRequestResult::Type::Failed)
+	// {
+	// 	return;
+	// }
+	//
+	// if (!AIController->ReceiveMoveCompleted.Contains(Commandable, FName("OnMoveCommandCompleted")))
+	// {
+	// 	AIController->ReceiveMoveCompleted.AddDynamic(Commandable, &UCommandableComponent::OnMoveCommandCompleted);
+	// }
 }
 
 void USOCCommand_MoveToLocation::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
@@ -63,8 +63,10 @@ bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponen
 	
 	FVector OwnerLocation;
 	FVector TargetLocation;
-	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Commandable->GetOwner()->GetActorLocation(), OwnerLocation, nullptr, nullptr);
-	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Command.TargetLocation, OwnerLocation, nullptr, nullptr);
+
+	const FVector OrigActorLocation = Commandable->GetOwner()->GetActorLocation();
+	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), OrigActorLocation, OwnerLocation, nullptr, nullptr);
+	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Command.TargetLocation, TargetLocation, nullptr, nullptr);
 
 	const float Distance = FVector::Dist(OwnerLocation, TargetLocation);
 	
@@ -75,3 +77,4 @@ bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponen
 
 	return Super::CheckCommandFinished(Commandable, Command);
 }
+UE_ENABLE_OPTIMIZATION

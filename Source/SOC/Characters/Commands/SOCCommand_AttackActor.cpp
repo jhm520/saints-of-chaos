@@ -36,7 +36,7 @@ void USOCCommand_AttackActor::OnCommandBegin(const UCommandableComponent* Comman
 		return;
 	}
 
-	 EPathFollowingRequestResult::Type Result = AIController->MoveToLocation(Command.TargetLocation, 25.0f);
+	 EPathFollowingRequestResult::Type Result = AIController->MoveToActor(Command.TargetActor, 25.0f);
 
 	if (Result == EPathFollowingRequestResult::Type::AlreadyAtGoal || Result == EPathFollowingRequestResult::Type::Failed)
 	{
@@ -65,18 +65,18 @@ bool USOCCommand_AttackActor::CheckCommandFinished(const UCommandableComponent* 
 	{
 		return true;
 	}
-	
-	FVector OwnerLocation;
-	FVector TargetLocation;
-	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Commandable->GetOwner()->GetActorLocation(), OwnerLocation, nullptr, nullptr);
-	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Command.TargetLocation, OwnerLocation, nullptr, nullptr);
 
-	const float Distance = FVector::Dist(OwnerLocation, TargetLocation);
-	
-	if (Distance < AcceptanceRadius)
+	if (!Command.IsValid())
 	{
 		return true;
 	}
+
+	if (!Command.TargetActor)
+	{
+		return true;
+	}
+
+	//TODO: Check if the target actor is dead, return true if it is
 
 	return Super::CheckCommandFinished(Commandable, Command);
 }

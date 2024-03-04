@@ -299,28 +299,28 @@ bool UCommandableComponent::CheckCommandFinished(const FCommandInstance& Command
 
 void UCommandableComponent::OnMoveCommandCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
-	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
-
-	if (!CharacterOwner)
-	{
-		return;
-	}
+	// ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+	//
+	// if (!CharacterOwner)
+	// {
+	// 	return;
+	// }
+	//
+	// AAIController* AIController = Cast<AAIController>(CharacterOwner->GetController());
+	//
+	// if (!AIController)
+	// {
+	// 	return;
+	// }
+	//
+	// AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UCommandableComponent::OnMoveCommandCompleted);
+	//
+	// if (Result != EPathFollowingResult::Success)
+	// {
+	// 	return;
+	// }
 	
-	AAIController* AIController = Cast<AAIController>(CharacterOwner->GetController());
-
-	if (!AIController)
-	{
-		return;
-	}
-	
-	AIController->ReceiveMoveCompleted.RemoveDynamic(this, &UCommandableComponent::OnMoveCommandCompleted);
-	
-	if (Result != EPathFollowingResult::Success)
-	{
-		return;
-	}
-	
-	FinishCurrentCommand();
+	//FinishCurrentCommand();
 }
 
 #pragma endregion
