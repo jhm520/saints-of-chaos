@@ -71,9 +71,10 @@ void USOCGameplayAbility_AutoCast::QueueAbility()
 		return;
 	}
 	
-	UGameplayEffect* GameplayEffect = AbilitySpec->Ability->GetCooldownGameplayEffect();
+	UGameplayEffect* CooldownGameplayEffect = AbilitySpec->Ability->GetCooldownGameplayEffect();
 
-	if (!GameplayEffect)
+	//if there was no cooldown, then the cast must have failed, or it can be cast again immediately
+	if (!CooldownGameplayEffect)
 	{
 		return;
 	}
@@ -81,15 +82,28 @@ void USOCGameplayAbility_AutoCast::QueueAbility()
 	float TimeRemaining = 0.0f;
 	float Duration = 0.0f;
 	FGameplayTagContainer TagContainer;
-	GameplayEffect->GetOwnedGameplayTags(TagContainer);
+	CooldownGameplayEffect->GetOwnedGameplayTags(TagContainer);
 	
 	UGASUtilityHelperLibrary::GetCooldownRemainingForTag(GetAbilitySystemComponentFromActorInfo(), TagContainer, TimeRemaining, Duration);
 
-
+	//if there was no cooldown, then the cast must have failed, or it can be cast again immediately
+	if (TimeRemaining <= 0.0f)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle_TryAgain);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_TryAgain, this, &USOCGameplayAbility_AutoCast::TryCastingAbilityAgain, TryAgainInterval, false);
+		return;
+	}
 	//when the cooldown for the ability is removed, we will cast the ability again
 
 	AbilitySystemComponent->OnAnyGameplayEffectRemovedDelegate().AddUObject(this, &USOCGameplayAbility_AutoCast::OnCooldownRemoved);
 	
+}
+
+void USOCGameplayAbility_AutoCast::TryCastingAbilityAgain()
+{
+	CastAbility();
+	
+	QueueAbility();
 }
 
 void USOCGameplayAbility_AutoCast::OnCooldownRemoved(const FActiveGameplayEffect& EffectHandle)

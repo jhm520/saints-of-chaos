@@ -26,4 +26,12 @@ public:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const;
 	
 #pragma endregion
+
+#pragma region Framework
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee Attack")
+	float AttackRange = 150.0f;
+
+#pragma endregion
+
 };

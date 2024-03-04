@@ -37,16 +37,6 @@ void USOCCommand_AttackActor::OnCommandBegin(const UCommandableComponent* Comman
 	}
 
 	 EPathFollowingRequestResult::Type Result = AIController->MoveToActor(Command.TargetActor, 25.0f);
-
-	if (Result == EPathFollowingRequestResult::Type::AlreadyAtGoal || Result == EPathFollowingRequestResult::Type::Failed)
-	{
-		return;
-	}
-	
-	if (!AIController->ReceiveMoveCompleted.Contains(Commandable, FName("OnMoveCommandCompleted")))
-	{
-		AIController->ReceiveMoveCompleted.AddDynamic(Commandable, &UCommandableComponent::OnMoveCommandCompleted);
-	}
 }
 
 void USOCCommand_AttackActor::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
@@ -71,6 +61,7 @@ bool USOCCommand_AttackActor::CheckCommandFinished(const UCommandableComponent* 
 		return true;
 	}
 
+	//if the target actor is no longer valid, the command is finished
 	if (!Command.TargetActor)
 	{
 		return true;

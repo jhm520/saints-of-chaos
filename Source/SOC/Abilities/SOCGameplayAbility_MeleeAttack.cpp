@@ -3,7 +3,7 @@
 
 #include "SOCGameplayAbility_MeleeAttack.h"
 
-	
+	UE_DISABLE_OPTIMIZATION
 #pragma region Framework
 USOCGameplayAbility_MeleeAttack::USOCGameplayAbility_MeleeAttack()
 {
@@ -19,7 +19,30 @@ void USOCGameplayAbility_MeleeAttack::ActivateAbility(const FGameplayAbilitySpec
 /** Returns true if this ability can be activated right now. Has no side effects */
 bool USOCGameplayAbility_MeleeAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, OUT FGameplayTagContainer* OptionalRelevantTags) const
 {
+	if (!GetAvatarActorFromActorInfo())
+	{
+		return false;
+	}
+
+	AActor* TargetActor = GetTargetActor();
+
+	if (!TargetActor)
+	{
+		return false;
+	}
+
+	const FVector& AvatarLocation = GetAvatarActorFromActorInfo()->GetActorLocation();
+
+	const FVector& TargetLocation = TargetActor->GetActorLocation();
+
+	//if the target is out of range, we can't activate the ability
+	if (AttackRange > 0.0f && FVector::DistSquared(AvatarLocation, TargetLocation) > FMath::Square(AttackRange))
+	{
+		return false;
+	}
+	
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 	
 #pragma endregion
+UE_ENABLE_OPTIMIZATION

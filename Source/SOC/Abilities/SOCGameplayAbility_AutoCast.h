@@ -40,6 +40,15 @@ protected:
 	void QueueAbility();
 
 	UFUNCTION()
+	void TryCastingAbilityAgain();
+
+	UPROPERTY()
+	FTimerHandle TimerHandle_TryAgain;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Auto Cast")
+	float TryAgainInterval = 0.25f;
+
+	UFUNCTION()
 	void OnCooldownRemoved(const FActiveGameplayEffect& EffectHandle);
 
 	UFUNCTION()
