@@ -167,6 +167,16 @@ AActor* ASOCAICharacter::GetTargetActor() const
 		return nullptr;
 	}
 
+	//check if we have a current command with a valid target actor, use that one if we do
+	FCommandInstance CurrentCommand;
+	UCommandSystemBlueprintLibrary::GetCurrentCommand(this, CurrentCommand);
+
+	if (CurrentCommand.IsValid() && CurrentCommand.TargetActor)
+	{
+		return CurrentCommand.TargetActor;
+	}
+
+	//otherwise get the target actor from the behavior component
 	ISOCAIBehaviorInterface* BehaviorInterface = Cast<ISOCAIBehaviorInterface>(GetController());
 
 	if (!BehaviorInterface)

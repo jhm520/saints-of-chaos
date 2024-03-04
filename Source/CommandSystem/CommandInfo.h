@@ -62,6 +62,9 @@ public:
 
 	virtual void OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 
+	virtual void ContinueCommand(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
+	
+	//returns if we should be done with the command
 	virtual bool CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Check Command Finished", Category = Command))

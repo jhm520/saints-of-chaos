@@ -47,6 +47,10 @@ void UCommandableComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		{
 			FinishCurrentCommand();
 		}
+		else
+		{
+			ContinueCurrentCommand();
+		}
 	}
 	// ...
 }
@@ -99,6 +103,15 @@ void UCommandableComponent::FinishCurrentCommand()
 
 	DequeueCommand();
 }
+
+void UCommandableComponent::ContinueCurrentCommand()
+{
+	if (GetCurrentCommand().IsValid())
+	{
+		GetCurrentCommand().CommandInfo->ContinueCommand(this, GetCurrentCommand());
+	}
+}
+
 
 void UCommandableComponent::SetCurrentCommand(const FCommandInstance& Command)
 {

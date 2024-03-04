@@ -42,6 +42,8 @@ public:
 protected:
 	void FinishCurrentCommand();
 
+	void ContinueCurrentCommand();
+
 	void QueueCommand(const FCommandInstance& Command);
 
 	void SetCurrentCommand(const FCommandInstance& Command);
@@ -77,7 +79,7 @@ protected:
 	void OnCommandFinished(const FCommandInstance& Command);
 
 	bool CheckCommandFinished(const FCommandInstance& Command) const;
-
+	
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnCommandReceived"), Category = "Command")
 	void K2_OnCommandReceived(const FCommandInstance& Command);
 

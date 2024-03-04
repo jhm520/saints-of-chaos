@@ -40,6 +40,11 @@ void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, c
 	OnComplete_AnimInstances(Commandable, Command);
 }
 
+void UCommandInfo::ContinueCommand(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	
+}
+
 bool UCommandInfo::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	return false;

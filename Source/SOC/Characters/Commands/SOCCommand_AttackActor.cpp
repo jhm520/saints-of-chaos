@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SOCCommand_MoveToLocation.h"
+#include "SOCCommand_AttackActor.h"
 
 #include "AIController.h"
 #include "NavigationSystem.h"
@@ -9,11 +9,11 @@
 #include "GameFramework/Character.h"
 #include "Navigation/PathFollowingComponent.h"
 
-USOCCommand_MoveToLocation::USOCCommand_MoveToLocation()
+USOCCommand_AttackActor::USOCCommand_AttackActor()
 {
 }
 
-void USOCCommand_MoveToLocation::OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+void USOCCommand_AttackActor::OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	Super::OnCommandBegin(Commandable, Command);
 
@@ -49,12 +49,17 @@ void USOCCommand_MoveToLocation::OnCommandBegin(const UCommandableComponent* Com
 	}
 }
 
-void USOCCommand_MoveToLocation::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+void USOCCommand_AttackActor::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	Super::OnCommandFinished(Commandable, Command);
 }
 
-bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+void USOCCommand_AttackActor::ContinueCommand(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	Super::ContinueCommand(Commandable, Command);
+}
+
+bool USOCCommand_AttackActor::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	if (!Commandable)
 	{
