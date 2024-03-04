@@ -31,3 +31,5 @@ TODO: Get rid of avatar component, just replicate the behavior component with th
 TODO: Rename director pawn to director avatar
 TODO: Have the building call SetDirector and DirectorAvatar when it spawns an AI Character
 TODO: Make CommandSystem commands into a DataAsset that has descriptive behavior and logic for each command
+TODO: When the AttackActor command is given, the commandable should start the auto attack ability. Then it will become effective once it enters its range
+	The Commandable will continue attempting to attack as long as the AttackActor command is their current command
