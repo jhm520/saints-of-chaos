@@ -285,6 +285,11 @@ void UCommandableComponent::OnCommandFinished(const FCommandInstance& Command)
 
 bool UCommandableComponent::CheckCommandFinished(const FCommandInstance& Command) const
 {
+	if (!GetOwner()->HasAuthority())
+	{
+		return false;
+	}
+	
 	if (Command.IsValid())
 	{
 		return Command.CommandInfo->CheckCommandFinished(this, Command);

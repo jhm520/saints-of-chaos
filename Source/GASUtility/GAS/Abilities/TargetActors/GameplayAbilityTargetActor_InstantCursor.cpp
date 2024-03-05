@@ -48,6 +48,8 @@ FHitResult AGameplayAbilityTargetActor_InstantCursor::PerformTrace_Implementatio
 	FHitResult ReturnHitResult;
 
 	PC->GetHitResultUnderCursorByChannel(CursorTraceChannel, bTraceComplex, ReturnHitResult);
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Hit Actor: %s"), *ReturnHitResult.GetActor()->GetName()));
 	
 	return ReturnHitResult;
 }

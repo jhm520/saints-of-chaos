@@ -108,7 +108,11 @@ protected:
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Behavior")
-	TArray<FCommandGameplayAbility> BehaviorGameplayAbilities;
+	TArray<FCommandGameplayAbility> CommandGameplayAbilities;
+	
+	virtual void OnCommandBegin_GameplayAbilities(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
+
+	virtual void OnCommandFinished_GameplayAbilities(const UCommandableComponent* Commandable, const FCommandInstance& Command) const;
 
 #pragma endregion
 	

@@ -35,4 +35,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	float AcceptanceRadius = 150.0f;
 #pragma endregion
+
+	
 };

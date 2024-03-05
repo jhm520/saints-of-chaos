@@ -138,7 +138,7 @@ void USOCGameplayAbility_ContextCommand::OnTargetDataReady(const FGameplayAbilit
 		
 		//Order the selected unit
 
-		const FCommandInstance& NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), CommandTag, nullptr, HitResult.Location);
+		const FCommandInstance& NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), CommandTag, nullptr, HitResult.ImpactPoint);
 		
 		UCommandSystemBlueprintLibrary::CommandActor(GetCurrentActorInfo()->AvatarActor.Get(), SelectedActor, NewCommand, bQueueCommand);
 	}

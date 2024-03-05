@@ -3,7 +3,7 @@
 
 #include "SOCGameplayAbility_MeleeAttack.h"
 
-	UE_DISABLE_OPTIMIZATION
+
 #pragma region Framework
 USOCGameplayAbility_MeleeAttack::USOCGameplayAbility_MeleeAttack()
 {
@@ -45,4 +45,3 @@ bool USOCGameplayAbility_MeleeAttack::CanActivateAbility(const FGameplayAbilityS
 }
 	
 #pragma endregion
-UE_ENABLE_OPTIMIZATION

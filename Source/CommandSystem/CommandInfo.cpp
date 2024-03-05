@@ -3,6 +3,8 @@
 
 #include "CommandInfo.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "CommandSubsystem.h"
 #include "Components/CommandableComponent.h"
 #include "GameFramework/Character.h"
@@ -33,11 +35,14 @@ void UCommandInfo::BeginDestroy()
 void UCommandInfo::OnCommandBegin(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	OnBegin_AnimInstances(Commandable, Command);
+	OnCommandBegin_GameplayAbilities(Commandable, Command);
 }
 
 void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	OnComplete_AnimInstances(Commandable, Command);
+	OnCommandFinished_GameplayAbilities(Commandable, Command);
+
 }
 
 void UCommandInfo::ContinueCommand(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
@@ -126,6 +131,78 @@ void UCommandInfo::OnComplete_AnimInstances(const UCommandableComponent* Command
 		if (LocalAnimInstance.DeactivationMode == ECommandTriggerMode::OnComplete)
 		{
 			AvatarCharacter->GetMesh()->GetAnimInstance()->UnlinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+		}
+	}
+}
+
+#pragma endregion
+
+#pragma region Gameplay Ability System
+
+void UCommandInfo::OnCommandBegin_GameplayAbilities(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	if (!Commandable)
+	{
+		return;
+	}
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Commandable->GetOwner());
+
+	for (const FCommandGameplayAbility& LocalAbility : CommandGameplayAbilities)
+	{
+		if (LocalAbility.ActivationMode == ECommandTriggerMode::OnBegin)
+		{
+			if (ASC)
+			{
+				ASC->TryActivateAbilityByClass(LocalAbility.GameplayAbilityClass, true);
+			}
+		}
+
+		if (LocalAbility.DeactivationMode == ECommandTriggerMode::OnBegin)
+		{
+			if (ASC)
+			{
+				FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(LocalAbility.GameplayAbilityClass);
+
+				if (AbilitySpec)
+				{
+					ASC->CancelAbility(AbilitySpec->Ability);
+				}
+			}
+		}
+	}
+}
+
+void UCommandInfo::OnCommandFinished_GameplayAbilities(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+{
+	if (!Commandable)
+	{
+		return;
+	}
+	
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Commandable->GetOwner());
+
+	for (const FCommandGameplayAbility& LocalAbility : CommandGameplayAbilities)
+	{
+		if (LocalAbility.ActivationMode == ECommandTriggerMode::OnComplete)
+		{
+			if (ASC && LocalAbility.GameplayAbilityClass)
+			{
+				ASC->TryActivateAbilityByClass(LocalAbility.GameplayAbilityClass, true);
+			}
+		}
+
+		if (LocalAbility.DeactivationMode == ECommandTriggerMode::OnComplete)
+		{
+			if (ASC)
+			{
+				FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(LocalAbility.GameplayAbilityClass);
+
+				if (AbilitySpec && AbilitySpec->IsActive())
+				{
+					ASC->CancelAbility(AbilitySpec->Ability);
+				}
+			}
 		}
 	}
 }

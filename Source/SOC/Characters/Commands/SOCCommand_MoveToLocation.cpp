@@ -7,8 +7,12 @@
 #include "NavigationSystem.h"
 #include "CommandSystem/Components/CommandableComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "NavMesh/RecastNavMesh.h"
 UE_DISABLE_OPTIMIZATION
+
 USOCCommand_MoveToLocation::USOCCommand_MoveToLocation()
 {
 }
@@ -64,9 +68,18 @@ bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponen
 	FVector OwnerLocation;
 	FVector TargetLocation;
 
+	ACharacter* OwnerChar = Cast<ACharacter>(Commandable->GetOwner());
+
+	if (!OwnerChar)
+	{
+		return true;
+	}
+
+	//DrawDebugSphere(Commandable->GetWorld(), Command.TargetLocation, 25.0f, 12, FColor::Red, false, 0.1f);
+	
 	const FVector OrigActorLocation = Commandable->GetOwner()->GetActorLocation();
-	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), OrigActorLocation, OwnerLocation, nullptr, nullptr);
-	UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Command.TargetLocation, TargetLocation, nullptr, nullptr);
+	const bool bOwnerSuccess = UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), OrigActorLocation, OwnerLocation, nullptr, nullptr);
+	const bool bTargetSuccess = UNavigationSystemV1::K2_ProjectPointToNavigation(Commandable->GetOwner(), Command.TargetLocation, TargetLocation, nullptr, nullptr);
 
 	const float Distance = FVector::Dist(OwnerLocation, TargetLocation);
 	
