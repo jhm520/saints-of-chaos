@@ -153,13 +153,12 @@ void ARTSPlayerPawn::DoCameraZoom(float ZoomValue)
 {
 	float NewTargetArmLength = SpringArmComponent->GetDesiredSpringArmLength();
 
-	NewTargetArmLength += ZoomValue > 0.0f ? -CameraZoomDistanceIncrement : CameraZoomDistanceIncrement;
+	NewTargetArmLength -= ZoomValue * CameraZoomDistanceIncrement;
+
+	NewTargetArmLength = FMath::Clamp(NewTargetArmLength, MinimumCameraZoomDistance, MaximumCameraZoomDistance);
 	
-	SpringArmComponent->SetDesiredSpringArmLength(FMath::Clamp(NewTargetArmLength, MinimumCameraZoomDistance, MaximumCameraZoomDistance));
-
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("NewTargetArmLength: %f"), NewTargetArmLength));
+	SpringArmComponent->SetDesiredSpringArmLength(NewTargetArmLength);
 }
-
 
 void ARTSPlayerPawn::InputAction_Ability(const FInputActionInstance& Instance, EInputActionBinding ActionInput, const UInputAction* InputAction)
 {

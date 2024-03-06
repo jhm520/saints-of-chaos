@@ -62,7 +62,7 @@ bool USOCCommand_AttackActor::CheckCommandFinished(const UCommandableComponent* 
 	}
 
 	//if the target actor is no longer valid, the command is finished
-	if (!Command.TargetActor)
+	if (!IsValid(Command.TargetActor))
 	{
 		return true;
 	}
