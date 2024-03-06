@@ -37,7 +37,10 @@ public:
 #pragma region Command
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
-	FGameplayTag CommandTag = FGameplayTag::EmptyTag;
+	FGameplayTag MovementCommandTag = FGameplayTag::EmptyTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
+	FGameplayTag AttackCommandTag = FGameplayTag::EmptyTag;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Command")
 	bool bQueueCommand = false;

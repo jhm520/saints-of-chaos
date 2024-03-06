@@ -135,12 +135,24 @@ void USOCGameplayAbility_ContextCommand::OnTargetDataReady(const FGameplayAbilit
 		{
 			continue;
 		}
+
+		ISelectableInterface* HitActorSelectable = Cast<ISelectableInterface>(HitResult.GetActor());
 		
 		//Order the selected unit
+		FCommandInstance NewCommand;
+		if (HitActorSelectable && HitResult.GetActor()->Implements<UAttitudeInterface>() && IAttitudeInterface::Execute_GetAttitudeTowards(GetCurrentActorInfo()->AvatarActor.Get(), HitResult.GetActor()) == EAttitude::Hostile)
+		{
+			NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), AttackCommandTag, HitResult.GetActor(), HitResult.ImpactPoint);
+		}
+		else
+		{
+			NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), MovementCommandTag, HitActorSelectable ? HitResult.GetActor() : nullptr, HitResult.ImpactPoint);
+		}
 
-		const FCommandInstance& NewCommand = UCommandSystemBlueprintLibrary::MakeCommand(GetCurrentActorInfo()->AvatarActor.Get(), CommandTag, nullptr, HitResult.ImpactPoint);
-		
-		UCommandSystemBlueprintLibrary::CommandActor(GetCurrentActorInfo()->AvatarActor.Get(), SelectedActor, NewCommand, bQueueCommand);
+		if (NewCommand.IsValid())
+		{
+			UCommandSystemBlueprintLibrary::CommandActor(GetCurrentActorInfo()->AvatarActor.Get(), SelectedActor, NewCommand, bQueueCommand);
+		}
 	}
 }
 
