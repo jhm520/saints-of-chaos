@@ -1,0 +1,70 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "SOCGameplayAbility_BoxSelect.h"
+
+#include "SelectionSystem/SelectionSystemBlueprintLibrary.h"
+#include "SOC/HUD/SOCHUD.h"
+#include "SOC/HUD/Widgets/BoxSelectWidget.h"
+
+USOCGameplayAbility_BoxSelect::USOCGameplayAbility_BoxSelect()
+{
+	
+}
+
+/** Actually activate ability, do not call this directly */
+void USOCGameplayAbility_BoxSelect::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	CommitAbility(Handle, ActorInfo, ActivationInfo);
+
+	BoxSelectInput(true);
+}
+	
+/** Returns true if this ability can be activated right now. Has no side effects */
+bool USOCGameplayAbility_BoxSelect::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, OUT FGameplayTagContainer* OptionalRelevantTags) const
+{
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+}
+
+void USOCGameplayAbility_BoxSelect::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	
+}
+
+void USOCGameplayAbility_BoxSelect::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
+{
+	BoxSelectInput(false);
+	
+	if (ActorInfo != NULL && ActorInfo->AvatarActor != NULL)
+	{
+		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
+	}
+}
+
+void USOCGameplayAbility_BoxSelect::BoxSelectInput(bool bPressed)
+{
+	APlayerController* PC = Cast<APlayerController>(GetActorInfo().PlayerController.Get());
+
+	if (!PC)
+	{
+		return;
+	}
+	
+	ASOCHUD* HUD = Cast<ASOCHUD>(PC->GetHUD());
+	
+	if (!HUD)
+	{
+		return;
+	}
+
+	if (HUD->GetBoxSelectWidget())
+	{
+		HUD->GetBoxSelectWidget()->OnBoxSelectInput(bPressed);
+	}
+}
+
+
+	

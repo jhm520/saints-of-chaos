@@ -13,5 +13,19 @@ UCLASS()
 class SOC_API ASOCHUD : public AHUD
 {
 	GENERATED_BODY()
+
+#pragma region Box Select
+protected:
+	UPROPERTY(Transient, BlueprintReadWrite, Category = "Box Select")
+	UBoxSelectWidget* BoxSelectWidget;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Box Select")
+	void SetBoxSelectWidget(UBoxSelectWidget* NewBoxSelectWidget) {BoxSelectWidget = NewBoxSelectWidget;}
+
+	UFUNCTION(BlueprintCallable, Category = "Box Select")
+	UBoxSelectWidget* GetBoxSelectWidget() const {return BoxSelectWidget;}
+
+#pragma endregion
 	
 };

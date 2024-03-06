@@ -17,9 +17,12 @@ void USOCGameplayAbility_SelectActor::ActivateAbility(const FGameplayAbilitySpec
 
 	CommitAbility(Handle, ActorInfo, ActivationInfo);
 
-	const AActor* Actor = TriggerEventData->Target;
+	if (TriggerEventData)
+	{
+		const AActor* Actor = TriggerEventData->Target;
 
-	USelectionSystemBlueprintLibrary::SelectActor(GetOwningActorFromActorInfo(), Actor, false);
+		USelectionSystemBlueprintLibrary::SelectActor(GetOwningActorFromActorInfo(), Actor, false);
+	}
 
 	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 }

@@ -20,9 +20,12 @@ void USOCGameplayAbility_SelectSingleActor::ActivateAbility(const FGameplayAbili
 	//clear the current selection before selecting the new actor
 	USelectionSystemBlueprintLibrary::ClearSelection(GetOwningActorFromActorInfo(), false);
 
-	const AActor* Actor = TriggerEventData->Target;
+	if (TriggerEventData)
+	{
+		const AActor* Actor = TriggerEventData->Target;
 
-	USelectionSystemBlueprintLibrary::SelectActor(GetOwningActorFromActorInfo(), Actor, false);
+		USelectionSystemBlueprintLibrary::SelectActor(GetOwningActorFromActorInfo(), Actor, false);
+	}
 
 	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 }
