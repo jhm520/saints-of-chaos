@@ -3,6 +3,7 @@
 
 #include "SOCGameplayAbility_BoxSelect.h"
 
+#include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
 #include "SelectionSystem/SelectionSystemBlueprintLibrary.h"
 #include "SOC/HUD/SOCHUD.h"
 #include "SOC/HUD/Widgets/BoxSelectWidget.h"
@@ -19,7 +20,25 @@ void USOCGameplayAbility_BoxSelect::ActivateAbility(const FGameplayAbilitySpecHa
 
 	CommitAbility(Handle, ActorInfo, ActivationInfo);
 
-	BoxSelectInput(true);
+	WaitTargetDataTask = UAbilityTask_WaitTargetData::WaitTargetData(this, "WaitTargetData", EGameplayTargetingConfirmation::Custom, TargetActorClass);
+
+	if (!WaitTargetDataTask)
+	{
+		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
+		return;
+	}
+
+	WaitTargetDataTask->ValidData.AddDynamic(this, &USOCGameplayAbility_BoxSelect::OnTargetDataReady);
+	WaitTargetDataTask->Cancelled.AddDynamic(this, &USOCGameplayAbility_BoxSelect::OnTargetDataCancelled);
+
+	AGameplayAbilityTargetActor* SpawnedActor = nullptr;
+	
+	WaitTargetDataTask->BeginSpawningActor(this, TargetActorClass, SpawnedActor);
+	WaitTargetDataTask->FinishSpawningActor(this, SpawnedActor);
+	
+	WaitTargetDataTask->ReadyForActivation();
+
+	//BoxSelectInput(true);
 }
 	
 /** Returns true if this ability can be activated right now. Has no side effects */
@@ -36,7 +55,12 @@ void USOCGameplayAbility_BoxSelect::EndAbility(const FGameplayAbilitySpecHandle 
 
 void USOCGameplayAbility_BoxSelect::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
-	BoxSelectInput(false);
+	//BoxSelectInput(false);
+
+	if (WaitTargetDataTask)
+	{
+		WaitTargetDataTask->ExternalConfirm(true);
+	}
 	
 	if (ActorInfo != NULL && ActorInfo->AvatarActor != NULL)
 	{
@@ -65,6 +89,20 @@ void USOCGameplayAbility_BoxSelect::BoxSelectInput(bool bPressed)
 		HUD->GetBoxSelectWidget()->OnBoxSelectInput(bPressed);
 	}
 }
+
+#pragma region Targeting
+
+void USOCGameplayAbility_BoxSelect::OnTargetDataReady(const FGameplayAbilityTargetDataHandle& Data)
+{
+	
+}
+
+void USOCGameplayAbility_BoxSelect::OnTargetDataCancelled(const FGameplayAbilityTargetDataHandle& Data)
+{
+	
+}
+
+#pragma endregion
 
 
 	

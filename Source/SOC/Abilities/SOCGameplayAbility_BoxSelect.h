@@ -6,6 +6,8 @@
 #include "SOCGameplayAbility.h"
 #include "SOCGameplayAbility_BoxSelect.generated.h"
 
+class UAbilityTask_WaitTargetData;
+class AGameplayAbilityTargetActor;
 /**
  * 
  */
@@ -35,6 +37,23 @@ public:
 #pragma region BoxSelect
 
 	void BoxSelectInput(bool bPressed);
+
+#pragma endregion
+
+	
+#pragma region Targeting
+
+	UPROPERTY()
+	UAbilityTask_WaitTargetData* WaitTargetDataTask;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Targeting")
+	TSubclassOf<AGameplayAbilityTargetActor> TargetActorClass;
+
+	UFUNCTION()
+	void OnTargetDataReady(const FGameplayAbilityTargetDataHandle& Data);
+
+	UFUNCTION()
+	void OnTargetDataCancelled(const FGameplayAbilityTargetDataHandle& Data);
 
 #pragma endregion
 

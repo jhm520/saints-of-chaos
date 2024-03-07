@@ -34,3 +34,4 @@ TODO: Make CommandSystem commands into a DataAsset that has descriptive behavior
 TODO: When the AttackActor command is given, the commandable should start the auto attack ability. Then it will become effective once it enters its range
 	The Commandable will continue attempting to attack as long as the AttackActor command is their current command
 TODO: Finish box select, make it actually target the actors that are within the box on the screen
+TODO: Do a literal 3D box trace, using DeprojectScreenToWorld on each box point
