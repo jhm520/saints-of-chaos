@@ -159,7 +159,7 @@ void AGameplayAbilityTargetActor_BoxSelect::GetTargetActors(TArray<AActor*>& Act
 	TArray<FHitResult> OutHits;
 	
 	TArray<AActor*> ActorsToIgnore = {};
-	const bool bTraceSuccessful = UKismetSystemLibrary::BoxTraceMulti(
+	const bool bBlockingTrace = UKismetSystemLibrary::BoxTraceMulti(
 		OwningAbility->GetCurrentActorInfo()->AvatarActor.Get(),
 		SelectBoxTraceMidpointCamera,
 		SelectBoxTraceEndLocation,
@@ -168,29 +168,21 @@ void AGameplayAbilityTargetActor_BoxSelect::GetTargetActors(TArray<AActor*>& Act
 		SelectBoxTraceType,
 		bTraceComplex,
 		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration,
+		EDrawDebugTrace::None,
 		OutHits,
 		false,
 		FLinearColor::Red,
 		FLinearColor::Green,
 		5.0f
 		);
-
-	// if (!bTraceSuccessful)
-	// {
-	// 	return;
-	// }
-
+	
 	for (FHitResult Hit : OutHits)
 	{
 		if (Hit.GetActor())
 		{
-			Actors.Add(Hit.GetActor());
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, Hit.GetActor()->GetName());
+			Actors.AddUnique(Hit.GetActor());
 		}
 	}
-
-	
 }
 
 void AGameplayAbilityTargetActor_BoxSelect::ConfirmTargetingAndContinue()

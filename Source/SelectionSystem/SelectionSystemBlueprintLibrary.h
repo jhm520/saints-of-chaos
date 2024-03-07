@@ -20,6 +20,9 @@ public:
 	static void SelectActor(AActor* Selector, const AActor* SelectedActor, bool bRepToServer = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Selection")
+	static void SelectActors(AActor* Selector, const TArray<AActor*> SelectedActors, bool bRepToServer = true);
+	
+	UFUNCTION(BlueprintCallable, Category = "Selection")
 	static void ClearSelection(AActor* Selector, bool bRepToServer = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Selection")

@@ -46,6 +46,15 @@ void USelectionSystemBlueprintLibrary::SelectActor(AActor* Selector, const AActo
 	SelectorComponent->Select(SelectableComponent, bRepToServer);
 }
 
+void USelectionSystemBlueprintLibrary::SelectActors(AActor* Selector, const TArray<AActor*> SelectedActors, bool bRepToServer)
+{
+	for (AActor* SelectedActor : SelectedActors)
+	{
+		SelectActor(Selector, SelectedActor, bRepToServer);
+	}
+}
+	
+
 void USelectionSystemBlueprintLibrary::ClearSelection(AActor* Selector, bool bRepToServer)
 {
 	if (!Selector)
