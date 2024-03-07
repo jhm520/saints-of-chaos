@@ -52,6 +52,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Box Select")
 	TSubclassOf<UBoxSelectWidget> BoxSelectWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Box Select")
+	TEnumAsByte<ETraceTypeQuery> ClickTraceType;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Box Select")
 	TEnumAsByte<ETraceTypeQuery> SelectBoxTraceType;

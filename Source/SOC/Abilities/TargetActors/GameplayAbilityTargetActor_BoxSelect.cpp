@@ -83,7 +83,7 @@ void AGameplayAbilityTargetActor_BoxSelect::StartBoxSelect()
 	
 	PlayerController->GetMousePosition(MousePosX, MousePosY);
 
-	PlayerController->GetHitResultUnderCursorByChannel(SelectBoxTraceType, bTraceComplex, BoxSelectStartHitResult);
+	PlayerController->GetHitResultUnderCursorByChannel(ClickTraceType, bTraceComplex, BoxSelectStartHitResult);
 	
 	BoxSelectStartPosition = FVector2D(MousePosX, MousePosY);
 }
@@ -102,7 +102,7 @@ void AGameplayAbilityTargetActor_BoxSelect::EndBoxSelect()
 	
 	PlayerController->GetMousePosition(MousePosX, MousePosY);
 
-	PlayerController->GetHitResultUnderCursorByChannel(SelectBoxTraceType, bTraceComplex, BoxSelectEndHitResult);
+	PlayerController->GetHitResultUnderCursorByChannel(ClickTraceType, bTraceComplex, BoxSelectEndHitResult);
 
 	BoxSelectEndPosition = FVector2D(MousePosX, MousePosY);
 }
@@ -176,10 +176,10 @@ void AGameplayAbilityTargetActor_BoxSelect::GetTargetActors(TArray<AActor*>& Act
 		5.0f
 		);
 
-	if (!bTraceSuccessful)
-	{
-		return;
-	}
+	// if (!bTraceSuccessful)
+	// {
+	// 	return;
+	// }
 
 	for (FHitResult Hit : OutHits)
 	{

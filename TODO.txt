@@ -35,3 +35,10 @@ TODO: When the AttackActor command is given, the commandable should start the au
 	The Commandable will continue attempting to attack as long as the AttackActor command is their current command
 TODO: Finish box select, make it actually target the actors that are within the box on the screen
 TODO: Do a literal 3D box trace, using DeprojectScreenToWorld on each box point
+
+TODO: I need 2 different collision channels.
+	One for clicking, which is blocked by environment and characters
+	Another one for Selection, which overlaps both environment and characters
+	Clicking gets you the positions you need for the box
+	Selection actually gets you everything you need for the box sweep
+	
