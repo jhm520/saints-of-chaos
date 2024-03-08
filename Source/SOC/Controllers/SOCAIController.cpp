@@ -59,10 +59,13 @@ void ASOCAIController::DoAIAction_Implementation(const FSOCAIAction& Action)
 			MoveToLocation(Action.TargetLocation, MovementAcceptanceRadius);
 		}
 	}
-
+	
 	if (Action.ActionTag == SOCAIActionTags::MoveToActor)
 	{
-		MoveToActor(Action.TargetActor, MovementAcceptanceRadius);
+		if (GetPathFollowingComponent()->GetMoveGoal() != Action.TargetActor)
+		{
+			MoveToActor(Action.TargetActor, MovementAcceptanceRadius);
+		}
 	}
 
 	if (Action.ActionTag == SOCAIActionTags::Attack)

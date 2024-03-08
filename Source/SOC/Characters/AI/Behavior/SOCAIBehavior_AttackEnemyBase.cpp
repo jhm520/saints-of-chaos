@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SOCAIBehavior_MoveToEnemyBase.h"
+#include "SOCAIBehavior_AttackEnemyBase.h"
 
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
@@ -9,7 +9,7 @@
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 
 #pragma region Framework
-USOCAIBehavior_MoveToEnemyBase::USOCAIBehavior_MoveToEnemyBase()
+USOCAIBehavior_AttackEnemyBase::USOCAIBehavior_AttackEnemyBase()
 {
 	DistanceThreshold = 100.0f;
 }
@@ -17,7 +17,7 @@ USOCAIBehavior_MoveToEnemyBase::USOCAIBehavior_MoveToEnemyBase()
 
 #pragma region Behavior
 
-bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
+bool USOCAIBehavior_AttackEnemyBase::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, UPARAM(ref) FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	if (!InActor)
 	{
@@ -46,19 +46,9 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 	{
 		return false;
 	}
-
-	const FVector& EnemyBaseLocation = InParentAction.TargetActor->GetActorLocation();
-
-	const float CurrentDistance = (CurrentLocation - EnemyBaseLocation).Size();
-
-	// If we are already within the distance threshold, we don't need to move
-	if (CurrentDistance < DistanceThreshold)
-	{
-		return false;
-	}
 	
 	OutAction.BehaviorTag = GetBehaviorTag();
-	OutAction.ActionTag = SOCAIActionTags::MoveToActor;
+	OutAction.ActionTag = SOCAIActionTags::Attack;
 	OutAction.TargetActor = EnemyBase;
 	
 	return Super::CalculateCurrentAction(InActor, OutAction, BehaviorPath, InParentAction);
@@ -68,25 +58,38 @@ bool USOCAIBehavior_MoveToEnemyBase::CalculateCurrentAction(const AActor* InActo
 
 #pragma region Enemy Base
 
-bool USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation(const AActor* InActor, FVector& OutEnemyBaseLocation) const
+bool USOCAIBehavior_AttackEnemyBase::GetEnemyBaseLocation(const AActor* InActor, FVector& OutEnemyBaseLocation) const
+{
+	AActor* EnemyBase = GetEnemyBase(InActor);
+
+	if (!EnemyBase)
+	{
+		return false;
+	}
+
+	OutEnemyBaseLocation = EnemyBase->GetActorLocation();
+	return true;
+}
+
+AActor* USOCAIBehavior_AttackEnemyBase::GetEnemyBase(const AActor* InActor) const
 {
 	if (!InActor)
 	{
-		return false;
+		return nullptr;
 	}
 
 	AActor* Director = GetDirector(InActor);
 
 	if (!Director)
 	{
-		return false;
+		return nullptr;
 	}
 
 	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(Director);
 
 	if (!BuildingSubsystem)
 	{
-		return false;
+		return nullptr;
 	}
 
 	TArray<ASOCBuilding*> Buildings = BuildingSubsystem->GetAllBuildings();
@@ -109,12 +112,11 @@ bool USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation(const AActor* InActor,
 		{
 			continue;
 		}
-		
-		OutEnemyBaseLocation = Building->GetActorLocation();
-		return true;
+
+		return Building;
 	}
-	
-	return false;
+
+	return nullptr;
 }
 
 #pragma endregion

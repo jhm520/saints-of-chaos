@@ -13,6 +13,7 @@
 
 class UGameplayAbilityCollection;
 class UAbilitySystemComponent;
+class UHealthAttributeSet;
 
 UCLASS()
 class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface
@@ -108,6 +109,12 @@ public:
 	UFUNCTION()
 	void OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn);
 
+#pragma endregion
+
+#pragma region Attribute: Health
+protected:
+	UPROPERTY()
+	TObjectPtr<UHealthAttributeSet> HealthAttributeSet;
 #pragma endregion
 
 };

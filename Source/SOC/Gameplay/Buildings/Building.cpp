@@ -14,6 +14,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
+#include "SOC/Attributes/Health/HealthAttributeSet.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 
@@ -29,6 +30,7 @@ ASOCBuilding::ASOCBuilding()
 	OwningControllerId = -1;
 
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
+	HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttribute"));
 }
 
 // Called when the game starts or when spawned
