@@ -156,6 +156,9 @@ protected:
 
 public:
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Selection")
+	TObjectPtr<UCapsuleComponent> ClickableCapsuleComponent;
+	
 	virtual UPrimitiveComponent* GetClickableComponent() const override;
 
 	virtual UClickableActorComponent* GetClickableActorComponent() const override {return ClickableActorComponent;};

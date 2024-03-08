@@ -36,6 +36,9 @@ ASOCCharacter::ASOCCharacter()
 
 	ClickableActorComponent = CreateDefaultSubobject<UClickableActorComponent>(TEXT("ClickableActorComponent"));
 
+	ClickableCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("ClickableCapsuleComponent"));
+	ClickableCapsuleComponent->SetupAttachment(GetRootComponent());
+
 }
 
 void ASOCCharacter::PossessedBy(AController* NewController)
@@ -349,6 +352,6 @@ void ASOCCharacter::UpdateCharacterInfoWidget_Attitude()
 
 UPrimitiveComponent* ASOCCharacter::GetClickableComponent() const
 {
-	return GetCapsuleComponent();
+	return ClickableCapsuleComponent;
 }
 #pragma endregion

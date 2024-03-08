@@ -96,12 +96,12 @@ void USOCGameplayAbility_BoxSelect::BoxSelectInput(bool bPressed)
 void USOCGameplayAbility_BoxSelect::OnTargetDataReady(const FGameplayAbilityTargetDataHandle& Data)
 {
 	TArray<AActor*> Actors = UAbilitySystemBlueprintLibrary::GetActorsFromTargetData(Data, 0);
-
+	
 	if (Actors.Num() > 0)
 	{
 		//clear the current selection before selecting the new actor
 		USelectionSystemBlueprintLibrary::ClearSelection(GetOwningActorFromActorInfo(), false);
-		
+	
 		USelectionSystemBlueprintLibrary::SelectActors(GetOwningActorFromActorInfo(), Actors, false);
 	}
 
