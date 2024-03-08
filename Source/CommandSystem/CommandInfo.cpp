@@ -45,9 +45,9 @@ void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, c
 
 }
 
-void UCommandInfo::ContinueCommand(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+void UCommandInfo::ContinueCommand(float DeltaSeconds, const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
-	
+	GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, TEXT("ContinueCommand") + Command.CommandInfo->GetName());
 }
 
 bool UCommandInfo::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const

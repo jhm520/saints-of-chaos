@@ -44,9 +44,9 @@ void USOCCommand_AttackActor::OnCommandFinished(const UCommandableComponent* Com
 	Super::OnCommandFinished(Commandable, Command);
 }
 
-void USOCCommand_AttackActor::ContinueCommand(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
+void USOCCommand_AttackActor::ContinueCommand(float DeltaSeconds, const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
-	Super::ContinueCommand(Commandable, Command);
+	Super::ContinueCommand(DeltaSeconds, Commandable, Command);
 }
 
 bool USOCCommand_AttackActor::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const

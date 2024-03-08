@@ -42,7 +42,7 @@ public:
 protected:
 	void FinishCurrentCommand();
 
-	void ContinueCurrentCommand();
+	void ContinueCurrentCommand(float DeltaSeconds);
 
 	void QueueCommand(const FCommandInstance& Command);
 

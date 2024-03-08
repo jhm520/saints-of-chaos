@@ -11,7 +11,7 @@
 ASOCAIBehaviorManager::ASOCAIBehaviorManager(const FObjectInitializer& ObjectInitializer)
 {
 	bAlwaysRelevant = true;
-	SetReplicates(true);
+	bReplicates = true;
 }
 
 void ASOCAIBehaviorManager::BeginPlay()

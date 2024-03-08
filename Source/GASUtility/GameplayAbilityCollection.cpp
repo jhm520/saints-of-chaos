@@ -12,6 +12,11 @@ void UGameplayAbilityCollection::GiveAbilities(UAbilitySystemComponent* AbilityS
 	{
 		return;
 	}
+
+	if (!AbilitySystemComponent->IsOwnerActorAuthoritative())
+	{
+		return;
+	}
 	
 	for (const FInputGameplayAbilityInfo& AbilityInfo : BoundAbilities)
 	{
