@@ -47,7 +47,7 @@ void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, c
 
 void UCommandInfo::ContinueCommand(float DeltaSeconds, const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
-	GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, TEXT("ContinueCommand") + Command.CommandInfo->GetName());
+	//GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, TEXT("ContinueCommand") + Command.CommandInfo->GetName());
 	
 	OnCommandBegin_GameplayAbilities(Commandable, Command);
 }
