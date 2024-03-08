@@ -13,7 +13,9 @@
 UE_DISABLE_OPTIMIZATION
 AGameplayAbilityTargetActor_BoxSelect::AGameplayAbilityTargetActor_BoxSelect()
 {
-	ShouldProduceTargetDataOnServer = true;
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+	ShouldProduceTargetDataOnServer = false;
 }
 
 FGameplayAbilityTargetDataHandle AGameplayAbilityTargetActor_BoxSelect::MakeTargetData(TArray<AActor*> TargetActors) const
@@ -28,7 +30,7 @@ void AGameplayAbilityTargetActor_BoxSelect::StartTargeting(UGameplayAbility* Abi
 
 	CreateBoxSelectWidget();
 
-	StartBoxSelect();
+	GetBoxSelectStartPoint();
 }
 
 void AGameplayAbilityTargetActor_BoxSelect::CreateBoxSelectWidget()
@@ -69,7 +71,7 @@ void AGameplayAbilityTargetActor_BoxSelect::DestroyBoxSelectWidget()
 	BoxSelectWidget = nullptr;
 }
 
-void AGameplayAbilityTargetActor_BoxSelect::StartBoxSelect()
+void AGameplayAbilityTargetActor_BoxSelect::GetBoxSelectStartPoint()
 {
 	APlayerController* PlayerController = OwningAbility->GetCurrentActorInfo()->PlayerController.Get();
 
@@ -83,12 +85,17 @@ void AGameplayAbilityTargetActor_BoxSelect::StartBoxSelect()
 	
 	PlayerController->GetMousePosition(MousePosX, MousePosY);
 
-	PlayerController->GetHitResultUnderCursorByChannel(ClickTraceType, bTraceComplex, BoxSelectStartHitResult);
+	FHitResult LocalBoxSelectStartHitResult;
+
+	if (PlayerController->GetHitResultUnderCursorByChannel(ClickTraceType, bTraceComplex, LocalBoxSelectStartHitResult))
+	{
+		BoxSelectStartHitResult = LocalBoxSelectStartHitResult;
+	}
 	
 	BoxSelectStartPosition = FVector2D(MousePosX, MousePosY);
 }
 
-void AGameplayAbilityTargetActor_BoxSelect::EndBoxSelect()
+void AGameplayAbilityTargetActor_BoxSelect::GetBoxSelectEndPoint()
 {
 	APlayerController* PlayerController = OwningAbility->GetCurrentActorInfo()->PlayerController.Get();
 
@@ -102,8 +109,13 @@ void AGameplayAbilityTargetActor_BoxSelect::EndBoxSelect()
 	
 	PlayerController->GetMousePosition(MousePosX, MousePosY);
 
-	PlayerController->GetHitResultUnderCursorByChannel(ClickTraceType, bTraceComplex, BoxSelectEndHitResult);
+	FHitResult LocalBoxSelectEndHitResult;
 
+	if (PlayerController->GetHitResultUnderCursorByChannel(ClickTraceType, bTraceComplex, LocalBoxSelectEndHitResult))
+	{
+		BoxSelectEndHitResult = LocalBoxSelectEndHitResult;
+	}
+	
 	BoxSelectEndPosition = FVector2D(MousePosX, MousePosY);
 }
 
@@ -112,6 +124,12 @@ void AGameplayAbilityTargetActor_BoxSelect::GetTargetActors(TArray<AActor*>& Act
 	APlayerController* PlayerController = OwningAbility->GetCurrentActorInfo()->PlayerController.Get();
 
 	if (!PlayerController || !PlayerController->IsLocalPlayerController())
+	{
+		return;
+	}
+
+	//can't do anything if we don't have valid hit results
+	if (!BoxSelectStartHitResult.bBlockingHit || !BoxSelectEndHitResult.bBlockingHit)
 	{
 		return;
 	}
@@ -189,7 +207,7 @@ void AGameplayAbilityTargetActor_BoxSelect::ConfirmTargetingAndContinue()
 {
 	check(ShouldProduceTargetData());
 	
-	EndBoxSelect();
+	GetBoxSelectEndPoint();
 	DestroyBoxSelectWidget();
 	
 	bDebug = false;
@@ -198,5 +216,13 @@ void AGameplayAbilityTargetActor_BoxSelect::ConfirmTargetingAndContinue()
 	FGameplayAbilityTargetDataHandle Handle = MakeTargetData(TargetActors);
 	TargetDataReadyDelegate.Broadcast(Handle);
 }
+
+void AGameplayAbilityTargetActor_BoxSelect::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	GetBoxSelectEndPoint();
+}
+
 
 UE_ENABLE_OPTIMIZATION

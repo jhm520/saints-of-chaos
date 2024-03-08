@@ -27,13 +27,15 @@ protected:
 	
 	void DestroyBoxSelectWidget();
 	
-	void StartBoxSelect();
+	void GetBoxSelectStartPoint();
 
-	void EndBoxSelect();
+	void GetBoxSelectEndPoint();
 
 	void GetTargetActors(TArray<AActor*>& Actors);
 
 	virtual void ConfirmTargetingAndContinue() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 
 #pragma region Box Select
 protected:
