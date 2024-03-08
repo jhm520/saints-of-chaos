@@ -31,6 +31,9 @@ public:
 
 #pragma region Clickable
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Clicking")
+	bool bIsClickable;
+
 	void SetupClickable();
 
 	UFUNCTION()

@@ -20,6 +20,7 @@ UClickableActorComponent::UClickableActorComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
+	bIsClickable = true;
 	// ...
 }
 
@@ -68,6 +69,11 @@ void UClickableActorComponent::SetupClickable()
 
 void UClickableActorComponent::OnActorClicked(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
+	if (!bIsClickable)
+	{
+		return;
+	}
+	
 	//get the player controller that clicked on this character, the local player
 	APlayerController* ClickPC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
