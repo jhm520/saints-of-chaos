@@ -42,4 +42,5 @@ TODO: I need 2 different collision channels.
 	Clicking gets you the positions you need for the box
 	Selection actually gets you everything you need for the box sweep
 TODO: When behavior changes from Attack to FollowCommands, the ability from Attack is deactivated
+TODO: Add an extra "floor" that is invisible but responds to clicking and selection, so that dragging the mouse cursor for box select works even at the "edge" of the map
 	
