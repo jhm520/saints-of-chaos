@@ -41,4 +41,5 @@ TODO: I need 2 different collision channels.
 	Another one for Selection, which overlaps both environment and characters
 	Clicking gets you the positions you need for the box
 	Selection actually gets you everything you need for the box sweep
+TODO: When behavior changes from Attack to FollowCommands, the ability from Attack is deactivated
 	

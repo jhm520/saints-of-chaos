@@ -28,6 +28,7 @@ bool USOCGameplayAbility_MeleeAttack::CanActivateAbility(const FGameplayAbilityS
 
 	if (!TargetActor)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_MeleeAttack::CanActivateAbility: TargetActor is null"));
 		return false;
 	}
 
@@ -38,6 +39,7 @@ bool USOCGameplayAbility_MeleeAttack::CanActivateAbility(const FGameplayAbilityS
 	//if the target is out of range, we can't activate the ability
 	if (AttackRange > 0.0f && FVector::DistSquared(AvatarLocation, TargetLocation) > FMath::Square(AttackRange))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_MeleeAttack::CanActivateAbility: Target is out of range"));
 		return false;
 	}
 	

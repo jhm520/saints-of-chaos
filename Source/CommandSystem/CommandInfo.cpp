@@ -48,6 +48,8 @@ void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, c
 void UCommandInfo::ContinueCommand(float DeltaSeconds, const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, TEXT("ContinueCommand") + Command.CommandInfo->GetName());
+	
+	OnCommandBegin_GameplayAbilities(Commandable, Command);
 }
 
 bool UCommandInfo::CheckCommandFinished(const UCommandableComponent* Commandable, const FCommandInstance& Command) const
@@ -148,11 +150,29 @@ void UCommandInfo::OnCommandBegin_GameplayAbilities(const UCommandableComponent*
 	
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Commandable->GetOwner());
 
+	if (!ASC)
+	{
+		return;
+	}
+	
+
 	for (const FCommandGameplayAbility& LocalAbility : CommandGameplayAbilities)
 	{
+		if (!LocalAbility.GameplayAbilityClass)
+		{
+			continue;
+		}
+		
+		FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(LocalAbility.GameplayAbilityClass);
+
+		if (!AbilitySpec)
+		{
+			continue;
+		}
+		
 		if (LocalAbility.ActivationMode == ECommandTriggerMode::OnBegin)
 		{
-			if (ASC)
+			if (AbilitySpec && !AbilitySpec->IsActive())
 			{
 				ASC->TryActivateAbilityByClass(LocalAbility.GameplayAbilityClass, true);
 			}
@@ -160,14 +180,9 @@ void UCommandInfo::OnCommandBegin_GameplayAbilities(const UCommandableComponent*
 
 		if (LocalAbility.DeactivationMode == ECommandTriggerMode::OnBegin)
 		{
-			if (ASC)
+			if (AbilitySpec && AbilitySpec->IsActive())
 			{
-				FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(LocalAbility.GameplayAbilityClass);
-
-				if (AbilitySpec)
-				{
-					ASC->CancelAbility(AbilitySpec->Ability);
-				}
+				ASC->CancelAbility(AbilitySpec->Ability);
 			}
 		}
 	}
@@ -179,14 +194,31 @@ void UCommandInfo::OnCommandFinished_GameplayAbilities(const UCommandableCompone
 	{
 		return;
 	}
-	
+
 	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Commandable->GetOwner());
 
+	if (!ASC)
+	{
+		return;
+	}
+	
 	for (const FCommandGameplayAbility& LocalAbility : CommandGameplayAbilities)
 	{
+		if (!LocalAbility.GameplayAbilityClass)
+		{
+			continue;
+		}
+		
+		FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(LocalAbility.GameplayAbilityClass);
+
+		if (!AbilitySpec)
+		{
+			continue;
+		}
+		
 		if (LocalAbility.ActivationMode == ECommandTriggerMode::OnComplete)
 		{
-			if (ASC && LocalAbility.GameplayAbilityClass)
+			if (AbilitySpec && !AbilitySpec->IsActive())
 			{
 				ASC->TryActivateAbilityByClass(LocalAbility.GameplayAbilityClass, true);
 			}
@@ -194,14 +226,9 @@ void UCommandInfo::OnCommandFinished_GameplayAbilities(const UCommandableCompone
 
 		if (LocalAbility.DeactivationMode == ECommandTriggerMode::OnComplete)
 		{
-			if (ASC)
+			if (AbilitySpec && AbilitySpec->IsActive())
 			{
-				FGameplayAbilitySpec* AbilitySpec = ASC->FindAbilitySpecFromClass(LocalAbility.GameplayAbilityClass);
-
-				if (AbilitySpec && AbilitySpec->IsActive())
-				{
-					ASC->CancelAbility(AbilitySpec->Ability);
-				}
+				ASC->CancelAbility(AbilitySpec->Ability);
 			}
 		}
 	}

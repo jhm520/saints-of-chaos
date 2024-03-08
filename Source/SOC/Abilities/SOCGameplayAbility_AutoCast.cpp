@@ -44,6 +44,7 @@ void USOCGameplayAbility_AutoCast::CastAbility()
 
 	if (!LocalASC)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_AutoCast::CastAbility: LocalASC is null"));
 		return;
 	}
 	
@@ -56,6 +57,7 @@ void USOCGameplayAbility_AutoCast::QueueAbility()
 
 	if (!AbilitySystemComponent)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_AutoCast::QueueAbility: AbilitySystemComponent is null"));
 		return;
 	}
 	
@@ -63,11 +65,13 @@ void USOCGameplayAbility_AutoCast::QueueAbility()
 
 	if (!AbilitySpec)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_AutoCast::QueueAbility: AbilitySpec is null"));
 		return;
 	}
 
 	if (!AbilitySpec->Ability)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_AutoCast::QueueAbility: Ability is null"));
 		return;
 	}
 	
@@ -76,6 +80,7 @@ void USOCGameplayAbility_AutoCast::QueueAbility()
 	//if there was no cooldown, then the cast must have failed, or it can be cast again immediately
 	if (!CooldownGameplayEffect)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("USOCGameplayAbility_AutoCast::QueueAbility: CooldownGameplayEffect is null"));
 		return;
 	}
 	
