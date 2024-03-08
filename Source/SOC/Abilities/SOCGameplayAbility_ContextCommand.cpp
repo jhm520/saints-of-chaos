@@ -78,12 +78,12 @@ bool USOCGameplayAbility_ContextCommand::CanActivateAbility(const FGameplayAbili
 			return false;
 		}
 
-		const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(GetCurrentActorInfo()->AvatarActor.Get(), SelectableOwner);
-
-		if (Attitude != EAttitude::Friendly)
-		{
-			return false;
-		}
+		// const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(GetCurrentActorInfo()->AvatarActor.Get(), SelectableOwner);
+		//
+		// if (Attitude != EAttitude::Friendly)
+		// {
+		// 	return false;
+		// }
 	}
 	
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
@@ -125,6 +125,26 @@ void USOCGameplayAbility_ContextCommand::OnTargetDataReady(const FGameplayAbilit
 	for  (USelectableComponent* Selectable : Selected)
 	{
 		if (!Selectable)
+		{
+			continue;
+		}
+
+		AActor* SelectableOwner = Selectable->GetOwner();
+
+		if (!SelectableOwner)
+		{
+			continue;
+		}
+
+		if (!SelectableOwner->Implements<UAttitudeInterface>())
+		{
+			continue;
+		}
+
+		//make sure we only command friendly units
+		const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(GetCurrentActorInfo()->AvatarActor.Get(), SelectableOwner);
+
+		if (Attitude != EAttitude::Friendly)
 		{
 			continue;
 		}
