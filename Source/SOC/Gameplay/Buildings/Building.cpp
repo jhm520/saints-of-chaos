@@ -9,12 +9,15 @@
 #include "GameplayAbilityCollection.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GASUtilityHelperLibrary.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "CoreUtility/CoreUtilityBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 #include "SOC/Attributes/Health/HealthAttributeSet.h"
+#include "SOC/HUD/Widgets/CharacterInfoWidget.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 
@@ -22,6 +25,11 @@
 // Sets default values
 ASOCBuilding::ASOCBuilding()
 {
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+	SetRootComponent(CapsuleComponent);
+	CapsuleComponent->SetCapsuleRadius(50.0f);
+	CapsuleComponent->SetCapsuleHalfHeight(100.0f);
+	
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
@@ -31,6 +39,9 @@ ASOCBuilding::ASOCBuilding()
 
 	BehaviorComponent = CreateDefaultSubobject<USOCAIBehaviorComponent>(TEXT("BehaviorComponent"));
 	HealthAttributeSet = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttribute"));
+
+	CharacterInfoWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("CharacterInfoWidgetComponent"));
+	CharacterInfoWidgetComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +55,8 @@ void ASOCBuilding::BeginPlay()
 	}
 	
 	Super::BeginPlay();
+
+	InitializeCharacterInfoWidget();
 }
 
 void ASOCBuilding::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -104,6 +117,8 @@ void ASOCBuilding::OnRep_Owner()
 void ASOCBuilding::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	TickCharacterInfoWidgetOrientation();
 
 }
 
@@ -275,6 +290,207 @@ EAttitude ASOCBuilding::GetAttitudeTowards_Implementation(AActor* Other) const
 void ASOCBuilding::OnDirectorPossessedPawnChanged(APawn* OldPawn, APawn* NewPawn)
 {
 	BehaviorComponent->InitBehaviorSystem(NewPawn);
+}
+
+#pragma endregion
+
+#pragma region Health Interface
+
+float ASOCBuilding::GetHealth_Implementation() const
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return 0.0f;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return 0.0f;
+	}
+
+	return HealthAttributeSet->GetHealth();
+}
+void ASOCBuilding::SetHealth_Implementation(float NewHealth)
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return;
+	}
+
+	return HealthAttributeSet->SetHealth(NewHealth);
+}
+
+float ASOCBuilding::GetMaxHealth_Implementation() const
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return 0.0f;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return 0.0f;
+	}
+
+	return HealthAttributeSet->GetMaxHealth();
+}
+
+void ASOCBuilding::SetMaxHealth_Implementation(float NewMaxHealth)
+{
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	if (!ASC)
+	{
+		return;
+	}
+
+	if (!HealthAttributeSet)
+	{
+		return;
+	}
+
+	return HealthAttributeSet->SetMaxHealth(NewMaxHealth);
+}
+
+bool ASOCBuilding::IsAlive_Implementation() const
+{
+	return IHealthInterface::Execute_GetHealth(this) > 0.0f;
+}
+
+void ASOCBuilding::OnHealthChanged_Implementation(float OldHealth, float NewHealth, float MaxHealth)
+{
+	UpdateCharacterInfoWidget_Health();
+
+	if (HasAuthority())
+	{
+		if (NewHealth <= 0.0f && OldHealth > 0.0f)
+		{
+			Die();
+		}
+	}
+}
+
+void ASOCBuilding::OnMaxHealthChanged_Implementation(float OldMaxHealth, float MaxHealth, float CurrentHealth)
+{
+	
+}
+
+#pragma endregion
+
+#pragma region Death
+
+void ASOCBuilding::Die()
+{
+	OnDeath();
+}
+
+void ASOCBuilding::OnDeath()
+{
+	K2_OnDeath();
+
+	if (HasAuthority())
+	{
+		Destroy();
+	}
+}
+
+#pragma endregion
+
+#pragma region Character Info Widget
+
+void ASOCBuilding::InitializeCharacterInfoWidget()
+{
+	//if we already made this widget, don't make it again
+	if (CharacterInfoWidget)
+	{
+		return;
+	}
+
+	if (!CharacterInfoWidgetClass)
+	{
+		return;
+	}
+
+	CharacterInfoWidget = CreateWidget<UCharacterInfoWidget>(GetWorld(), CharacterInfoWidgetClass);
+
+	CharacterInfoWidgetComponent->SetWidget(CharacterInfoWidget);
+
+	UpdateCharacterInfoWidget();
+}
+
+void ASOCBuilding::UpdateCharacterInfoWidget()
+{
+	InitializeCharacterInfoWidget();
+
+	UpdateCharacterInfoWidget_Health();
+	UpdateCharacterInfoWidget_Attitude();
+}
+
+void ASOCBuilding::TickCharacterInfoWidgetOrientation()
+{
+	if (!CharacterInfoWidgetComponent)
+	{
+		return;
+	}
+	
+	APlayerController* LocalPC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (!LocalPC)
+	{
+		return;
+	}
+	
+	const FVector& CameraLocation = LocalPC->PlayerCameraManager->GetCameraLocation();
+
+	const FVector& ComponentLocation = CharacterInfoWidgetComponent->GetComponentLocation();
+	
+	CharacterInfoWidgetComponent->SetWorldRotation((CameraLocation - ComponentLocation).Rotation());
+}
+
+
+void ASOCBuilding::UpdateCharacterInfoWidget_Health()
+{
+	if (!CharacterInfoWidget)
+	{
+		InitializeCharacterInfoWidget();
+		return;
+	}
+
+	const float CurrentHealth = IHealthInterface::Execute_GetHealth(this);
+	const float MaxHealth = IHealthInterface::Execute_GetMaxHealth(this);
+	
+	CharacterInfoWidget->OnHealthChanged(CurrentHealth, MaxHealth);
+}
+
+void ASOCBuilding::UpdateCharacterInfoWidget_Attitude()
+{
+	if (!CharacterInfoWidget)
+	{
+		InitializeCharacterInfoWidget();
+		return;
+	}
+	
+	APlayerController* LocalPlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (!LocalPlayerController)
+	{
+		return;
+	}
+
+	const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(LocalPlayerController, this);
+
+	CharacterInfoWidget->UpdatePlayerAttitude(Attitude);
 }
 
 #pragma endregion

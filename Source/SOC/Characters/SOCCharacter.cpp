@@ -55,7 +55,6 @@ void ASOCCharacter::BeginPlay()
 	SetupGameplayTags();
 
 	InitializeCharacterInfoWidget();
-	
 }
 
 void ASOCCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
