@@ -14,7 +14,6 @@ class SOC_API USOCAssetManager : public UAssetManager
 {
 	GENERATED_BODY()
 
-
 	virtual void StartInitialLoading() override;
 	
 };

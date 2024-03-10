@@ -82,6 +82,15 @@
 				"Engine",
 				"GameplayAbilities"
 			]
+		},
+		{
+			"Name": "ObjectiveSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"GameplayAbilities"
+			]
 		}
 	],
 	"Plugins": [

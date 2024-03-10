@@ -37,7 +37,8 @@ public class SOC : ModuleRules
 	        "AggroSystem",
 			"RTSUtility",
 			"SelectionSystem",
-			"CommandSystem"
+			"CommandSystem",
+			"ObjectiveSystem"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
