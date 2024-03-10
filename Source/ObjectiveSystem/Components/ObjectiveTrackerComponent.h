@@ -40,6 +40,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
 	void BeginObjectives();
+	
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
+	void BeginObjective(AObjective* Objective);
 
 	//indicate that an objective has been progressed
 	//the assignee is the actor responsible for completing the objective, could be the team associated with the game mode

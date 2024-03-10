@@ -93,13 +93,18 @@ void UObjectiveTrackerComponent::BeginObjectives()
 {
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
-		{
-			continue;
-		}
-
-		Objective->Begin();
+		BeginObjective(Objective);
 	}
+}
+	
+void UObjectiveTrackerComponent::BeginObjective(AObjective* Objective)
+{
+	if (!Objective)
+	{
+		return;
+	}
+
+	Objective->Begin();
 }
 
 void UObjectiveTrackerComponent::ProgressObjective(AActor* Assignee, AActor* Instigator, const FGameplayTag& ObjectiveTag, bool bSuccess)
