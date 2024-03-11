@@ -24,6 +24,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -32,14 +34,25 @@ public:
 #pragma region Objective System
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
-	UObjectiveInfoCollection* ObjectiveInfoCollection;
+	TArray<UObjectiveInfoCollection*> ObjectiveInfoCollections;
+
+	//sets up all the objectives available on this tracker
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
+	void SetupAllObjectives();
+	
+	//sets up the objectives on this tracker for this collection
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
+	void SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags = FGameplayTagContainer());
 
 	//sets up the objectives for this tracker
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void SetupObjectives();
+	void SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void BeginObjectives();
+	void BeginAllObjectives();
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
+	void BeginObjectivesByTags(const FGameplayTagContainer& ObjectiveTags);
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
 	void BeginObjective(AObjective* Objective);

@@ -30,6 +30,18 @@ void UObjectiveComponent::BeginPlay()
 	}
 }
 
+void UObjectiveComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	// ...
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(this);
+
+	if (ObjectiveSubsystem)
+	{
+		ObjectiveSubsystem->UnregisterObjectiveComponent(this);
+	}
+	
+	Super::EndPlay(EndPlayReason);
+}
 
 // Called every frame
 void UObjectiveComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

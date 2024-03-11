@@ -25,6 +25,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Objective System")
 	void UnregisterObjectiveComponent(UObjectiveComponent* ObjectiveComponent);
+
+	UFUNCTION(BlueprintCallable, Category = "Objective System")
+	void RegisterObjectiveTrackerComponent(UObjectiveTrackerComponent* ObjectiveTrackerComponent);
+
+	UFUNCTION(BlueprintCallable, Category = "Objective System")
+	void UnregisterObjectiveTrackerComponent(UObjectiveTrackerComponent* ObjectiveTrackerComponent);
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Objective System")
@@ -32,6 +39,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Objective System")
 	TArray<TObjectPtr<UObjectiveComponent>> ObjectiveComponents;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Objective System")
+	TArray<TObjectPtr<UObjectiveTrackerComponent>> ObjectiveTrackerComponents;
 
 #pragma endregion
 

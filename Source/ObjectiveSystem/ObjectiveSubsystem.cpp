@@ -32,6 +32,16 @@ void UObjectiveSubsystem::UnregisterObjective(AObjective* Objective)
 	Objectives.Remove(Objective);
 }
 
+void UObjectiveSubsystem::RegisterObjectiveTrackerComponent(UObjectiveTrackerComponent* ObjectiveTrackerComponent)
+{
+	ObjectiveTrackerComponents.Add(ObjectiveTrackerComponent);
+}
+
+void UObjectiveSubsystem::UnregisterObjectiveTrackerComponent(UObjectiveTrackerComponent* ObjectiveTrackerComponent)
+{
+	ObjectiveTrackerComponents.Remove(ObjectiveTrackerComponent);
+}
+
 void UObjectiveSubsystem::RegisterObjectiveComponent(UObjectiveComponent* ObjectiveComponent)
 {
 	ObjectiveComponents.Add(ObjectiveComponent);

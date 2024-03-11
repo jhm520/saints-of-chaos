@@ -29,7 +29,19 @@ void AObjective::BeginPlay()
 	{
 		ObjectiveSubsystem->RegisterObjective(this);
 	}
+}
+
+/** Overridable function called whenever this actor is being removed from a level */
+void AObjective::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(this);
+
+	if (ObjectiveSubsystem)
+	{
+		ObjectiveSubsystem->UnregisterObjective(this);
+	}
 	
+	Super::EndPlay(EndPlayReason);
 }
 
 // Called every frame

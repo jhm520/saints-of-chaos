@@ -5,6 +5,7 @@
 
 #include "ObjectiveSystem/Actors/Objective.h"
 #include "GameFramework/GameStateBase.h"
+#include "ObjectiveSystem/ObjectiveSubsystem.h"
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveTrackerInterface.h"
 
@@ -25,8 +26,29 @@ void UObjectiveTrackerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	// ...
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(this);
+
+	if (ObjectiveSubsystem)
+	{
+		ObjectiveSubsystem->RegisterObjectiveTrackerComponent(this);
+	}
 }
+
+void UObjectiveTrackerComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	// ...
+	// ...
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(this);
+
+	if (ObjectiveSubsystem)
+	{
+		ObjectiveSubsystem->UnregisterObjectiveTrackerComponent(this);
+	}
+	
+	Super::EndPlay(EndPlayReason);
+}
+
 
 // Called every frame
 void UObjectiveTrackerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -40,23 +62,64 @@ void UObjectiveTrackerComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 #pragma region Objective System
 
-void UObjectiveTrackerComponent::SetupObjectives()
+//sets up all the objectives available on this tracker
+void UObjectiveTrackerComponent::SetupAllObjectives()
+{
+	for (UObjectiveInfoCollection* Collection : ObjectiveInfoCollections)
+	{
+		SetupObjectivesByCollection(Collection);
+	}
+}
+
+void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags)
 {
 	if (!GetOwner()->HasAuthority())
 	{
 		return;
 	}
 	
-	if (!IsValid(ObjectiveInfoCollection))
+	if (!IsValid(InObjectiveInfoCollection))
 	{
 		return;
 	}
 
-	TArray<FObjectiveInfo> ObjectiveInfos = ObjectiveInfoCollection->GetObjectiveInfos();
+	TArray<FObjectiveInfo> ObjectiveInfos = InObjectiveInfoCollection->GetObjectiveInfos();
 
 	for (const FObjectiveInfo& ObjectiveInfo : ObjectiveInfos)
 	{
-		SetupObjective(ObjectiveInfo);
+		//if we didn't specify any tags, then we just setup the objective
+		if (OptionalTags.IsEmpty())
+		{
+			SetupObjective(ObjectiveInfo);
+			continue;
+		}
+
+		if (!ObjectiveInfo.ObjectiveClass)
+		{
+			continue;
+		}
+
+		AObjective* DefaultObjectiveObject = Cast<AObjective>(ObjectiveInfo.ObjectiveClass->GetDefaultObject());
+
+		if (!DefaultObjectiveObject)
+		{
+			continue;
+		}
+
+		//if the objective has any of the optional tags, then we setup the objective
+		if (DefaultObjectiveObject->ObjectiveTags.HasAny(OptionalTags))
+		{
+			SetupObjective(ObjectiveInfo);
+		}
+	}
+}
+
+//sets up the objectives for this tracker
+void UObjectiveTrackerComponent::SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags)
+{
+	for (UObjectiveInfoCollection* Collection : ObjectiveInfoCollections)
+	{
+		SetupObjectivesByCollection(Collection, ObjectiveTags);
 	}
 }
 
@@ -89,11 +152,27 @@ void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveI
 	}
 }
 
-void UObjectiveTrackerComponent::BeginObjectives()
+void UObjectiveTrackerComponent::BeginAllObjectives()
 {
 	for (AObjective* Objective : Objectives)
 	{
 		BeginObjective(Objective);
+	}
+}
+
+void UObjectiveTrackerComponent::BeginObjectivesByTags(const FGameplayTagContainer& ObjectiveTags)
+{
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		if (Objective->ObjectiveTags.HasAny(ObjectiveTags))
+		{
+			BeginObjective(Objective);
+		}
 	}
 }
 	
