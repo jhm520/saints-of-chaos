@@ -8,6 +8,13 @@
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "Objective.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveSuccessDelegate, AObjective*, Objective);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveFailedDelegate, AObjective*, Objective);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveCompleteDelegate, AObjective*, Objective);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveFailureDelegate, AObjective*, Objective);
+
+
+
 UCLASS()
 class OBJECTIVESYSTEM_API AObjective : public AActor
 {
@@ -67,6 +74,19 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Begin Objective"), Category = "Objective System")
 	void K2_Begin();
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveSuccessDelegate OnObjectiveSuccess;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveFailureDelegate OnObjectiveFailure;
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveCompleteDelegate OnObjectiveComplete;
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveFailedDelegate OnObjectiveFailed;
+
 
 	UPROPERTY()
 	TMap<AActor*, FObjectiveStatus> ObjectiveStatusMap;

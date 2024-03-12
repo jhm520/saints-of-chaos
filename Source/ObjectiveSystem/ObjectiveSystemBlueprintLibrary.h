@@ -17,9 +17,11 @@ class OBJECTIVESYSTEM_API UObjectiveSystemBlueprintLibrary : public UBlueprintFu
 	GENERATED_BODY()
 	
 public:
+	//setup specified objectives on the specified Tracker actor, essentially informing all assignees of the objectives they need to complete
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objectives")
 	static void SetupObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, TArray<AActor*> Assignees);
 
+	//begin specified objectives for the specified Tracker actor, essentially informing all assignees of the objective that they should start working on completing the objective now
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objectives")
 	static void BeginObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, const FGameplayTagContainer& OptionalTags = FGameplayTagContainer());
 	
