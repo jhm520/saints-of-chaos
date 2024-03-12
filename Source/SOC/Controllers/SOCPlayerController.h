@@ -44,6 +44,13 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Server_DebugSpawnMobs();
 
+	// Starts the game match
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug Commands")
+	void DebugStartMatch();
+
+	UFUNCTION(Server, Reliable)
+	void Server_DebugStartMatch();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug Commands")
 	TSubclassOf<class UGameplayAbility> MobSpawnAbilityClass;
 #pragma endregion

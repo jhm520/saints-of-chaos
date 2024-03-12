@@ -6,10 +6,16 @@
 #include "AbilitySystemComponent.h"
 #include "EngineUtils.h"
 #include "CoreUtility/Clicking/Components/ClickingComponent.h"
+#include "GameFramework/GameMode.h"
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
+static TAutoConsoleVariable<bool> CVarEnableGameDebugCommands(
+	TEXT("Game.EnableDebugCommands"),
+	!UE_BUILD_SHIPPING, // Only enable it for non-shipping builds
+	TEXT("Enables debug commands. (Server only)")
+);
 
 #pragma region Framework
 
@@ -61,7 +67,41 @@ void ASOCPlayerController::DebugSpawnMobs()
 
 void ASOCPlayerController::Server_DebugSpawnMobs_Implementation()
 {
+	if (!CVarEnableGameDebugCommands->GetBool())
+	{
+		return;
+	}
+	
 	DebugSpawnMobs();
+}
+
+// Starts the game match
+void ASOCPlayerController::DebugStartMatch()
+{
+	if (!HasAuthority())
+	{
+		Server_DebugStartMatch();
+		return;
+	}
+
+	AGameMode* GameMode = Cast<AGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (!GameMode)
+	{
+		return;
+	}
+
+	GameMode->StartMatch();
+}
+
+void ASOCPlayerController::Server_DebugStartMatch_Implementation()
+{
+	if (!CVarEnableGameDebugCommands->GetBool())
+	{
+		return;
+	}
+
+	DebugStartMatch();
 }
 
 #pragma endregion

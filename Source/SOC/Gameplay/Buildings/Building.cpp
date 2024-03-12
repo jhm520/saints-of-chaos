@@ -12,6 +12,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "CoreUtility/CoreUtilityBlueprintLibrary.h"
+#include "GameFramework/GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
@@ -73,7 +74,6 @@ void ASOCBuilding::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-
 void ASOCBuilding::SetOwner( AActor* NewOwner )
 {
 	Super::SetOwner(NewOwner);
@@ -81,8 +81,8 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 	if (NewOwner)
 	{
 		InitAbilitySystem();
-
-		StartSpawningMobs();
+		
+		BindGameModeEvents();
 		
 		AController* ControllerDirector = Cast<AController>(NewOwner);
 
@@ -491,6 +491,28 @@ void ASOCBuilding::UpdateCharacterInfoWidget_Attitude()
 	const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(LocalPlayerController, this);
 
 	CharacterInfoWidget->UpdatePlayerAttitude(Attitude);
+}
+
+#pragma endregion
+
+#pragma region GameMode
+	
+void ASOCBuilding::BindGameModeEvents()
+{
+	FGameModeEvents::OnGameModeMatchStateSetEvent().AddUObject(this, &ASOCBuilding::OnGameModeMatchStateSetEvent);
+}
+
+void ASOCBuilding::OnGameModeMatchStateSetEvent(FName NewMatchState)
+{
+	if (NewMatchState == NAME_None)
+	{
+		return;
+	}
+
+	if (NewMatchState == MatchState::InProgress)
+	{
+		StartSpawningMobs();
+	}
 }
 
 #pragma endregion

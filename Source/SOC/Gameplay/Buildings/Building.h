@@ -38,6 +38,8 @@ protected:
 	virtual void OnRep_Owner() override;
 
 	virtual void SetOwner( AActor* NewOwner ) override;
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -174,6 +176,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Info")
 	TObjectPtr<UWidgetComponent> CharacterInfoWidgetComponent;
+
+#pragma endregion
+
+#pragma region Game Mode
+	
+	void BindGameModeEvents();
+
+	UFUNCTION()
+	void OnGameModeMatchStateSetEvent(FName NewMatchState);
 
 #pragma endregion
 
