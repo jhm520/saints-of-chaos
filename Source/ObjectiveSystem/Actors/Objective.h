@@ -81,6 +81,9 @@ public:
 	//begin this objective, and indicate to the assignees that they should start working on completing the objective
 	void Begin();
 
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
+	bool bHasBegun;
+
 #pragma endregion
 
 };

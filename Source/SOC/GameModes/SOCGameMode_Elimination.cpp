@@ -44,6 +44,12 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 		for (UObjectiveInfoCollection* Collection : PreMatchObjectiveCollections)
 		{
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
+		}
+
+		for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
 		}
 	}
 	else if (GetMatchState() == MatchState::InProgress)
@@ -51,6 +57,7 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 		for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
 		{
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 		}
 	}
 }
@@ -76,9 +83,17 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted()
 	{
 		return;
 	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
 
 	for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
 	{
+		UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
 		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 	}
 }

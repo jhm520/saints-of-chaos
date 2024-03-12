@@ -72,6 +72,8 @@ public:
 	UFUNCTION()
 	void OnObjectiveComplete();
 protected:
+	AObjective* FindObjective(const FObjectiveInfo& ObjectiveInfo);
+	
 	AObjective* CreateObjective(const FObjectiveInfo& ObjectiveInfo);
 
 	void SetupObjective(const FObjectiveInfo& ObjectiveInfo, TArray<AActor*> Assignees);

@@ -131,8 +131,15 @@ void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveI
 	{
 		return;
 	}
-		
-	AObjective* NewObjective = CreateObjective(ObjectiveInfo);
+
+	//find an exisiting objective of the same type if we already have one
+	AObjective* NewObjective = FindObjective(ObjectiveInfo);
+
+	//if we didn't find one, create a new one
+	if (!NewObjective)
+	{
+		NewObjective = CreateObjective(ObjectiveInfo);
+	}
 
 	if (!NewObjective)
 	{
@@ -245,6 +252,31 @@ void UObjectiveTrackerComponent::ProgressObjective(AActor* Assignee, AActor* Ins
 void UObjectiveTrackerComponent::OnObjectiveComplete()
 {
 	
+}
+
+AObjective* UObjectiveTrackerComponent::FindObjective(const FObjectiveInfo& ObjectiveInfo)
+{
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		AObjective* DefaultObjective = ObjectiveInfo.ObjectiveClass.GetDefaultObject();
+
+		if (!DefaultObjective)
+		{
+			return nullptr;
+		}
+
+		if (Objective->ObjectiveTags.HasAll(DefaultObjective->ObjectiveTags))
+		{
+			return Objective;
+		}
+	}
+
+	return nullptr;
 }
 
 AObjective* UObjectiveTrackerComponent::CreateObjective(const FObjectiveInfo& ObjectiveInfo)

@@ -16,6 +16,8 @@ AObjective::AObjective()
 	SuccessCount = 1;
 	FailureCount = 0;
 
+	bHasBegun = false;
+
 }
 
 // Called when the game starts or when spawned
@@ -120,6 +122,13 @@ void AObjective::Unassign(AActor* Assignee)
 
 void AObjective::Begin()
 {
+	if (bHasBegun)
+	{
+		return;
+	}
+	
+	bHasBegun = true;
+	
 	K2_Begin();
 }
 
