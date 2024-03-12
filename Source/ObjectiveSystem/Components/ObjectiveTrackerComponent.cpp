@@ -63,15 +63,15 @@ void UObjectiveTrackerComponent::TickComponent(float DeltaTime, ELevelTick TickT
 #pragma region Objective System
 
 //sets up all the objectives available on this tracker
-void UObjectiveTrackerComponent::SetupAllObjectives()
+void UObjectiveTrackerComponent::SetupAllObjectives(TArray<AActor*> Assignees)
 {
 	for (UObjectiveInfoCollection* Collection : ObjectiveInfoCollections)
 	{
-		SetupObjectivesByCollection(Collection);
+		SetupObjectivesByCollection(Collection, Assignees);
 	}
 }
 
-void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags)
+void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, TArray<AActor*> Assignees, const FGameplayTagContainer& OptionalTags)
 {
 	if (!GetOwner()->HasAuthority())
 	{
@@ -90,7 +90,7 @@ void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoColle
 		//if we didn't specify any tags, then we just setup the objective
 		if (OptionalTags.IsEmpty())
 		{
-			SetupObjective(ObjectiveInfo);
+			SetupObjective(ObjectiveInfo, Assignees);
 			continue;
 		}
 
@@ -109,21 +109,21 @@ void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoColle
 		//if the objective has any of the optional tags, then we setup the objective
 		if (DefaultObjectiveObject->ObjectiveTags.HasAny(OptionalTags))
 		{
-			SetupObjective(ObjectiveInfo);
+			SetupObjective(ObjectiveInfo,Assignees);
 		}
 	}
 }
 
 //sets up the objectives for this tracker
-void UObjectiveTrackerComponent::SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags)
+void UObjectiveTrackerComponent::SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags, TArray<AActor*> Assignees)
 {
 	for (UObjectiveInfoCollection* Collection : ObjectiveInfoCollections)
 	{
-		SetupObjectivesByCollection(Collection, ObjectiveTags);
+		SetupObjectivesByCollection(Collection, Assignees, ObjectiveTags);
 	}
 }
 
-void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveInfo)
+void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveInfo, TArray<AActor*> Assignees)
 {
 	IObjectiveTrackerInterface* ObjectiveTrackerInterface = Cast<IObjectiveTrackerInterface>(GetOwner());
 
@@ -138,9 +138,7 @@ void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveI
 	{
 		return;
 	}
-
-	TArray<AActor*> Assignees = ObjectiveTrackerInterface->GetAssignees(NewObjective);
-
+	
 	for (AActor* Assignee : Assignees)
 	{
 		if (!Assignee)
@@ -149,6 +147,39 @@ void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveI
 		}
 		
 		AssignObjective(NewObjective, Assignee);
+	}
+}
+
+void UObjectiveTrackerComponent::BeginObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags)
+{
+	if (!GetOwner()->HasAuthority())
+	{
+		return;
+	}
+	
+	if (!IsValid(InObjectiveInfoCollection))
+	{
+		return;
+	}
+
+	const FGameplayTagContainer& AllObjectiveTags = InObjectiveInfoCollection->GetAllObjectiveTags();
+
+	for (AObjective* Objective : Objectives)
+	{
+		if (Objective->ObjectiveTags.HasAny(AllObjectiveTags))
+		{
+			if (OptionalTags.IsEmpty())
+			{
+				BeginObjective(Objective);
+				continue;
+			}
+
+			if (Objective->ObjectiveTags.HasAny(OptionalTags))
+			{
+				BeginObjective(Objective);
+				continue;
+			}
+		}
 	}
 }
 

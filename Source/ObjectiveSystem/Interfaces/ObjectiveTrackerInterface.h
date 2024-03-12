@@ -22,8 +22,8 @@ class OBJECTIVESYSTEM_API IObjectiveTrackerInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	
-	// returns the assignees of this objective
+
+	// returns the objective tracker component
 	UFUNCTION()
-	virtual TArray<AActor*> GetAssignees(AObjective* Objective) const= 0;
+	virtual UObjectiveTrackerComponent* GetObjectiveTrackerComponent() const= 0;
 };

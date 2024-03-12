@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "GameplayTags/Classes/GameplayTagContainer.h"
+#include "GameplayTagContainer.h"
 #include "ObjectiveInfoCollection.generated.h"
 
 class AObjective;
@@ -19,6 +20,21 @@ struct OBJECTIVESYSTEM_API FObjectiveInfo
 	//the class of the objective that will be spawned when this objective is setup
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	TSubclassOf<AObjective> ObjectiveClass;
+
+	//a descriptor and ID tag for this objective
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	FGameplayTagContainer ObjectiveTags = FGameplayTagContainer();
+
+	//The number of times this objective must be completed to be considered successfully completed
+	//if this value is -1, it will be overridden by the value in the objective class
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	int32 SuccessCount = -1;
+	
+	//The number of times this objective must be failed for this objective to be considered failed
+	//A value of zero means that this objective cannot be failed
+	//if this value is -1, it will be overridden by the value in the objective class
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	int32 FailureCount = -1;
 };
 
 /**
@@ -60,4 +76,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Objective System")
 	TArray<FObjectiveInfo> GetObjectiveInfos() const { return ObjectiveInfoArray; }
+
+	UFUNCTION()
+	const FGameplayTagContainer GetAllObjectiveTags() const;
 };

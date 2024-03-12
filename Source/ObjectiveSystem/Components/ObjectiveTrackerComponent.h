@@ -38,15 +38,19 @@ public:
 
 	//sets up all the objectives available on this tracker
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void SetupAllObjectives();
+	void SetupAllObjectives(TArray<AActor*> Assignees);
 	
 	//sets up the objectives on this tracker for this collection
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags = FGameplayTagContainer());
+	void SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, TArray<AActor*> Assignees, const FGameplayTagContainer& OptionalTags = FGameplayTagContainer());
 
 	//sets up the objectives for this tracker
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags);
+	void SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags, TArray<AActor*> Assignees);
+
+	//sets up the objectives on this tracker for this collection
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
+	void BeginObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags = FGameplayTagContainer());
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
 	void BeginAllObjectives();
@@ -70,7 +74,7 @@ public:
 protected:
 	AObjective* CreateObjective(const FObjectiveInfo& ObjectiveInfo);
 
-	void SetupObjective(const FObjectiveInfo& ObjectiveInfo);
+	void SetupObjective(const FObjectiveInfo& ObjectiveInfo, TArray<AActor*> Assignees);
 
 	void AssignObjective(AObjective* Objective, AActor* Assignee);
 

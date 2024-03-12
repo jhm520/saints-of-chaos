@@ -15,6 +15,7 @@ class SOC_API ASOCGameModeBase : public ACoreGameModeBase
 	GENERATED_BODY()
 
 #pragma region Framework
+protected:
 	ASOCGameModeBase();
 #pragma endregion
 
@@ -34,6 +35,9 @@ class SOC_API ASOCGameModeBase : public ACoreGameModeBase
 
 	/** Called when the state transitions to WaitingToStart */
 	virtual void HandleMatchIsWaitingToStart() override;
+
+	/** Overridable virtual function to dispatch the appropriate transition functions before GameState and Blueprints get SetMatchState calls. */
+	virtual void OnMatchStateSet() override;
 #pragma endregion
 
 };

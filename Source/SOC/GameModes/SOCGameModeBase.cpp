@@ -77,4 +77,10 @@ void ASOCGameModeBase::HandleMatchIsWaitingToStart()
 		}
 	}
 }
+
+/** Overridable virtual function to dispatch the appropriate transition functions before GameState and Blueprints get SetMatchState calls. */
+void ASOCGameModeBase::OnMatchStateSet()
+{
+	Super::OnMatchStateSet();
+}
 #pragma endregion
