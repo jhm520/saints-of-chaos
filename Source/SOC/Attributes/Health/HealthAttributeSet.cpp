@@ -3,8 +3,11 @@
 
 #include "HealthAttributeSet.h"
 
+#include "GameplayEffectExtension.h"
 #include "HealthInterface.h"
 #include "Net/UnrealNetwork.h"
+#include "SOC/Attributes/Damage/DamageCauserInterface.h"
+#include "SOC/Attributes/Damage/DamageInterface.h"
 
 
 UHealthAttributeSet::UHealthAttributeSet()
@@ -40,6 +43,31 @@ bool UHealthAttributeSet::PreGameplayEffectExecute(FGameplayEffectModCallbackDat
 void UHealthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+
+	UAbilitySystemComponent* Target = &Data.Target;
+
+	AActor* Instigator = Data.EffectSpec.GetContext().GetInstigator();
+
+	const float CurrentHealth = Data.EvaluatedData.Attribute.GetNumericValue(this);
+	const float LocalMaxHealth = GetMaxHealth();
+	
+	const float Magnitude = Data.EvaluatedData.Magnitude;
+	
+	IDamageCauserInterface* DamageCauserInterface = Cast<IDamageCauserInterface>(Instigator);
+
+	AController* DamageInstigator = nullptr;
+	
+	if (DamageCauserInterface)
+	{
+		DamageInstigator = DamageCauserInterface->GetDamageInstigatorController();
+	}
+
+	AActor* TargetActor = Target->GetAvatarActor();
+	
+	if (TargetActor && TargetActor->Implements<UDamageInterface>())
+	{
+		IDamageInterface::Execute_OnDamaged(TargetActor, Magnitude, LocalMaxHealth - CurrentHealth + Magnitude, Instigator, DamageInstigator);
+	}
 }
 
 void UHealthAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth)

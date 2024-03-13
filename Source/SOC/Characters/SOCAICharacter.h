@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "SOCCharacter.h"
+#include "CommandSystem/CommandSystemBlueprintLibrary.h"
 #include "CommandSystem/Interfaces/CommandableInterface.h"
 #include "GAS/Abilities/TargetActors/GameplayAbilityTargetActorInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
@@ -86,6 +87,12 @@ public:
 	virtual void OnCommandBegin_Implementation(const FCommandInstance& Command) override;
 
 	virtual bool CheckCommandFinished_Implementation(const FCommandInstance& Command) const override;
+#pragma endregion
+
+#pragma region Damage Causer Interface
+	
+public:
+	virtual AController* GetDamageInstigatorController() const override;
 #pragma endregion
 
 

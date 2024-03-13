@@ -13,6 +13,8 @@
 #include "SOC/Attributes/Health/HealthInterface.h"
 #include "SelectionSystem/Interfaces/SelectableInterface.h"
 #include "GameplayTagContainer.h"
+#include "SOC/Attributes/Damage/DamageCauserInterface.h"
+#include "SOC/Attributes/Damage/DamageInterface.h"
 #include "SOCCharacter.generated.h"
 
 /**
@@ -28,7 +30,7 @@ class USelectableComponent;
 
 UCLASS()
 class SOC_API ASOCCharacter : public ACharacter, public IAbilitySystemInterface, public IAttitudeInterface,
-public IAggroInterface, public IHealthInterface, public ISelectableInterface, public IClickableActorInterface
+public IAggroInterface, public IHealthInterface, public IDamageInterface, public IDamageCauserInterface, public ISelectableInterface, public IClickableActorInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -163,6 +165,19 @@ public:
 
 	virtual UClickableActorComponent* GetClickableActorComponent() const override {return ClickableActorComponent;};
 
+#pragma endregion
+
+#pragma region Damage Interface
+	
+public:
+	virtual void OnDamaged_Implementation(float Damage, float PreviousDamageTotal, AActor* DamageCauser, AController* InstigatorController) override;
+
+#pragma endregion
+
+#pragma region Damage Causer Interface
+	
+public:
+	virtual AController* GetDamageInstigatorController() const override;
 #pragma endregion
 
 };

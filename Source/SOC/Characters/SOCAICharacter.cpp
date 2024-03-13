@@ -211,3 +211,33 @@ bool ASOCAICharacter::CheckCommandFinished_Implementation(const FCommandInstance
 }
 
 #pragma endregion
+
+#pragma region Damage Causer Interface
+	
+AController* ASOCAICharacter::GetDamageInstigatorController() const
+{
+	USOCAIBehaviorComponent* LocalBehaviorComponent = GetBehaviorComponent();
+
+	if (!LocalBehaviorComponent)
+	{
+		return nullptr;
+	}
+
+	AActor* Director = LocalBehaviorComponent->GetDirector();
+
+	if (!Director)
+	{
+		return nullptr;
+	}
+
+	AController* InstigatorController = Cast<AController>(Director);
+
+	if (!InstigatorController)
+	{
+		InstigatorController = Cast<AController>(Director->GetOwner());
+	}
+
+	return InstigatorController;
+}
+
+#pragma endregion

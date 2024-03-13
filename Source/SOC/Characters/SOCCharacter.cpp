@@ -19,6 +19,7 @@
 #include "SelectionSystem/Interfaces/SelectorInterface.h"
 #include "SOC/Abilities/SOCGameplayAbility_SelectActor.h"
 #include "CoreUtility/Clicking/Components/ClickableActorComponent.h"
+#include "Engine/DamageEvents.h"
 
 ASOCCharacter::ASOCCharacter()
 {
@@ -223,14 +224,6 @@ bool ASOCCharacter::IsAlive_Implementation() const
 void ASOCCharacter::OnHealthChanged_Implementation(float OldHealth, float NewHealth, float MaxHealth)
 {
 	UpdateCharacterInfoWidget_Health();
-
-	if (HasAuthority())
-	{
-		if (NewHealth <= 0.0f && OldHealth > 0.0f)
-		{
-			Die();
-		}
-	}
 }
 
 void ASOCCharacter::OnMaxHealthChanged_Implementation(float OldMaxHealth, float MaxHealth, float CurrentHealth)
@@ -353,4 +346,30 @@ UPrimitiveComponent* ASOCCharacter::GetClickableComponent() const
 {
 	return ClickableCapsuleComponent;
 }
+#pragma endregion
+
+#pragma region Damage Interface
+	
+void ASOCCharacter::OnDamaged_Implementation(float Damage, float PreviousDamageTotal, AActor* DamageCauser, AController* InstigatorController)
+{
+	TakeDamage(Damage, FDamageEvent(), InstigatorController, DamageCauser);
+	
+	if (HasAuthority())
+	{
+		if (!IHealthInterface::Execute_IsAlive(this) && PreviousDamageTotal < IHealthInterface::Execute_GetMaxHealth(this))
+		{
+			Die();
+		}
+	}
+}
+
+#pragma endregion
+
+#pragma region Damage Causer Interface
+	
+AController* ASOCCharacter::GetDamageInstigatorController() const
+{
+	return GetController();
+}
+
 #pragma endregion
