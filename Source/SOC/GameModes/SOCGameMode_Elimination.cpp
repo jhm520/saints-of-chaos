@@ -9,6 +9,7 @@
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 #include "SOC/Gameplay/Buildings/Building.h"
+#include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 
 #pragma region Framework
 
@@ -110,6 +111,40 @@ void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim,
 	}
 
 	//GEngine->AddOnScreenDebugMessage(-1 , 5.f, FColor::Red, "Building Destroyed");
+
+	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(this);
+
+	if (!BuildingSubsystem)
+	{
+		return;
+	}
+
+	if (!Attacker || !Attacker->Implements<UAttitudeInterface>())
+	{
+		return;
+	}
+
+	bool bRemainingEnemyBuildings = false;
+	
+	TArray<ASOCBuilding*> Buildings = BuildingSubsystem->GetAllBuildings();
+
+	for (ASOCBuilding* Building : Buildings)
+	{
+		const EAttitude Attitude = IAttitudeInterface::Execute_GetAttitudeTowards(Attacker, Building);
+
+		const bool bIsAlive = IHealthInterface::Execute_IsAlive(Building);
+
+		if (bIsAlive && Attitude == EAttitude::Hostile)
+		{
+			bRemainingEnemyBuildings = true;
+			break;
+		}
+	}
+
+	if (!bRemainingEnemyBuildings)
+	{
+		UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(ControllerInstigator, DestroyBuildingsObjectiveTags, true);
+	}
 }
 
 #pragma endregion

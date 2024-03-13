@@ -25,4 +25,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objectives")
 	static void BeginObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, const FGameplayTagContainer& OptionalTags = FGameplayTagContainer());
 	
+	//progress any objectives assigned to the assignee actor that have the specified tags
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objectives")
+	static void ProgressObjectivesForActorByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
+	
 };

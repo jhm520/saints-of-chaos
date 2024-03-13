@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "SOCGameModeBase.h"
 #include "SOCGameMode_Elimination.generated.h"
 
@@ -51,6 +52,9 @@ protected:
 #pragma endregion
 
 #pragma region Buildings
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	FGameplayTagContainer DestroyBuildingsObjectiveTags;
 
 	void OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator);
 
