@@ -103,7 +103,7 @@ protected:
 #pragma region Death
 
 protected:
-	virtual void Die();
+	virtual void Die(AActor* DamageCauser, AController* Killer);
 
 	virtual void OnDeath();
 

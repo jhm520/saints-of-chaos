@@ -40,4 +40,10 @@ protected:
 	virtual void OnMatchStateSet() override;
 #pragma endregion
 
+#pragma region Actor Death
+public:
+	virtual void OnActorKilled(AActor* Victim, AActor* Attacker, AController* ControllerInstigator);
+
+#pragma endregion
+
 };

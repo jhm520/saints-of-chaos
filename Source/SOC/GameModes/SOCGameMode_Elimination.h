@@ -6,6 +6,7 @@
 #include "SOCGameMode_Elimination.generated.h"
 
 class UObjectiveInfoCollection;
+class ASOCBuilding;
 /**
  * 
  */
@@ -48,5 +49,18 @@ protected:
 	
 
 #pragma endregion
+
+#pragma region Buildings
+
+	void OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator);
+
+#pragma endregion
+
+#pragma region Actor Death
+
+	virtual void OnActorKilled(AActor* Victim, AActor* Attacker, AController* ControllerInstigator) override;
+
+#pragma endregion
+
 
 };

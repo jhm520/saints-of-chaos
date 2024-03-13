@@ -12,12 +12,14 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "CoreUtility/CoreUtilityBlueprintLibrary.h"
+#include "Engine/DamageEvents.h"
 #include "GameFramework/GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 #include "SOC/Attributes/Health/HealthAttributeSet.h"
+#include "SOC/GameModes/SOCGameModeBase.h"
 #include "SOC/HUD/Widgets/CharacterInfoWidget.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
@@ -371,14 +373,6 @@ bool ASOCBuilding::IsAlive_Implementation() const
 void ASOCBuilding::OnHealthChanged_Implementation(float OldHealth, float NewHealth, float MaxHealth)
 {
 	UpdateCharacterInfoWidget_Health();
-
-	if (HasAuthority())
-	{
-		if (NewHealth <= 0.0f && OldHealth > 0.0f)
-		{
-			Die();
-		}
-	}
 }
 
 void ASOCBuilding::OnMaxHealthChanged_Implementation(float OldMaxHealth, float MaxHealth, float CurrentHealth)
@@ -390,8 +384,15 @@ void ASOCBuilding::OnMaxHealthChanged_Implementation(float OldMaxHealth, float M
 
 #pragma region Death
 
-void ASOCBuilding::Die()
+void ASOCBuilding::Die(AActor* DamageCauser, AController* Killer)
 {
+	ASOCGameModeBase* GameMode = Cast<ASOCGameModeBase>(GetWorld()->GetAuthGameMode());
+	
+	if (GameMode)
+	{
+		GameMode->OnActorKilled(this, DamageCauser, Killer);
+	}
+	
 	OnDeath();
 }
 
@@ -512,6 +513,23 @@ void ASOCBuilding::OnGameModeMatchStateSetEvent(FName NewMatchState)
 	if (NewMatchState == MatchState::InProgress)
 	{
 		StartSpawningMobs();
+	}
+}
+
+#pragma endregion
+
+#pragma region Damage Interface
+	
+void ASOCBuilding::OnDamaged_Implementation(float Damage, float PreviousDamageTotal, AActor* DamageCauser, AController* InstigatorController)
+{
+	TakeDamage(Damage, FDamageEvent(UDamageType::StaticClass()), InstigatorController, DamageCauser);
+	
+	if (HasAuthority())
+	{
+		if (!IHealthInterface::Execute_IsAlive(this) && PreviousDamageTotal < IHealthInterface::Execute_GetMaxHealth(this))
+		{
+			Die(DamageCauser, InstigatorController);
+		}
 	}
 }
 

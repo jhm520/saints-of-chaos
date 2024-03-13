@@ -8,6 +8,7 @@
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
+#include "SOC/Gameplay/Buildings/Building.h"
 
 #pragma region Framework
 
@@ -97,4 +98,34 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted()
 		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 	}
 }
+#pragma endregion
+
+#pragma region Buildings
+
+void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator)
+{
+	if (!BuildingVictim)
+	{
+		return;
+	}
+
+	//GEngine->AddOnScreenDebugMessage(-1 , 5.f, FColor::Red, "Building Destroyed");
+}
+
+#pragma endregion
+
+#pragma region Actor Death
+
+void ASOCGameMode_Elimination::OnActorKilled(AActor* Victim, AActor* Attacker, AController* ControllerInstigator)
+{
+	Super::OnActorKilled(Victim, Attacker, ControllerInstigator);
+
+	ASOCBuilding* BuildingVictim = Cast<ASOCBuilding>(Victim);
+
+	if (BuildingVictim)
+	{
+		OnBuildingDestroyed(BuildingVictim, Attacker, ControllerInstigator);
+	}
+}
+
 #pragma endregion

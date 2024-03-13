@@ -8,6 +8,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameplayTagContainer.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
+#include "SOC/Attributes/Damage/DamageInterface.h"
 #include "SOC/Attributes/Health/HealthInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "Building.generated.h"
@@ -20,7 +21,7 @@ class UWidgetComponent;
 class UCapsuleComponent;
 
 UCLASS()
-class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface, public IHealthInterface
+class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface, public IHealthInterface, public IDamageInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -145,7 +146,7 @@ protected:
 #pragma region Death
 
 protected:
-	virtual void Die();
+	virtual void Die(AActor* DamageCauser, AController* Killer);
 
 	virtual void OnDeath();
 
@@ -185,6 +186,13 @@ protected:
 
 	UFUNCTION()
 	void OnGameModeMatchStateSetEvent(FName NewMatchState);
+
+#pragma endregion
+
+#pragma region Damage Interface
+	
+public:
+	virtual void OnDamaged_Implementation(float Damage, float PreviousDamageTotal, AActor* DamageCauser, AController* InstigatorController) override;
 
 #pragma endregion
 

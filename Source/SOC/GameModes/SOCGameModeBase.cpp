@@ -84,3 +84,12 @@ void ASOCGameModeBase::OnMatchStateSet()
 	Super::OnMatchStateSet();
 }
 #pragma endregion
+
+#pragma region Character Death
+
+void ASOCGameModeBase::OnActorKilled(AActor* Victim, AActor* Attacker, AController* ControllerInstigator)
+{
+	
+}
+
+#pragma endregion

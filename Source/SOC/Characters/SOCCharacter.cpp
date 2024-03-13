@@ -20,6 +20,7 @@
 #include "SOC/Abilities/SOCGameplayAbility_SelectActor.h"
 #include "CoreUtility/Clicking/Components/ClickableActorComponent.h"
 #include "Engine/DamageEvents.h"
+#include "SOC/GameModes/SOCGameModeBase.h"
 
 ASOCCharacter::ASOCCharacter()
 {
@@ -235,8 +236,15 @@ void ASOCCharacter::OnMaxHealthChanged_Implementation(float OldMaxHealth, float 
 
 #pragma region Death
 
-void ASOCCharacter::Die()
+void ASOCCharacter::Die(AActor* DamageCauser, AController* Killer)
 {
+	ASOCGameModeBase* GameMode = Cast<ASOCGameModeBase>(GetWorld()->GetAuthGameMode());
+	
+	if (GameMode)
+	{
+		GameMode->OnActorKilled(this, DamageCauser, Killer);
+	}
+	
 	OnDeath();
 }
 
@@ -352,13 +360,13 @@ UPrimitiveComponent* ASOCCharacter::GetClickableComponent() const
 	
 void ASOCCharacter::OnDamaged_Implementation(float Damage, float PreviousDamageTotal, AActor* DamageCauser, AController* InstigatorController)
 {
-	TakeDamage(Damage, FDamageEvent(), InstigatorController, DamageCauser);
+	TakeDamage(Damage, FDamageEvent(UDamageType::StaticClass()), InstigatorController, DamageCauser);
 	
 	if (HasAuthority())
 	{
 		if (!IHealthInterface::Execute_IsAlive(this) && PreviousDamageTotal < IHealthInterface::Execute_GetMaxHealth(this))
 		{
-			Die();
+			Die(DamageCauser, InstigatorController);
 		}
 	}
 }
