@@ -3,6 +3,7 @@
 
 #include "ObjectiveSystemBlueprintLibrary.h"
 #include "Components/ObjectiveTrackerComponent.h"
+#include "Interfaces/ObjectiveAssigneeInterface.h"
 #include "Interfaces/ObjectiveTrackerInterface.h"
 
 void UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, TArray<AActor*> Assignees)
@@ -60,6 +61,15 @@ void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(AActor* 
 	{
 		return;
 	}
+
+	IObjectiveAssigneeInterface* AssigneeInterface = Cast<IObjectiveAssigneeInterface>(Assignee);
+
+	if (!AssigneeInterface)
+	{
+		return;
+	}
+
+	
 }
 
 	

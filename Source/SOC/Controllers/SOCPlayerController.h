@@ -8,6 +8,7 @@
 #include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
 #include "CoreUtility/Clicking/Interfaces/ClickingInterface.h"
 #include "GameFramework/PlayerController.h"
+#include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
 #include "SelectionSystem/Interfaces/SelectorInterface.h"
 #include "SOCPlayerController.generated.h"
 
@@ -18,7 +19,7 @@ class UAutoOwnershipComponent;
  */
 
 UCLASS()
-class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface, public IClickingInterface
+class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface, public IClickingInterface, public IObjectiveAssigneeInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -84,6 +85,11 @@ public:
 
 	virtual UClickingComponent* GetClickingComponent() const;
 
+#pragma endregion
+
+#pragma region Objective System
+public:
+	virtual UObjectiveAssigneeComponent* GetObjectiveAssigneeComponent() const override;
 #pragma endregion
 
 };

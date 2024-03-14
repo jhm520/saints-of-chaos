@@ -2,11 +2,13 @@
 
 
 #include "SOCPlayerState.h"
+
+#include "ObjectiveSystem/Components/ObjectiveAssigneeComponent.h"
 #include "ObjectiveSystem/Components/ObjectiveTrackerComponent.h"
 
 ASOCPlayerState::ASOCPlayerState()
 {
-	ObjectiveTrackerComponent = CreateDefaultSubobject<UObjectiveTrackerComponent>(TEXT("ObjectiveTrackerComponent"));
+	ObjectiveAssigneeComponent = CreateDefaultSubobject<UObjectiveAssigneeComponent>(TEXT("ObjectiveAssigneeComponent"));
 }
 
 

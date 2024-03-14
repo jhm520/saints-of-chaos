@@ -10,6 +10,7 @@
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
+#include "GameFramework/PlayerState.h"
 
 static TAutoConsoleVariable<bool> CVarEnableGameDebugCommands(
 	TEXT("Game.EnableDebugCommands"),
@@ -168,6 +169,29 @@ USelectorComponent* ASOCPlayerController::GetSelectorComponent() const
 UClickingComponent* ASOCPlayerController::GetClickingComponent() const
 {
 	return ClickingComponent;
+}
+
+#pragma endregion
+
+#pragma region Objective System
+
+UObjectiveAssigneeComponent* ASOCPlayerController::GetObjectiveAssigneeComponent() const
+{
+	const APlayerState* LocalPlayerState = GetPlayerState<APlayerState>();
+
+	if (!LocalPlayerState)
+	{
+		return nullptr;
+	}
+
+	const IObjectiveAssigneeInterface* AssigneeInterface = Cast<IObjectiveAssigneeInterface>(LocalPlayerState);
+
+	if (!AssigneeInterface)
+	{
+		return nullptr;
+	}
+
+	return AssigneeInterface->GetObjectiveAssigneeComponent();
 }
 
 #pragma endregion
