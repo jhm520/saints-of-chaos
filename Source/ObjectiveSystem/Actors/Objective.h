@@ -8,10 +8,10 @@
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "Objective.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveSuccessDelegate, AObjective*, Objective);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveFailedDelegate, AObjective*, Objective);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveCompleteDelegate, AObjective*, Objective);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FOnObjectiveFailureDelegate, AObjective*, Objective);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveSuccessDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveFailedDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveCompleteDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveFailureDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
 
 
 

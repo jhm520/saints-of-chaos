@@ -83,4 +83,14 @@ void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(AActor* 
 	ObjectiveSubsystem->ProgressAssignedObjectives(LocalAssignee, ObjectiveTags, bSuccess);
 }
 
-	
+void UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives)
+{
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(WorldContextObject->GetWorld());
+
+	if (!ObjectiveSubsystem)
+	{
+		return;
+	}
+
+	ObjectiveSubsystem->GetObjectivesByTags(ObjectiveTags, OutObjectives);
+}

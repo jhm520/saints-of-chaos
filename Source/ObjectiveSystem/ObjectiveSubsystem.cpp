@@ -3,6 +3,7 @@
 #include "GameplayTagContainer.h"
 #include "Components/ObjectiveComponent.h"
 #include "Components/ObjectiveTrackerComponent.h"
+#include "Actors/Objective.h"
 #include "Interfaces/ObjectiveInterface.h"
 
 UObjectiveSubsystem::UObjectiveSubsystem()
@@ -114,4 +115,21 @@ void UObjectiveSubsystem::ProgressAssignedObjectives(AActor* Assignee, const FGa
 		ObjectiveTrackerComponent->ProgressObjectives(Assignee, Assignee, ObjectiveTags, bSuccess);
 	}
 }
+
+void UObjectiveSubsystem::GetObjectivesByTags(const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives)
+{
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		if (Objective->ObjectiveTags.HasAny(ObjectiveTags))
+		{
+			OutObjectives.Add(Objective);
+		}
+	}
+}
+
 

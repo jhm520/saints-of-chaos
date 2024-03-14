@@ -29,4 +29,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objectives")
 	static void ProgressObjectivesForActorByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
 	
+	//get any objectives that have the specified tags
+	UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContextObject"), BlueprintAuthorityOnly, Category = "Objectives")
+	static void GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives);
+	
 };

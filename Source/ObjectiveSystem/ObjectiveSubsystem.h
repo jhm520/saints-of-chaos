@@ -62,6 +62,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
 	void ProgressAssignedObjectives(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
 
+	void GetObjectivesByTags(const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives);
+
 #pragma endregion
 	
 };

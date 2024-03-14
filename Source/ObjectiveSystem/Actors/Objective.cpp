@@ -69,7 +69,7 @@ void AObjective::Success(AActor* Assignee, AActor* InInstigator)
 	
 	FoundAssignee->SuccessCount++;
 
-	OnObjectiveSuccess.Broadcast(this);
+	OnObjectiveSuccess.Broadcast(this, Assignee, InInstigator);
 	
 	if (FoundAssignee->SuccessCount >= SuccessCount)
 	{
@@ -88,7 +88,7 @@ void AObjective::Failure(AActor* Assignee, AActor* InInstigator)
 
 	FoundAssignee->FailureCount++;
 
-	OnObjectiveFailure.Broadcast(this);
+	OnObjectiveFailure.Broadcast(this, Assignee, InInstigator);
 	
 	if (FoundAssignee->FailureCount >= FailureCount)
 	{
@@ -98,13 +98,13 @@ void AObjective::Failure(AActor* Assignee, AActor* InInstigator)
 
 void AObjective::Complete(AActor* Assignee, AActor* InInstigator)
 {
-	OnObjectiveComplete.Broadcast(this);
+	OnObjectiveComplete.Broadcast(this, Assignee, InInstigator);
 	K2_Complete(Assignee, InInstigator);
 }
 	
 void AObjective::Failed(AActor* Assignee, AActor* InInstigator)
 {
-	OnObjectiveFailed.Broadcast(this);
+	OnObjectiveFailed.Broadcast(this, Assignee, InInstigator);
 	K2_Failed(Assignee, InInstigator);
 }
 

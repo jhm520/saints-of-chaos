@@ -8,6 +8,7 @@
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
+#include "ObjectiveSystem/Actors/Objective.h"
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 
@@ -98,6 +99,14 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted()
 		UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
 		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 	}
+
+	TArray<AObjective*> DestroyEnemyBuildingsObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, DestroyBuildingsObjectiveTags, DestroyEnemyBuildingsObjectives);
+
+	for (AObjective* Objective : DestroyEnemyBuildingsObjectives)
+	{
+		Objective->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnDestroyEnemyBuildingsObjectiveComplete);
+	}
 }
 #pragma endregion
 
@@ -145,6 +154,11 @@ void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim,
 	{
 		UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(ControllerInstigator, DestroyBuildingsObjectiveTags, true);
 	}
+}
+
+void ASOCGameMode_Elimination::OnDestroyEnemyBuildingsObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Destroy Enemy Buildings Objective Complete" + Assignee->GetName() + " won the game!");
 }
 
 #pragma endregion

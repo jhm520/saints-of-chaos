@@ -58,6 +58,8 @@ protected:
 
 	void OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator);
 
+	UFUNCTION()
+	void OnDestroyEnemyBuildingsObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 #pragma endregion
 
 #pragma region Actor Death
