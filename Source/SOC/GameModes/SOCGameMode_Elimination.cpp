@@ -108,6 +108,14 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted()
 		Objective->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnDestroyEnemyBuildingsObjectiveComplete);
 	}
 }
+
+/** Called when the map transitions to WaitingPostMatch */
+void ASOCGameMode_Elimination::HandleMatchHasEnded()
+{
+	Super::HandleMatchHasEnded();
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Match Has Ended");
+}
 #pragma endregion
 
 #pragma region Buildings
@@ -159,6 +167,8 @@ void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim,
 void ASOCGameMode_Elimination::OnDestroyEnemyBuildingsObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Destroy Enemy Buildings Objective Complete" + Assignee->GetName() + " won the game!");
+
+	SetMatchState(MatchState::WaitingPostMatch);
 }
 
 #pragma endregion

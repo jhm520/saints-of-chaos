@@ -39,7 +39,7 @@ void USOCGameplayAbility_AutoCast::EndAbility(const FGameplayAbilitySpecHandle H
 
 #pragma region Auto Cast
 void USOCGameplayAbility_AutoCast::CastAbility()
-{
+{	
 	UAbilitySystemComponent* LocalASC = GetAbilitySystemComponentFromActorInfo();
 
 	if (!LocalASC)
@@ -160,6 +160,22 @@ void USOCGameplayAbility_AutoCast::CancelAutoCast()
 	}
 	
 	AbilitySystemComponent->OnAnyGameplayEffectRemovedDelegate().RemoveAll(this);
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle_TryAgain);
+	
+	FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(AbilityToAutoCast);
+
+	if (!AbilitySpec)
+	{
+		return;
+	}
+	
+	if (!AbilitySpec->IsActive())
+	{
+		return;
+	}
+
+	AbilitySystemComponent->CancelAbility(AbilitySpec->Ability);
 }
 
 #pragma endregion 

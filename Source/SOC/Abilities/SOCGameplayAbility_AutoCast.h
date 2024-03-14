@@ -35,7 +35,7 @@ protected:
 
 	UFUNCTION()
 	void CastAbility();
-
+	
 	UFUNCTION()
 	void QueueAbility();
 

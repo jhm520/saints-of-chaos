@@ -514,6 +514,10 @@ void ASOCBuilding::OnGameModeMatchStateSetEvent(FName NewMatchState)
 	{
 		StartSpawningMobs();
 	}
+	else if (NewMatchState == MatchState::WaitingPostMatch)
+	{
+		StopSpawningMobs();
+	}
 }
 
 #pragma endregion

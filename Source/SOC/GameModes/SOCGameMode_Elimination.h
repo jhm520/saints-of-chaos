@@ -48,7 +48,9 @@ protected:
 	/** Called when the state transitions to InProgress */
 	virtual void HandleMatchHasStarted() override;
 	
-
+	/** Called when the map transitions to WaitingPostMatch */
+	virtual void HandleMatchHasEnded() override;
+	
 #pragma endregion
 
 #pragma region Buildings
