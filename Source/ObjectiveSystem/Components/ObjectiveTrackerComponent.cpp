@@ -224,16 +224,21 @@ void UObjectiveTrackerComponent::BeginObjective(AObjective* Objective)
 	Objective->Begin();
 }
 
-void UObjectiveTrackerComponent::ProgressObjective(AActor* Assignee, AActor* Instigator, const FGameplayTag& ObjectiveTag, bool bSuccess)
+void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
 {
 	for (AObjective* Objective : Objectives)
 	{
 		if (!Objective)
 		{
-			return;
+			continue;
 		}
 
-		if (!Objective->ObjectiveTags.HasTag(ObjectiveTag))
+		if (!Objective->IsAssigned(Assignee))
+		{
+			continue;
+		}
+
+		if (!Objective->ObjectiveTags.HasAny(ObjectiveTags))
 		{
 			continue;
 		}

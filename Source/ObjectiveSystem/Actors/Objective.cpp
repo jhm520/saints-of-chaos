@@ -4,6 +4,8 @@
 #include "Objective.h"
 
 #include "ObjectiveSystem/ObjectiveSubsystem.h"
+#include "ObjectiveSystem/Components/ObjectiveAssigneeComponent.h"
+#include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
 
 #pragma region Framework
 
@@ -124,6 +126,11 @@ void AObjective::Unassign(AActor* Assignee)
 	}
 	
 	ObjectiveStatusMap.Remove(Assignee);
+}
+
+bool AObjective::IsAssigned(const AActor* Assignee)
+{
+	return ObjectiveStatusMap.Find(Assignee) != nullptr;
 }
 
 void AObjective::Begin()

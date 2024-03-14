@@ -60,7 +60,7 @@ public:
 	static UObjectiveComponent* GetObjectiveComponentFromActor(const AActor* Actor);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void ProgressPawnObjective(APawn* Instigator, const FGameplayTag& ObjectiveTag, bool bSuccess = true);
+	void ProgressAssignedObjectives(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
 
 #pragma endregion
 	

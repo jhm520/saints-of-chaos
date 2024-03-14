@@ -90,6 +90,9 @@ public:
 #pragma region Objective System
 public:
 	virtual UObjectiveAssigneeComponent* GetObjectiveAssigneeComponent() const override;
+
+	virtual AActor* GetAssignee() override;
+
 #pragma endregion
 
 };

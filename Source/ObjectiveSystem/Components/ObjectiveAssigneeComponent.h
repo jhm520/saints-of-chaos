@@ -6,12 +6,11 @@
 #include "Components/ActorComponent.h"
 #include "ObjectiveAssigneeComponent.generated.h"
 
-class AObjective;
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class OBJECTIVESYSTEM_API UObjectiveAssigneeComponent : public UActorComponent
 {
 	GENERATED_BODY()
+#pragma region Framework
 
 public:	
 	// Sets default values for this component's properties
@@ -26,9 +25,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+#pragma endregion
 
 #pragma region Objective System
+protected:
 
+public:
 
 #pragma endregion
 	

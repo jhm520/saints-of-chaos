@@ -67,7 +67,7 @@ public:
 	//the objective tag is the tag of the objective that was completed
 	//bSuccess indicates whether the objective was completed successfully or if it was failed
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
-	void ProgressObjective(AActor* Assignee, AActor* Instigator, const FGameplayTag& ObjectiveTag, bool bSuccess = true);
+	void ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
 
 	UFUNCTION()
 	void OnObjectiveComplete();

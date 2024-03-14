@@ -4,6 +4,9 @@
 #include "ObjectiveAssigneeComponent.h"
 
 #include "ObjectiveSystem/ObjectiveSubsystem.h"
+#include "ObjectiveSystem/Actors/Objective.h"
+
+#pragma region Framework
 
 // Sets default values for this component's properties
 UObjectiveAssigneeComponent::UObjectiveAssigneeComponent()
@@ -35,4 +38,10 @@ void UObjectiveAssigneeComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 	// ...
 }
+
+#pragma endregion
+
+#pragma region Objective System
+
+#pragma endregion
 

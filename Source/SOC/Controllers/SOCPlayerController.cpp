@@ -194,4 +194,24 @@ UObjectiveAssigneeComponent* ASOCPlayerController::GetObjectiveAssigneeComponent
 	return AssigneeInterface->GetObjectiveAssigneeComponent();
 }
 
+AActor* ASOCPlayerController::GetAssignee()
+{
+	APlayerState* LocalPlayerState = GetPlayerState<APlayerState>();
+
+	if (!LocalPlayerState)
+	{
+		return nullptr;
+	}
+
+	IObjectiveAssigneeInterface* AssigneeInterface = Cast<IObjectiveAssigneeInterface>(LocalPlayerState);
+
+	if (!AssigneeInterface)
+	{
+		return nullptr;
+	}
+
+	return AssigneeInterface->GetAssignee();
+}
+
+
 #pragma endregion

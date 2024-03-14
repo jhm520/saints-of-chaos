@@ -2,6 +2,8 @@
 
 
 #include "ObjectiveSystemBlueprintLibrary.h"
+
+#include "ObjectiveSubsystem.h"
 #include "Components/ObjectiveTrackerComponent.h"
 #include "Interfaces/ObjectiveAssigneeInterface.h"
 #include "Interfaces/ObjectiveTrackerInterface.h"
@@ -68,8 +70,17 @@ void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(AActor* 
 	{
 		return;
 	}
-
 	
+	AActor* LocalAssignee = AssigneeInterface->GetAssignee();
+
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(Assignee->GetWorld());
+
+	if (!ObjectiveSubsystem)
+	{
+		return;
+	}
+
+	ObjectiveSubsystem->ProgressAssignedObjectives(LocalAssignee, ObjectiveTags, bSuccess);
 }
 
 	

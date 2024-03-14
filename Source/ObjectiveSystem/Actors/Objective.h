@@ -87,7 +87,6 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Objective System")
 	FOnObjectiveFailedDelegate OnObjectiveFailed;
 
-
 	UPROPERTY()
 	TMap<AActor*, FObjectiveStatus> ObjectiveStatusMap;
 
@@ -97,6 +96,8 @@ public:
 
 	//unassign an actor from this objective
 	void Unassign(AActor* Assignee);
+
+	bool IsAssigned(const AActor* Assignee);
 
 	//begin this objective, and indicate to the assignees that they should start working on completing the objective
 	void Begin();

@@ -1,5 +1,8 @@
 #include "ObjectiveSubsystem.h"
+
+#include "GameplayTagContainer.h"
 #include "Components/ObjectiveComponent.h"
+#include "Components/ObjectiveTrackerComponent.h"
 #include "Interfaces/ObjectiveInterface.h"
 
 UObjectiveSubsystem::UObjectiveSubsystem()
@@ -99,8 +102,16 @@ UObjectiveComponent* UObjectiveSubsystem::GetObjectiveComponentFromActor(const A
 	return nullptr;
 }
 
-void UObjectiveSubsystem::ProgressPawnObjective(APawn* Instigator, const FGameplayTag& ObjectiveTag, bool bSuccess)
+void UObjectiveSubsystem::ProgressAssignedObjectives(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
 {
-	
+	for (UObjectiveTrackerComponent* ObjectiveTrackerComponent : ObjectiveTrackerComponents)
+	{
+		if (!ObjectiveTrackerComponent)
+		{
+			continue;
+		}
+
+		ObjectiveTrackerComponent->ProgressObjectives(Assignee, Assignee, ObjectiveTags, bSuccess);
+	}
 }
 

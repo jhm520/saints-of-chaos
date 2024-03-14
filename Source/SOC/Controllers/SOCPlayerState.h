@@ -22,6 +22,10 @@ class SOC_API ASOCPlayerState : public APlayerState, public IObjectiveAssigneeIn
 #pragma region Objective System
 public:
 	virtual UObjectiveAssigneeComponent* GetObjectiveAssigneeComponent() const override {return ObjectiveAssigneeComponent;}
+
+	// Getter function for the ObjectiveAssigneeComponent variable
+	UFUNCTION()
+	virtual AActor* GetAssignee() override {return this;}
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	UObjectiveAssigneeComponent* ObjectiveAssigneeComponent;
