@@ -113,13 +113,6 @@ void ASOCPlayerController::DebugStartSpawningMobs()
 		{
 			continue;
 		}
-		
-		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(Building->MobSpawnAbilityClass);
-
-		if (!AbilitySpec)
-		{
-			return;
-		}
 
 		AbilitySystemComponent->TryActivateAbilityByClass(Building->MobSpawnAbilityClass, true);
 	}

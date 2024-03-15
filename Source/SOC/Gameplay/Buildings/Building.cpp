@@ -198,18 +198,8 @@ void ASOCBuilding::StopSpawningMobs()
 	{
 		return;
 	}
-
-	if (!AbilitySpec->Ability)
-	{
-		return;
-	}
-
-	if (!AbilitySpec->Ability->CanBeCanceled())
-	{
-		return;
-	}
 	
-	AbilitySpec->Ability->CancelAbility(AbilitySpec->Ability->GetCurrentAbilitySpecHandle(), AbilitySpec->Ability->GetCurrentActorInfo(), AbilitySpec->Ability->GetCurrentActivationInfo(), true);
+	AbilitySystemComponent->CancelAbility(AbilitySpec->Ability);
 }
 
 void ASOCBuilding::Timer_SpawnMob()
