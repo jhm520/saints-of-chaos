@@ -11,6 +11,7 @@
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "GameFramework/PlayerState.h"
+#include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 
 static TAutoConsoleVariable<bool> CVarEnableGameDebugCommands(
 	TEXT("Game.EnableDebugCommands"),
@@ -74,6 +75,127 @@ void ASOCPlayerController::Server_DebugSpawnMobs_Implementation()
 	}
 	
 	DebugSpawnMobs();
+}
+
+// Sets default values for this character's properties
+void ASOCPlayerController::DebugStartSpawningMobs()
+{
+	if (!HasAuthority())
+	{
+		Server_DebugStartSpawningMobs();
+		return;
+	}
+
+	UBuildingSubsystem* BuildingSubsystem = GetWorld()->GetSubsystem<UBuildingSubsystem>();
+
+	if (!BuildingSubsystem)
+	{
+		return;
+	}
+
+	for (ASOCBuilding* Building : BuildingSubsystem->GetAllBuildings())
+	{
+		if (!Building)
+		{
+			continue;
+		}
+
+		IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(Building);
+
+		if (!AbilitySystemInterface)
+		{
+			continue;
+		}
+
+		UAbilitySystemComponent* AbilitySystemComponent = AbilitySystemInterface->GetAbilitySystemComponent();
+
+		if (!AbilitySystemComponent)
+		{
+			continue;
+		}
+		
+		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(Building->MobSpawnAbilityClass);
+
+		if (!AbilitySpec)
+		{
+			return;
+		}
+
+		AbilitySystemComponent->TryActivateAbilityByClass(Building->MobSpawnAbilityClass, true);
+	}
+}
+
+void ASOCPlayerController::Server_DebugStartSpawningMobs_Implementation()
+{
+	if (!CVarEnableGameDebugCommands->GetBool())
+	{
+		return;
+	}
+	
+	DebugStartSpawningMobs();
+}
+
+// Sets default values for this character's properties
+void ASOCPlayerController::DebugStopSpawningMobs()
+{
+	if (!HasAuthority())
+	{
+		Server_DebugStopSpawningMobs();
+		return;
+	}
+
+	UBuildingSubsystem* BuildingSubsystem = GetWorld()->GetSubsystem<UBuildingSubsystem>();
+
+	if (!BuildingSubsystem)
+	{
+		return;
+	}
+
+	for (ASOCBuilding* Building : BuildingSubsystem->GetAllBuildings())
+	{
+		if (!Building)
+		{
+			continue;
+		}
+
+		IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(Building);
+
+		if (!AbilitySystemInterface)
+		{
+			continue;
+		}
+
+		UAbilitySystemComponent* AbilitySystemComponent = AbilitySystemInterface->GetAbilitySystemComponent();
+
+		if (!AbilitySystemComponent)
+		{
+			continue;
+		}
+		
+		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(Building->MobSpawnAbilityClass);
+
+		if (!AbilitySpec)
+		{
+			return;
+		}
+		
+		if (!AbilitySpec->Ability)
+		{
+			return;
+		}
+
+		AbilitySpec->Ability->CancelAbility(AbilitySpec->Handle, AbilitySystemComponent->AbilityActorInfo.Get(), AbilitySpec->ActivationInfo, true);
+	}
+}
+
+void ASOCPlayerController::Server_DebugStopSpawningMobs_Implementation()
+{
+	if (!CVarEnableGameDebugCommands->GetBool())
+	{
+		return;
+	}
+	
+	DebugStopSpawningMobs();
 }
 
 // Starts the game match
@@ -215,3 +337,4 @@ AActor* ASOCPlayerController::GetAssignee()
 
 
 #pragma endregion
+

@@ -45,6 +45,20 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Server_DebugSpawnMobs();
 
+	// Sets default values for this character's properties
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug Commands")
+	void DebugStartSpawningMobs();
+
+	UFUNCTION(Server, Reliable)
+	void Server_DebugStartSpawningMobs();
+
+	// Sets default values for this character's properties
+	UFUNCTION(Exec, BlueprintCallable, Category = "Debug Commands")
+	void DebugStopSpawningMobs();
+
+	UFUNCTION(Server, Reliable)
+	void Server_DebugStopSpawningMobs();
+
 	// Starts the game match
 	UFUNCTION(Exec, BlueprintCallable, Category = "Debug Commands")
 	void DebugStartMatch();
