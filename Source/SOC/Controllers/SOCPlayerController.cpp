@@ -172,19 +172,15 @@ void ASOCPlayerController::DebugStopSpawningMobs()
 			continue;
 		}
 		
+
 		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(Building->MobSpawnAbilityClass);
 
 		if (!AbilitySpec)
 		{
-			return;
-		}
-		
-		if (!AbilitySpec->Ability)
-		{
-			return;
+			continue;
 		}
 
-		AbilitySpec->Ability->CancelAbility(AbilitySpec->Handle, AbilitySystemComponent->AbilityActorInfo.Get(), AbilitySpec->ActivationInfo, true);
+		AbilitySystemComponent->CancelAbility(AbilitySpec->Ability);
 	}
 }
 

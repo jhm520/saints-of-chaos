@@ -10,7 +10,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "SOC/HUD/Widgets/BoxSelectWidget.h"
 
-UE_DISABLE_OPTIMIZATION
+
 AGameplayAbilityTargetActor_BoxSelect::AGameplayAbilityTargetActor_BoxSelect()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -223,6 +223,3 @@ void AGameplayAbilityTargetActor_BoxSelect::Tick(float DeltaSeconds)
 
 	GetBoxSelectEndPoint();
 }
-
-
-UE_ENABLE_OPTIMIZATION

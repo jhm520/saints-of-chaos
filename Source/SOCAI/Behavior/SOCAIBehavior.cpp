@@ -10,7 +10,7 @@
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 
 #pragma region Behavior
-UE_DISABLE_OPTIMIZATION
+
 bool USOCAIBehavior::CalculateCurrentAction(const AActor* InActor, FSOCAIAction& OutAction, FGameplayTagContainer& BehaviorPath, const FSOCAIAction& InParentAction) const
 {
 	//add the tag to the behavior path, letting the other nodes know that we've traversed this node
@@ -319,5 +319,3 @@ void USOCAIBehavior::OnExitedBehavior_AnimInstances(AActor* InBehaviorActor, con
 }
 
 #pragma endregion
-
-UE_ENABLE_OPTIMIZATION

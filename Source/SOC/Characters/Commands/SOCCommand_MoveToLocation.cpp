@@ -11,7 +11,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "NavMesh/RecastNavMesh.h"
-UE_DISABLE_OPTIMIZATION
 
 USOCCommand_MoveToLocation::USOCCommand_MoveToLocation()
 {
@@ -90,4 +89,3 @@ bool USOCCommand_MoveToLocation::CheckCommandFinished(const UCommandableComponen
 
 	return Super::CheckCommandFinished(Commandable, Command);
 }
-UE_ENABLE_OPTIMIZATION

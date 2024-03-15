@@ -102,8 +102,6 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 void ASOCBuilding::OnRep_Owner()
 {
 	Super::OnRep_Owner();
-	
-	InitAbilitySystem();
 
 	AController* ControllerDirector = Cast<AController>(GetOwner());
 
