@@ -45,9 +45,13 @@ struct OBJECTIVESYSTEM_API FObjectiveStatus
 {
 	GENERATED_BODY()
 
-	//a descriptor and ID tag for this objective
+	//the assignee that is working on completing the objective
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	AActor* Assignee = nullptr;
+
+	//whether the assignee has started working on this objective
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	bool bHasBegun = false;
 
 	//a descriptor and ID tag for this objective
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")

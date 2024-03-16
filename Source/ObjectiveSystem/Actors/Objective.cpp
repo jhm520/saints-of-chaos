@@ -19,9 +19,6 @@ AObjective::AObjective()
 
 	SuccessCount = 1;
 	FailureCount = 0;
-
-	bHasBegun = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -61,8 +58,27 @@ void AObjective::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
-	DOREPLIFETIME_CONDITION_NOTIFY(AObjective, bHasBegun, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(AObjective, ObjectiveStatuses, COND_None, REPNOTIFY_Always);
+}
+#pragma endregion
+
+#pragma region Objective Status Replication
+/*
+* Objective Status Events
+*/
+void AObjective::OnObjectiveStatusAdded(const FObjectiveReplicatorItem& Slot)
+{
+	
+}
+
+void AObjective::OnObjectiveStatusRemoved(const FObjectiveReplicatorItem& Slot)
+{
+	
+}
+
+void AObjective::OnObjectiveStatusChanged(const FObjectiveReplicatorItem& Slot)
+{
+	
 }
 #pragma endregion
 
@@ -130,29 +146,56 @@ void AObjective::Failed(AActor* Assignee, AActor* InInstigator)
 void AObjective::ReplicateObjectiveStatuses()
 {
 	ObjectiveStatusMap.GenerateValueArray(ObjectiveStatuses);
-	OnRep_ObjectiveStatuses();
+
+	OnRep_ObjectiveStatuses(ObjectiveStatuses);
 }
 
-void AObjective::OnRep_ObjectiveStatuses()
+void AObjective::OnRep_ObjectiveStatuses(const TArray<FObjectiveStatus>& PreviousObjectiveStatuses)
 {
-	OnObjectiveStatusesChanged();
+	OnObjectiveStatusesChanged(PreviousObjectiveStatuses);
 }
 
-void AObjective::OnObjectiveStatusesChanged()
+void AObjective::OnObjectiveStatusesChanged(const TArray<FObjectiveStatus>& PreviousObjectiveStatuses)
 {
-	K2_OnObjectiveStatusesChanged();
-}
+	TMap<AActor*, FObjectiveStatus> PreviousObjectiveStatusMap;
 
-void AObjective::OnRep_HasBegun()
-{
-	if (bHasBegun)
+	for (const FObjectiveStatus& Status : PreviousObjectiveStatuses)
 	{
-		K2_Begin();
+		PreviousObjectiveStatusMap.Add(Status.Assignee, Status);
 	}
+	
+	for (const FObjectiveStatus& Status : ObjectiveStatuses)
+	{
+		ObjectiveStatusMap.Add(Status.Assignee, Status);
+	}
+
+	TArray<AActor*> Assignees;
+
+	ObjectiveStatusMap.GenerateKeyArray(Assignees);
+
+	for (AActor* Assignee : Assignees)
+	{
+		FObjectiveStatus* PreviousStatus = PreviousObjectiveStatusMap.Find(Assignee);
+
+		FObjectiveStatus* CurrentStatus = ObjectiveStatusMap.Find(Assignee);
+
+		//if the current status has begun, and the previous status has not, then we have begun the objective
+		if (CurrentStatus && CurrentStatus->bHasBegun && (!PreviousStatus || !PreviousStatus->bHasBegun))
+		{
+			OnBegin(Assignee);
+		}
+	}
+	
+	K2_OnObjectiveStatusesChanged();
 }
 
 void AObjective::Assign(AActor* Assignee)
 {
+	if (!HasAuthority())
+	{
+		return;
+	}
+	
 	if (!Assignee)
 	{
 		return;
@@ -160,11 +203,23 @@ void AObjective::Assign(AActor* Assignee)
 	
 	ObjectiveStatusMap.Add(Assignee);
 
+	FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee);
+
+	if (FoundAssignee)
+	{
+		FoundAssignee->Assignee = Assignee;
+	}
+
 	ReplicateObjectiveStatuses();
 }
 
 void AObjective::Unassign(AActor* Assignee)
 {
+	if (!HasAuthority())
+	{
+		return;
+	}
+	
 	if (!Assignee)
 	{
 		return;
@@ -177,24 +232,66 @@ void AObjective::Unassign(AActor* Assignee)
 
 bool AObjective::IsAssigned(const AActor* Assignee)
 {
-	return ObjectiveStatuses.ContainsByPredicate([Assignee](const FObjectiveStatus& Status) { return Status.Assignee == Assignee; });
+	return ObjectiveStatusMap.Contains(Assignee);
 }
 
-void AObjective::Begin()
+TArray<AActor*> AObjective::GetAssignees() const
 {
-	if (bHasBegun)
+	TArray<AActor*> Assignees;
+	ObjectiveStatusMap.GenerateKeyArray(Assignees);
+
+	return Assignees;
+}
+
+void AObjective::Begin(const AActor* Assignee)
+{
+	if (!HasAuthority())
 	{
 		return;
 	}
 	
-	bHasBegun = true;
+	FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee);
 	
-	K2_Begin();
+	if (FoundAssignee)
+	{
+		FoundAssignee->bHasBegun = true;
+	}
+	
+	ReplicateObjectiveStatuses();
 }
 
-bool AObjective::HasBegun() const
+void AObjective::OnBegin(AActor* Assignee)
 {
-	return bHasBegun;
+	K2_Begin(Assignee);
+}
+
+//begin this objective, and indicate to the assignee that they should start working on completing the objective
+//begin this objective, and indicate to all assignees that they should start working on completing the objective
+void AObjective::BeginAllAssignees()
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees = GetAssignees();
+
+	for (AActor* Assignee : Assignees)
+	{
+		Begin(Assignee);
+	}
+
+	ReplicateObjectiveStatuses();
+}
+
+bool AObjective::HasBegun(const AActor* Assignee) const
+{
+	if (const FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee))
+	{
+		return FoundAssignee->bHasBegun;
+	}
+
+	return false;
 }
 
 

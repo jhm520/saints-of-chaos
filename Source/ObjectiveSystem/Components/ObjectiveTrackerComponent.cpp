@@ -221,7 +221,7 @@ void UObjectiveTrackerComponent::BeginObjective(AObjective* Objective)
 		return;
 	}
 
-	Objective->Begin();
+	Objective->BeginAllAssignees();
 }
 
 void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
@@ -244,7 +244,7 @@ void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* In
 			continue;
 		}
 
-		if (!Objective->HasBegun())
+		if (!Objective->HasBegun(Assignee))
 		{
 			continue;
 		}

@@ -21,6 +21,8 @@ class OBJECTIVESYSTEM_API AObjective : public AActor
 	GENERATED_BODY()
 
 	friend class UObjectiveTrackerComponent;
+	friend struct FObjectiveReplicator;
+	friend struct FObjectiveReplicatorItem;
 #pragma region Objective System
 
 public:	
@@ -37,6 +39,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+#pragma endregion
+
+#pragma region Objective Status Replication
+	/*
+* Objective Status Events
+*/
+	virtual void OnObjectiveStatusAdded(const FObjectiveReplicatorItem& Slot);
+	virtual void OnObjectiveStatusRemoved(const FObjectiveReplicatorItem& Slot);
+	virtual void OnObjectiveStatusChanged(const FObjectiveReplicatorItem& Slot);
 #pragma endregion
 
 #pragma region Objective System
@@ -74,8 +85,10 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Objective Failure"), Category = "Objective System")
 	void K2_Failed(AActor* Assignee, AActor* InInstigator);
 
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Begin Objective"), Category = "Objective System")
-	void K2_Begin();
+	void OnBegin(AActor* Assignee);
+	
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Begin Objective"), Category = "Objective System")
+	void K2_Begin(const AActor* Assignee);
 
 	UPROPERTY()
 	TMap<AActor*, FObjectiveStatus> ObjectiveStatusMap;
@@ -87,18 +100,12 @@ protected:
 	void ReplicateObjectiveStatuses();
 	
 	UFUNCTION()
-	void OnRep_ObjectiveStatuses();
+	void OnRep_ObjectiveStatuses(const TArray<FObjectiveStatus>& PreviousObjectiveStatuses);
 
-	void OnObjectiveStatusesChanged();
+	void OnObjectiveStatusesChanged(const TArray<FObjectiveStatus>& PreviousObjectiveStatuses);
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Objective Statuses Changed"), Category = "Objective System")
 	void K2_OnObjectiveStatusesChanged();
-	
-	UPROPERTY(ReplicatedUsing="OnRep_HasBegun", Transient, BlueprintReadOnly, Category = "Objective System")
-	bool bHasBegun;
-
-	UFUNCTION()
-	void OnRep_HasBegun();
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
 	bool bIsComplete;
@@ -115,10 +122,17 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
 	bool IsAssigned(const AActor* Assignee);
 
-	//begin this objective, and indicate to the assignees that they should start working on completing the objective
-	void Begin();
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
+	TArray<AActor*> GetAssignees() const;
 
-	bool HasBegun() const;
+	//begin this objective, and indicate to the assignee that they should start working on completing the objective
+	void Begin(const AActor* Assignee);
+	
+	//begin this objective, and indicate to all assignees that they should start working on completing the objective
+	void BeginAllAssignees();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
+	bool HasBegun(const AActor* Assignee) const;
 
 	bool IsComplete() const {return bIsComplete;}
 
