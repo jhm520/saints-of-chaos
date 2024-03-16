@@ -58,12 +58,12 @@ protected:
 
 	//The number of times this objective must be completed to be considered successfully completed
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
-	int32 SuccessCount;
+	int32 CompleteCount;
 	
 	//The number of times this objective must be failed for this objective to be considered failed
 	//A value of zero means that this objective cannot be failed, but the failure count will still increment
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
-	int32 FailureCount;
+	int32 FailedCount;
 
 	//increment the success count of this objective,
 	//the assignee is the actor that caused this objective to succeed (the team)
@@ -123,6 +123,9 @@ public:
 	bool IsAssigned(const AActor* Assignee);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
+	bool GetObjectiveStatus(const AActor* Assignee, FObjectiveStatus& OutObjectiveStatus) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
 	TArray<AActor*> GetAssignees() const;
 
 	//begin this objective, and indicate to the assignee that they should start working on completing the objective
@@ -138,9 +141,9 @@ public:
 
 	bool IsFailed() const {return bIsFailed;}
 
-	int32 GetSuccessCount() const {return SuccessCount;}
+	int32 GetSuccessCount() const {return CompleteCount;}
 
-	int32 GetFailureCount() const {return FailureCount;}
+	int32 GetFailureCount() const {return FailedCount;}
 
 	const FGameplayTagContainer& GetObjectiveTags() const {return ObjectiveTags;}
 

@@ -5,6 +5,8 @@
 
 #include "AbilitySystemComponent.h"
 #include "EngineUtils.h"
+#include "SOCPlayerState.h"
+#include "CoreUtility/CoreUtilityBlueprintLibrary.h"
 #include "CoreUtility/Clicking/Components/ClickingComponent.h"
 #include "GameFramework/GameMode.h"
 #include "SOC/Gameplay/Buildings/Building.h"
@@ -27,6 +29,24 @@ ASOCPlayerController::ASOCPlayerController()
 
 	ClickingComponent = CreateDefaultSubobject<UClickingComponent>(TEXT("ClickingComponent"));
 }
+
+void ASOCPlayerController::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (HasAuthority())
+	{
+		ASOCPlayerState* LocalPlayerState = GetPlayerState<ASOCPlayerState>();
+
+		if (LocalPlayerState)
+		{
+			int32 PlayerIndex = UCoreUtilityBlueprintLibrary::GetAuthPlayerControllerId(this, this);
+
+			LocalPlayerState->SetPlayerIndex(PlayerIndex);
+		}
+	}
+}
+
 
 #pragma endregion
 

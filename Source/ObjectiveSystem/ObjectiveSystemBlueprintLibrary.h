@@ -30,7 +30,11 @@ public:
 	static void ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
 	
 	//get any objectives that have the specified tags
-	UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContextObject"), BlueprintAuthorityOnly, Category = "Objectives")
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
 	static void GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives);
+
+	//get any objectives that have the specified tags
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
+	static bool GetAssignedObjectives(UObject* WorldContextObject, AActor* Assignee, TArray<AObjective*>& OutObjectives, FGameplayTagContainer ObjectiveTags = FGameplayTagContainer());
 	
 };

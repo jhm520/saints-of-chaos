@@ -4,6 +4,7 @@
 #include "ObjectiveSystemBlueprintLibrary.h"
 
 #include "ObjectiveSubsystem.h"
+#include "Actors/Objective.h"
 #include "Components/ObjectiveTrackerComponent.h"
 #include "Interfaces/ObjectiveAssigneeInterface.h"
 #include "Interfaces/ObjectiveTrackerInterface.h"
@@ -94,3 +95,36 @@ void UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(UObject* WorldContext
 
 	ObjectiveSubsystem->GetObjectivesByTags(ObjectiveTags, OutObjectives);
 }
+UE_DISABLE_OPTIMIZATION
+bool UObjectiveSystemBlueprintLibrary::GetAssignedObjectives(UObject* WorldContextObject, AActor* Assignee, TArray<AObjective*>& OutObjectives, FGameplayTagContainer ObjectiveTags)
+{
+	if (!WorldContextObject || !Assignee)
+	{
+		return false;
+	}
+	TArray<AObjective*> Objectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(WorldContextObject, ObjectiveTags, Objectives);
+
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		if (!ObjectiveTags.IsEmpty() && !Objective->GetObjectiveTags().HasAny(ObjectiveTags))
+		{
+			continue;
+		}
+
+		if (!Objective->IsAssigned(Assignee))
+		{
+			continue;
+		}
+
+		OutObjectives.Add(Objective);
+	}
+
+	return OutObjectives.Num() > 0;
+}
+UE_ENABLE_OPTIMIZATION

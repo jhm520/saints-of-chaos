@@ -53,6 +53,14 @@ struct OBJECTIVESYSTEM_API FObjectiveStatus
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	bool bHasBegun = false;
 
+	//whether the assignee has completed this objective
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	bool bIsComplete = false;
+
+	//whether the assignee has failed this objective
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	bool bIsFailed = false;
+
 	//a descriptor and ID tag for this objective
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	FGameplayTagContainer ObjectiveTags;

@@ -17,8 +17,8 @@ AObjective::AObjective()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
-	SuccessCount = 1;
-	FailureCount = 0;
+	CompleteCount = 1;
+	FailedCount = 0;
 }
 
 // Called when the game starts or when spawned
@@ -97,7 +97,7 @@ void AObjective::Success(AActor* Assignee, AActor* InInstigator)
 
 	OnObjectiveSuccess.Broadcast(this, Assignee, InInstigator);
 	
-	if (FoundAssignee->SuccessCount >= SuccessCount)
+	if (FoundAssignee->SuccessCount >= CompleteCount)
 	{
 		Complete(Assignee, InInstigator);
 	}
@@ -118,7 +118,7 @@ void AObjective::Failure(AActor* Assignee, AActor* InInstigator)
 
 	OnObjectiveFailure.Broadcast(this, Assignee, InInstigator);
 	
-	if (FoundAssignee->FailureCount >= FailureCount)
+	if (FoundAssignee->FailureCount >= FailedCount)
 	{
 		Failed(Assignee, InInstigator);
 	}
@@ -130,6 +130,15 @@ void AObjective::Complete(AActor* Assignee, AActor* InInstigator)
 {
 	bIsComplete = true;
 	bIsFailed = false;
+
+	FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee);
+
+	if (FoundAssignee)
+	{
+		FoundAssignee->bIsComplete = true;
+		FoundAssignee->bIsFailed = false;
+	}
+	
 	OnObjectiveComplete.Broadcast(this, Assignee, InInstigator);
 	K2_Complete(Assignee, InInstigator);
 }
@@ -138,6 +147,15 @@ void AObjective::Failed(AActor* Assignee, AActor* InInstigator)
 {
 	bIsComplete = false;
 	bIsFailed = true;
+
+	FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee);
+
+	if (FoundAssignee)
+	{
+		FoundAssignee->bIsComplete = false;
+		FoundAssignee->bIsFailed = true;
+	}
+	
 	OnObjectiveFailed.Broadcast(this, Assignee, InInstigator);
 	K2_Failed(Assignee, InInstigator);
 }
@@ -233,6 +251,19 @@ void AObjective::Unassign(AActor* Assignee)
 bool AObjective::IsAssigned(const AActor* Assignee)
 {
 	return ObjectiveStatusMap.Contains(Assignee);
+}
+
+bool AObjective::GetObjectiveStatus(const AActor* Assignee, FObjectiveStatus& OutObjectiveStatus) const
+{
+	const FObjectiveStatus* StatusPtr = ObjectiveStatusMap.Find(Assignee);
+
+	if (StatusPtr)
+	{
+		OutObjectiveStatus = *StatusPtr;
+		return true;
+	}
+
+	return false;
 }
 
 TArray<AActor*> AObjective::GetAssignees() const

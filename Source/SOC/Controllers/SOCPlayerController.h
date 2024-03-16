@@ -26,6 +26,8 @@ class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeI
 public:
 	// Sets default values for this character's properties
 	ASOCPlayerController();
+
+	virtual void PostInitializeComponents() override;
 #pragma endregion
 
 #pragma region Auto Ownership
