@@ -9,6 +9,8 @@
 ASOCPlayerState::ASOCPlayerState()
 {
 	ObjectiveAssigneeComponent = CreateDefaultSubobject<UObjectiveAssigneeComponent>(TEXT("ObjectiveAssigneeComponent"));
+
+	ObjectiveTrackerComponent = CreateDefaultSubobject<UObjectiveTrackerComponent>(TEXT("ObjectiveTrackerComponent"));
 }
 
 

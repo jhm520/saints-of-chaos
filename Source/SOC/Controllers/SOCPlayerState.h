@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
+#include "ObjectiveSystem/Interfaces/ObjectiveTrackerInterface.h"
 #include "SOCPlayerState.generated.h"
 
 class UObjectiveTrackerComponent;
@@ -12,7 +13,7 @@ class UObjectiveTrackerComponent;
  * 
  */
 UCLASS()
-class SOC_API ASOCPlayerState : public APlayerState, public IObjectiveAssigneeInterface
+class SOC_API ASOCPlayerState : public APlayerState, public IObjectiveAssigneeInterface, public IObjectiveTrackerInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -29,5 +30,11 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	UObjectiveAssigneeComponent* ObjectiveAssigneeComponent;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	UObjectiveTrackerComponent* ObjectiveTrackerComponent;
+	
+	virtual UObjectiveTrackerComponent* GetObjectiveTrackerComponent() const override {return ObjectiveTrackerComponent;}
+
 #pragma endregion
 };

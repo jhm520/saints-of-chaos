@@ -29,6 +29,9 @@ protected:
 	TArray<UObjectiveInfoCollection*> PreMatchObjectiveCollections;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	TArray<UObjectiveInfoCollection*> PreMatchPlayerObjectiveCollections;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	TArray<UObjectiveInfoCollection*> MatchObjectiveCollections;
 
 #pragma endregion 
@@ -52,7 +55,29 @@ protected:
 	virtual void HandleMatchHasEnded() override;
 	
 #pragma endregion
+	
+#pragma region Ready Check
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	FGameplayTagContainer ReadyCheckObjectiveTags;
+	
+	UFUNCTION()
+	void OnReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+
+	UFUNCTION()
+	void OnReadyCheckObjectiveFailure(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+
+	UPROPERTY()
+	FTimerHandle TimerHandle_StartMatch;
+	
+	UFUNCTION()
+	void Timer_StartMatch();
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	float StartMatchTimerDuration;
+	
+#pragma endregion
+	
 #pragma region Buildings
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")

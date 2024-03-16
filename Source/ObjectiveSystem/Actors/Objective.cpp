@@ -98,12 +98,16 @@ void AObjective::Failure(AActor* Assignee, AActor* InInstigator)
 
 void AObjective::Complete(AActor* Assignee, AActor* InInstigator)
 {
+	bIsComplete = true;
+	bIsFailed = false;
 	OnObjectiveComplete.Broadcast(this, Assignee, InInstigator);
 	K2_Complete(Assignee, InInstigator);
 }
 	
 void AObjective::Failed(AActor* Assignee, AActor* InInstigator)
 {
+	bIsComplete = false;
+	bIsFailed = true;
 	OnObjectiveFailed.Broadcast(this, Assignee, InInstigator);
 	K2_Failed(Assignee, InInstigator);
 }
@@ -144,5 +148,11 @@ void AObjective::Begin()
 	
 	K2_Begin();
 }
+
+bool AObjective::HasBegun() const
+{
+	return bHasBegun;
+}
+
 
 #pragma endregion

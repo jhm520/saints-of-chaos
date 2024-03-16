@@ -226,6 +226,12 @@ void UObjectiveTrackerComponent::BeginObjective(AObjective* Objective)
 
 void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
 {
+	if (!GetOwner()->HasAuthority())
+	{
+		Server_ProgressObjectives(Assignee, Instigator, ObjectiveTags, bSuccess);
+		return;
+	}
+	
 	for (AObjective* Objective : Objectives)
 	{
 		if (!Objective)
@@ -238,7 +244,12 @@ void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* In
 			continue;
 		}
 
-		if (!Objective->ObjectiveTags.HasAny(ObjectiveTags))
+		if (!Objective->HasBegun())
+		{
+			continue;
+		}
+
+		if (!Objective->GetObjectiveTags().HasAny(ObjectiveTags))
 		{
 			continue;
 		}
@@ -253,6 +264,12 @@ void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* In
 		}
 	}
 }
+
+void UObjectiveTrackerComponent::Server_ProgressObjectives_Implementation(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
+{
+	ProgressObjectives(Assignee, Instigator, ObjectiveTags, bSuccess);
+}
+
 
 void UObjectiveTrackerComponent::OnObjectiveComplete()
 {

@@ -69,6 +69,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
 	void ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
 
+	UFUNCTION(Server, Reliable)
+	void Server_ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
+
 	UFUNCTION()
 	void OnObjectiveComplete();
 protected:

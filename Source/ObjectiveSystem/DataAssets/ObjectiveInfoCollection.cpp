@@ -24,7 +24,7 @@ const FGameplayTagContainer UObjectiveInfoCollection::GetAllObjectiveTags() cons
 			continue;
 		}
 
-		AllTags.AppendTags(Objective->ObjectiveTags);
+		AllTags.AppendTags(Objective->GetObjectiveTags());
 	}
 
 	return AllTags;

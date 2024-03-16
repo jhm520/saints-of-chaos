@@ -19,6 +19,8 @@ UCLASS()
 class OBJECTIVESYSTEM_API AObjective : public AActor
 {
 	GENERATED_BODY()
+
+	friend class UObjectiveTrackerComponent;
 #pragma region Objective System
 
 public:	
@@ -38,7 +40,7 @@ public:
 #pragma endregion
 
 #pragma region Objective System
-
+protected:
 	//a descriptor and ID tag for this objective
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	FGameplayTagContainer ObjectiveTags;
@@ -48,7 +50,7 @@ public:
 	int32 SuccessCount;
 	
 	//The number of times this objective must be failed for this objective to be considered failed
-	//A value of zero means that this objective cannot be failed
+	//A value of zero means that this objective cannot be failed, but the failure count will still increment
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	int32 FailureCount;
 
@@ -75,21 +77,17 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Begin Objective"), Category = "Objective System")
 	void K2_Begin();
 
-	UPROPERTY(BlueprintAssignable, Category = "Objective System")
-	FOnObjectiveSuccessDelegate OnObjectiveSuccess;
-	
-	UPROPERTY(BlueprintAssignable, Category = "Objective System")
-	FOnObjectiveFailureDelegate OnObjectiveFailure;
-
-	UPROPERTY(BlueprintAssignable, Category = "Objective System")
-	FOnObjectiveCompleteDelegate OnObjectiveComplete;
-
-	UPROPERTY(BlueprintAssignable, Category = "Objective System")
-	FOnObjectiveFailedDelegate OnObjectiveFailed;
-
 	UPROPERTY()
 	TMap<AActor*, FObjectiveStatus> ObjectiveStatusMap;
+	
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
+	bool bHasBegun;
 
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
+	bool bIsComplete;
+
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
+	bool bIsFailed;
 public:
 	//assign an actor to this objective
 	void Assign(AActor* Assignee);
@@ -102,8 +100,29 @@ public:
 	//begin this objective, and indicate to the assignees that they should start working on completing the objective
 	void Begin();
 
-	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
-	bool bHasBegun;
+	bool HasBegun() const;
+
+	bool IsComplete() const {return bIsComplete;}
+
+	bool IsFailed() const {return bIsFailed;}
+
+	int32 GetSuccessCount() const {return SuccessCount;}
+
+	int32 GetFailureCount() const {return FailureCount;}
+
+	const FGameplayTagContainer& GetObjectiveTags() const {return ObjectiveTags;}
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveSuccessDelegate OnObjectiveSuccess;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveFailureDelegate OnObjectiveFailure;
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveCompleteDelegate OnObjectiveComplete;
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveFailedDelegate OnObjectiveFailed;
 
 #pragma endregion
 

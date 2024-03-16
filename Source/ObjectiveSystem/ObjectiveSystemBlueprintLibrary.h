@@ -27,7 +27,7 @@ public:
 	
 	//progress any objectives assigned to the assignee actor that have the specified tags
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objectives")
-	static void ProgressObjectivesForActorByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
+	static void ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
 	
 	//get any objectives that have the specified tags
 	UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContextObject"), BlueprintAuthorityOnly, Category = "Objectives")

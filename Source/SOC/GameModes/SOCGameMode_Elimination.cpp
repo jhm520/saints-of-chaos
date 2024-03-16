@@ -44,12 +44,37 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 
 	if (GetMatchState() == MatchState::WaitingToStart)
 	{
+		//set up and begin any pre-match objectives
 		for (UObjectiveInfoCollection* Collection : PreMatchObjectiveCollections)
 		{
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
 			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 		}
 
+		for (UObjectiveInfoCollection* Collection : PreMatchPlayerObjectiveCollections)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(PlayerState, Collection, Assignees);
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(PlayerState, Collection);
+		}
+
+		//bind the events for the ready check objectives
+		TArray<AObjective*> ReadyCheckObjectives;
+		UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, ReadyCheckObjectiveTags, ReadyCheckObjectives);
+
+		for (AObjective* Objective : ReadyCheckObjectives)
+		{
+			if (!Objective->OnObjectiveComplete.IsAlreadyBound(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete))
+			{
+				Objective->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete);
+			}
+
+			if (!Objective->OnObjectiveFailure.IsAlreadyBound(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveFailure))
+			{
+				Objective->OnObjectiveFailure.AddDynamic(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveFailure);
+			}
+		}
+
+		//set up the objectives for the match
 		for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
 		{
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
@@ -118,6 +143,38 @@ void ASOCGameMode_Elimination::HandleMatchHasEnded()
 }
 #pragma endregion
 
+#pragma region Ready Check
+
+void ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
+{
+	TArray<AObjective*> ReadyCheckObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, ReadyCheckObjectiveTags, ReadyCheckObjectives);
+
+	//make sure all the ready check objectives are complete, which indicates that all players are ready
+	//if one is not ready, we can't start the match yet
+	for (AObjective* ReadyCheckObjective : ReadyCheckObjectives)
+	{
+		if (!ReadyCheckObjective->IsComplete())
+		{
+			return;
+		}
+	}
+	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle_StartMatch, this, &ASOCGameMode_Elimination::Timer_StartMatch, StartMatchTimerDuration, false);
+}
+
+void ASOCGameMode_Elimination::OnReadyCheckObjectiveFailure(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
+{
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle_StartMatch);
+}
+
+void ASOCGameMode_Elimination::Timer_StartMatch()
+{
+	SetMatchState(MatchState::InProgress);
+}
+
+#pragma endregion
+
 #pragma region Buildings
 
 void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator)
@@ -160,7 +217,7 @@ void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim,
 
 	if (!bRemainingEnemyBuildings)
 	{
-		UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(ControllerInstigator, DestroyBuildingsObjectiveTags, true);
+		UObjectiveSystemBlueprintLibrary::ProgressObjectivesForAssigneeByTags(ControllerInstigator, DestroyBuildingsObjectiveTags, true);
 	}
 }
 

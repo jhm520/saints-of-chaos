@@ -57,7 +57,7 @@ void UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(AActo
 	ObjectiveTrackerComponent->BeginObjectivesByCollection(ObjectiveCollection);
 }
 
-void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForActorByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
+void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
 {
 	if (!Assignee)
 	{
