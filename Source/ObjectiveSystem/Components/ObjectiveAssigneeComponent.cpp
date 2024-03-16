@@ -43,5 +43,30 @@ void UObjectiveAssigneeComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 #pragma region Objective System
 
+void UObjectiveAssigneeComponent::ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
+{
+	if (!GetOwner()->HasAuthority())
+	{
+		Server_ProgressObjectivesForAssigneeByTags(Assignee, ObjectiveTags, bSuccess);
+		return;
+	}
+	
+	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(Assignee->GetWorld());
+
+	if (!ObjectiveSubsystem)
+	{
+		return;
+	}
+
+	ObjectiveSubsystem->ProgressAssignedObjectives(Assignee, ObjectiveTags, bSuccess);
+}
+
+void UObjectiveAssigneeComponent::Server_ProgressObjectivesForAssigneeByTags_Implementation(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
+{
+	ProgressObjectivesForAssigneeByTags(Assignee, ObjectiveTags, bSuccess);
+}
+
+
+
 #pragma endregion
 

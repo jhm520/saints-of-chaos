@@ -226,9 +226,9 @@ void UObjectiveTrackerComponent::BeginObjective(AObjective* Objective)
 
 void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
 {
+	//must be authority to progress objectives
 	if (!GetOwner()->HasAuthority())
 	{
-		Server_ProgressObjectives(Assignee, Instigator, ObjectiveTags, bSuccess);
 		return;
 	}
 	
@@ -264,12 +264,6 @@ void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* In
 		}
 	}
 }
-
-void UObjectiveTrackerComponent::Server_ProgressObjectives_Implementation(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess)
-{
-	ProgressObjectives(Assignee, Instigator, ObjectiveTags, bSuccess);
-}
-
 
 void UObjectiveTrackerComponent::OnObjectiveComplete()
 {

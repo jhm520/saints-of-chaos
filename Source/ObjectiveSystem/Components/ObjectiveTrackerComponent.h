@@ -68,10 +68,7 @@ public:
 	//bSuccess indicates whether the objective was completed successfully or if it was failed
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = "Objective System")
 	void ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
-
-	UFUNCTION(Server, Reliable)
-	void Server_ProgressObjectives(AActor* Assignee, AActor* Instigator, const FGameplayTagContainer& ObjectiveTags, bool bSuccess = true);
-
+	
 	UFUNCTION()
 	void OnObjectiveComplete();
 protected:

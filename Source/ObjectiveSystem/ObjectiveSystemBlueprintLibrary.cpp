@@ -5,6 +5,7 @@
 
 #include "ObjectiveSubsystem.h"
 #include "Actors/Objective.h"
+#include "Components/ObjectiveAssigneeComponent.h"
 #include "Components/ObjectiveTrackerComponent.h"
 #include "Interfaces/ObjectiveAssigneeInterface.h"
 #include "Interfaces/ObjectiveTrackerInterface.h"
@@ -74,14 +75,14 @@ void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForAssigneeByTags(AActo
 	
 	AActor* LocalAssignee = AssigneeInterface->GetAssignee();
 
-	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(Assignee->GetWorld());
+	UObjectiveAssigneeComponent* AssigneeComponent = AssigneeInterface->GetObjectiveAssigneeComponent();
 
-	if (!ObjectiveSubsystem)
+	if (!AssigneeComponent)
 	{
 		return;
 	}
 
-	ObjectiveSubsystem->ProgressAssignedObjectives(LocalAssignee, ObjectiveTags, bSuccess);
+	AssigneeComponent->ProgressObjectivesForAssigneeByTags(LocalAssignee, ObjectiveTags, bSuccess);
 }
 
 void UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives)

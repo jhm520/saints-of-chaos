@@ -31,6 +31,10 @@ public:
 protected:
 
 public:
+	void ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
+
+	UFUNCTION(Server, Reliable, Category = "Objective System")
+	void Server_ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
 
 #pragma endregion
 	
