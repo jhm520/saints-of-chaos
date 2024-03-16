@@ -3,6 +3,7 @@
 
 #include "Objective.h"
 
+#include "Net/UnrealNetwork.h"
 #include "ObjectiveSystem/ObjectiveSubsystem.h"
 #include "ObjectiveSystem/Components/ObjectiveAssigneeComponent.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
@@ -14,6 +15,7 @@ AObjective::AObjective()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 
 	SuccessCount = 1;
 	FailureCount = 0;
@@ -54,6 +56,14 @@ void AObjective::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void AObjective::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(AObjective, bHasBegun, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(AObjective, ObjectiveStatuses, COND_None, REPNOTIFY_Always);
+}
 #pragma endregion
 
 #pragma region Objective System
@@ -75,6 +85,8 @@ void AObjective::Success(AActor* Assignee, AActor* InInstigator)
 	{
 		Complete(Assignee, InInstigator);
 	}
+
+	ReplicateObjectiveStatuses();
 }
 	
 void AObjective::Failure(AActor* Assignee, AActor* InInstigator)
@@ -94,6 +106,8 @@ void AObjective::Failure(AActor* Assignee, AActor* InInstigator)
 	{
 		Failed(Assignee, InInstigator);
 	}
+	
+	ReplicateObjectiveStatuses();
 }
 
 void AObjective::Complete(AActor* Assignee, AActor* InInstigator)
@@ -112,6 +126,31 @@ void AObjective::Failed(AActor* Assignee, AActor* InInstigator)
 	K2_Failed(Assignee, InInstigator);
 }
 
+
+void AObjective::ReplicateObjectiveStatuses()
+{
+	ObjectiveStatusMap.GenerateValueArray(ObjectiveStatuses);
+	OnRep_ObjectiveStatuses();
+}
+
+void AObjective::OnRep_ObjectiveStatuses()
+{
+	OnObjectiveStatusesChanged();
+}
+
+void AObjective::OnObjectiveStatusesChanged()
+{
+	K2_OnObjectiveStatusesChanged();
+}
+
+void AObjective::OnRep_HasBegun()
+{
+	if (bHasBegun)
+	{
+		K2_Begin();
+	}
+}
+
 void AObjective::Assign(AActor* Assignee)
 {
 	if (!Assignee)
@@ -120,6 +159,8 @@ void AObjective::Assign(AActor* Assignee)
 	}
 	
 	ObjectiveStatusMap.Add(Assignee);
+
+	ReplicateObjectiveStatuses();
 }
 
 void AObjective::Unassign(AActor* Assignee)
@@ -130,11 +171,13 @@ void AObjective::Unassign(AActor* Assignee)
 	}
 	
 	ObjectiveStatusMap.Remove(Assignee);
+
+	ReplicateObjectiveStatuses();
 }
 
 bool AObjective::IsAssigned(const AActor* Assignee)
 {
-	return ObjectiveStatusMap.Find(Assignee) != nullptr;
+	return ObjectiveStatuses.ContainsByPredicate([Assignee](const FObjectiveStatus& Status) { return Status.Assignee == Assignee; });
 }
 
 void AObjective::Begin()

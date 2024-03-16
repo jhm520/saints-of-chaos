@@ -47,6 +47,10 @@ struct OBJECTIVESYSTEM_API FObjectiveStatus
 
 	//a descriptor and ID tag for this objective
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
+	AActor* Assignee = nullptr;
+
+	//a descriptor and ID tag for this objective
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	FGameplayTagContainer ObjectiveTags;
 
 	//the class of the objective

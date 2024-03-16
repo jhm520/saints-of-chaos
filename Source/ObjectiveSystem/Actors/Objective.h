@@ -79,9 +79,26 @@ protected:
 
 	UPROPERTY()
 	TMap<AActor*, FObjectiveStatus> ObjectiveStatusMap;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing="OnRep_ObjectiveStatuses", Category = "Objective System")
+	TArray<FObjectiveStatus> ObjectiveStatuses;
+
+	UFUNCTION()
+	void ReplicateObjectiveStatuses();
 	
-	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
+	UFUNCTION()
+	void OnRep_ObjectiveStatuses();
+
+	void OnObjectiveStatusesChanged();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Objective Statuses Changed"), Category = "Objective System")
+	void K2_OnObjectiveStatusesChanged();
+	
+	UPROPERTY(ReplicatedUsing="OnRep_HasBegun", Transient, BlueprintReadOnly, Category = "Objective System")
 	bool bHasBegun;
+
+	UFUNCTION()
+	void OnRep_HasBegun();
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Objective System")
 	bool bIsComplete;
@@ -95,6 +112,7 @@ public:
 	//unassign an actor from this objective
 	void Unassign(AActor* Assignee);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
 	bool IsAssigned(const AActor* Assignee);
 
 	//begin this objective, and indicate to the assignees that they should start working on completing the objective
