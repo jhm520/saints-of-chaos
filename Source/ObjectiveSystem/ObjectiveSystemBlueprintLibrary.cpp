@@ -96,7 +96,7 @@ void UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(UObject* WorldContext
 
 	ObjectiveSubsystem->GetObjectivesByTags(ObjectiveTags, OutObjectives);
 }
-UE_DISABLE_OPTIMIZATION
+
 bool UObjectiveSystemBlueprintLibrary::GetAssignedObjectives(UObject* WorldContextObject, AActor* Assignee, TArray<AObjective*>& OutObjectives, FGameplayTagContainer ObjectiveTags)
 {
 	if (!WorldContextObject || !Assignee)
@@ -128,4 +128,35 @@ bool UObjectiveSystemBlueprintLibrary::GetAssignedObjectives(UObject* WorldConte
 
 	return OutObjectives.Num() > 0;
 }
-UE_ENABLE_OPTIMIZATION
+
+bool UObjectiveSystemBlueprintLibrary::GetObjectiveAssigneesByTags(UObject* WorldContextObject, TArray<AActor*>& OutAssignees, FGameplayTagContainer ObjectiveTags)
+{
+	if (!WorldContextObject)
+	{
+		return false;
+	}
+	TArray<AObjective*> Objectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(WorldContextObject, ObjectiveTags, Objectives);
+
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		TArray<AActor*> Assignees = Objective->GetAssignees();
+
+		for (AActor* Assignee : Assignees)
+		{
+			if (!Assignee)
+			{
+				continue;
+			}
+
+			OutAssignees.AddUnique(Assignee);
+		}
+	}
+
+	return OutAssignees.Num() > 0;
+}

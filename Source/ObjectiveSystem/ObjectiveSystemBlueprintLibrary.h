@@ -36,5 +36,9 @@ public:
 	//get any objectives that have the specified tags
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
 	static bool GetAssignedObjectives(UObject* WorldContextObject, AActor* Assignee, TArray<AObjective*>& OutObjectives, FGameplayTagContainer ObjectiveTags = FGameplayTagContainer());
+
+	//get any assignees of objectives that have the specified tags
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
+	static bool GetObjectiveAssigneesByTags(UObject* WorldContextObject, TArray<AActor*>& OutAssignees, FGameplayTagContainer ObjectiveTags = FGameplayTagContainer());
 	
 };
