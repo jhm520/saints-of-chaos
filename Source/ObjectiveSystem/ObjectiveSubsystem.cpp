@@ -32,13 +32,18 @@ void UObjectiveSubsystem::RegisterObjective(AObjective* Objective)
 
 	if (Objective)
 	{
-		Objective->OnObjectiveStatusesChanged(Objective->ObjectiveStatuses);
+		Objective->OnRegistered();
 	}
 }
 
 void UObjectiveSubsystem::UnregisterObjective(AObjective* Objective)
 {
 	Objectives.Remove(Objective);
+
+	if (Objective)
+	{
+		Objective->OnUnregistered();
+	}
 }
 
 void UObjectiveSubsystem::RegisterObjectiveTrackerComponent(UObjectiveTrackerComponent* ObjectiveTrackerComponent)

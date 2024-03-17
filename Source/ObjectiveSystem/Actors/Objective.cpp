@@ -85,6 +85,17 @@ void AObjective::OnObjectiveStatusChanged(const FObjectiveReplicatorItem& Slot)
 
 #pragma region Objective System
 
+void AObjective::OnRegistered()
+{
+	OnObjectiveStatusesChanged(ObjectiveStatuses);
+}
+
+void AObjective::OnUnregistered()
+{
+	
+}
+
+
 void AObjective::Success(AActor* Assignee, AActor* InInstigator)
 {
 	FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee);

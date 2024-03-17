@@ -53,6 +53,11 @@ public:
 
 #pragma region Objective System
 protected:
+
+	virtual void OnRegistered();
+
+	virtual void OnUnregistered();
+
 	//a descriptor and ID tag for this objective
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Objective System")
 	FGameplayTagContainer ObjectiveTags;
