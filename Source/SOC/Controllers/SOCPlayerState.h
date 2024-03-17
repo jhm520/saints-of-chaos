@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CoreUtility/Sorting/Interface/SortableInterface.h"
 #include "GameFramework/PlayerState.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveTrackerInterface.h"
@@ -16,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerIndexChangedDelegate, APla
  * 
  */
 UCLASS()
-class SOC_API ASOCPlayerState : public APlayerState, public IObjectiveAssigneeInterface, public IObjectiveTrackerInterface
+class SOC_API ASOCPlayerState : public APlayerState, public IObjectiveAssigneeInterface, public IObjectiveTrackerInterface, public ISortableInterface
 {
 	GENERATED_BODY()
 
@@ -61,4 +62,14 @@ protected:
 	virtual UObjectiveTrackerComponent* GetObjectiveTrackerComponent() const override {return ObjectiveTrackerComponent;}
 
 #pragma endregion
+
+#pragma region Sortable
+
+	virtual bool Compare(const AActor* OtherActor, FGameplayTag SortTag, bool bDescending) const override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sorting")
+	FGameplayTag PlayerIndexSortTag;
+
+#pragma endregion
+
 };

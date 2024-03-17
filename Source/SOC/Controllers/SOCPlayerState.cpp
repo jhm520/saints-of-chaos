@@ -50,3 +50,31 @@ void ASOCPlayerState::OnRep_PlayerIndex()
 
 #pragma endregion
 
+#pragma region Sortable
+
+bool ASOCPlayerState::Compare(const AActor* OtherActor, FGameplayTag SortTag, bool bDescending) const
+{
+	const ASOCPlayerState* OtherPlayerState = Cast<ASOCPlayerState>(OtherActor);
+
+	if (!OtherPlayerState)
+	{
+		return false;
+	}
+	
+	if (SortTag == PlayerIndexSortTag)
+	{
+		if (bDescending)
+		{
+			return PlayerIndex > OtherPlayerState->PlayerIndex;
+		}
+		else
+		{
+			return PlayerIndex < OtherPlayerState->PlayerIndex;
+		}
+	}
+
+	return false;
+}
+
+#pragma endregion
+
