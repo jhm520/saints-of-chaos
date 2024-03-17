@@ -31,7 +31,7 @@ public:
 	
 	//get any objectives that have the specified tags
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
-	static void GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives);
+	static void GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer ObjectiveTags, TArray<AObjective*>& OutObjectives);
 
 	//get any objectives that have the specified tags
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")

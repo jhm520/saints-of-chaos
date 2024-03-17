@@ -85,7 +85,7 @@ void UObjectiveSystemBlueprintLibrary::ProgressObjectivesForAssigneeByTags(AActo
 	AssigneeComponent->ProgressObjectivesForAssigneeByTags(LocalAssignee, ObjectiveTags, bSuccess);
 }
 
-void UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer& ObjectiveTags, TArray<AObjective*>& OutObjectives)
+void UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(UObject* WorldContextObject, const FGameplayTagContainer ObjectiveTags, TArray<AObjective*>& OutObjectives)
 {
 	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(WorldContextObject->GetWorld());
 

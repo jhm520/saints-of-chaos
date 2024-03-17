@@ -28,4 +28,18 @@ public:
 
 #pragma endregion
 	
+#pragma region Ready Check
+protected:
+	UPROPERTY(Transient, BlueprintReadWrite, Category = "Box Select")
+	UReadyCheckWidget* ReadyCheckWidget;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Box Select")
+	void SetReadyCheckWidget(UReadyCheckWidget* NewReadyCheckWidget) {ReadyCheckWidget = NewReadyCheckWidget;}
+
+	UFUNCTION(BlueprintCallable, Category = "Box Select")
+	UReadyCheckWidget* GetReadyCheckWidget() const {return ReadyCheckWidget;}
+
+#pragma endregion
+	
 };
