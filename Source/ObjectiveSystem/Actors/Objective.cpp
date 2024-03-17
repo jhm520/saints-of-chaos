@@ -269,7 +269,10 @@ bool AObjective::GetObjectiveStatus(const AActor* Assignee, FObjectiveStatus& Ou
 TArray<AActor*> AObjective::GetAssignees() const
 {
 	TArray<AActor*> Assignees;
-	ObjectiveStatusMap.GenerateKeyArray(Assignees);
+	for (const FObjectiveStatus& Status : ObjectiveStatuses)
+	{
+		Assignees.AddUnique(Status.Assignee);
+	}
 
 	return Assignees;
 }
