@@ -41,4 +41,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
 	static bool GetObjectiveAssigneesByTags(UObject* WorldContextObject, TArray<AActor*>& OutAssignees, FGameplayTagContainer ObjectiveTags = FGameplayTagContainer());
 	
+	//returns true if all assignees have completed the objectives with the specified tags
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(WorldContext="WorldContextObject"), Category = "Objectives")
+	static bool HaveAllAssigneesCompletedObjectivesByTags(UObject* WorldContextObject, TArray<AActor*>& OutAssignees, FGameplayTagContainer ObjectiveTags = FGameplayTagContainer());
+	
 };

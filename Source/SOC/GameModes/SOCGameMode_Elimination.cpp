@@ -17,6 +17,7 @@
 ASOCGameMode_Elimination::ASOCGameMode_Elimination()
 {
 	bDelayedStart = true;
+	StartMatchTimerDuration = 5.0f;
 }
 
 #pragma endregion

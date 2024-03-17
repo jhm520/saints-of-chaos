@@ -160,3 +160,47 @@ bool UObjectiveSystemBlueprintLibrary::GetObjectiveAssigneesByTags(UObject* Worl
 
 	return OutAssignees.Num() > 0;
 }
+
+//returns true if all assignees have completed the objectives with the specified tags
+bool UObjectiveSystemBlueprintLibrary::HaveAllAssigneesCompletedObjectivesByTags(UObject* WorldContextObject, TArray<AActor*>& OutAssignees, FGameplayTagContainer ObjectiveTags)
+{
+	if (!WorldContextObject)
+	{
+		return false;
+	}
+
+	TArray<AObjective*> Objectives;
+	GetObjectivesByTags(WorldContextObject, ObjectiveTags, Objectives);
+
+	TArray<AActor*> LocalAssignees;
+	
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		TArray<AActor*> Assignees = Objective->GetAssignees();
+
+		for (AActor* Assignee : Assignees)
+		{
+			if (!Assignee)
+			{
+				continue;
+			}
+
+			if (!Objective->HasAssigneeCompleted(Assignee))
+			{
+				return false;
+			}
+			
+			LocalAssignees.AddUnique(Assignee);
+		}
+	}
+
+	OutAssignees = LocalAssignees;
+
+	return OutAssignees.Num() > 0;
+}
+	

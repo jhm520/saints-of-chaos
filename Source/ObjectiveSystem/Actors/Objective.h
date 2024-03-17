@@ -85,10 +85,10 @@ protected:
 
 	virtual void Failed(AActor* Assignee, AActor* InInstigator);
 
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Objective Success"), Category = "Objective System")
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Objective Complete"), Category = "Objective System")
 	void K2_Complete(AActor* Assignee, AActor* InInstigator);
 
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Objective Failure"), Category = "Objective System")
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Objective Failed"), Category = "Objective System")
 	void K2_Failed(AActor* Assignee, AActor* InInstigator);
 
 	void OnBegin(AActor* Assignee);
@@ -131,6 +131,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
 	bool GetObjectiveStatus(const AActor* Assignee, FObjectiveStatus& OutObjectiveStatus) const;
 
+	//returns true if the specified assignee has completed this objective
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
+	bool HasAssigneeCompleted(const AActor* Assignee) const;
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
 	TArray<AActor*> GetAssignees() const;
 
@@ -143,8 +147,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Objective System")
 	bool HasBegun(const AActor* Assignee) const;
 
+	//returns true if any assignee has completed this objective
 	bool IsComplete() const {return bIsComplete;}
 
+	//returns true if any assignee has failed this objective
 	bool IsFailed() const {return bIsFailed;}
 
 	int32 GetSuccessCount() const {return CompleteCount;}

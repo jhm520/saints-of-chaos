@@ -281,6 +281,19 @@ bool AObjective::GetObjectiveStatus(const AActor* Assignee, FObjectiveStatus& Ou
 	return false;
 }
 
+bool AObjective::HasAssigneeCompleted(const AActor* Assignee) const
+{
+	FObjectiveStatus ObjectiveStatus;
+	const bool bGotStatus = GetObjectiveStatus(Assignee, ObjectiveStatus);
+
+	if (!bGotStatus)
+	{
+		return false;
+	}
+
+	return ObjectiveStatus.bIsComplete;
+}
+
 TArray<AActor*> AObjective::GetAssignees() const
 {
 	TArray<AActor*> Assignees;

@@ -23,3 +23,12 @@ void USOCGameInstance::OnReceievedPublicIP(FString InPublicIP)
 {
 	PublicIPAddress = InPublicIP;
 }
+
+#pragma region Game State
+
+void USOCGameInstance::OnGameStateHasBegunPlay_Implementation(AGameStateBase* GameState)
+{
+	OnGameStateHasBegunPlayDelegate.Broadcast(GameState);
+}
+
+#pragma endregion

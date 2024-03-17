@@ -8,6 +8,15 @@
 #include "SOCGameState.generated.h"
 
 class UObjectiveTrackerComponent;
+
+/**
+	 * Match state has changed via SetMatchState()
+	 *
+	 * @param MatchState new match state
+	 */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGameStateMatchStateSetEvent, FName /*MatchState*/, MatchState);
+
+
 /**
  * 
  */
@@ -19,8 +28,18 @@ class SOC_API ASOCGameState : public AGameState, public IObjectiveTrackerInterfa
 #pragma region Framework
 protected:
 	ASOCGameState();
-#pragma endregion
 
+	virtual void BeginPlay() override;
+	
+	/** Match state has changed */
+	virtual void OnRep_MatchState() override;
+
+	virtual void OnRep_ReplicatedHasBegunPlay() override;
+#pragma endregion
+	
+	UPROPERTY(BlueprintAssignable, Category = "Game State")
+	FGameStateMatchStateSetEvent GameStateMatchStateSetEvent;
+	
 #pragma region Objectives
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
