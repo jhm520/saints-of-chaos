@@ -16,6 +16,7 @@ AObjective::AObjective()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+	bAlwaysRelevant = true;
 
 	CompleteCount = 1;
 	FailedCount = 0;
@@ -250,7 +251,10 @@ void AObjective::Unassign(AActor* Assignee)
 
 bool AObjective::IsAssigned(const AActor* Assignee)
 {
-	return ObjectiveStatusMap.Contains(Assignee);
+	return ObjectiveStatuses.ContainsByPredicate([Assignee](const FObjectiveStatus& Status)
+	{
+		return Status.Assignee == Assignee;
+	});
 }
 
 bool AObjective::GetObjectiveStatus(const AActor* Assignee, FObjectiveStatus& OutObjectiveStatus) const

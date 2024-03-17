@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Info.h"
 #include "GameplayTags/Classes/GameplayTagContainer.h"
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "Objective.generated.h"
@@ -16,10 +16,11 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveFailureDelegate, AOb
 
 
 UCLASS()
-class OBJECTIVESYSTEM_API AObjective : public AActor
+class OBJECTIVESYSTEM_API AObjective : public AInfo
 {
 	GENERATED_BODY()
 
+	friend class UObjectiveSubsystem;
 	friend class UObjectiveTrackerComponent;
 	friend struct FObjectiveReplicator;
 	friend struct FObjectiveReplicatorItem;

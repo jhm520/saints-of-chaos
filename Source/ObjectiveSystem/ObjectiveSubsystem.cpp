@@ -29,6 +29,11 @@ UObjectiveSubsystem* UObjectiveSubsystem::Get(const UObject* WorldContext)
 void UObjectiveSubsystem::RegisterObjective(AObjective* Objective)
 {
 	Objectives.Add(Objective);
+
+	if (Objective)
+	{
+		Objective->OnObjectiveStatusesChanged(Objective->ObjectiveStatuses);
+	}
 }
 
 void UObjectiveSubsystem::UnregisterObjective(AObjective* Objective)
