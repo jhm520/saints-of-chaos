@@ -34,6 +34,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	TArray<UObjectiveInfoCollection*> MatchObjectiveCollections;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	TArray<UObjectiveInfoCollection*> PostMatchObjectiveCollections;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	TArray<UObjectiveInfoCollection*> PostMatchPlayerObjectiveCollections;
+	
+
 #pragma endregion 
 
 #pragma region Player

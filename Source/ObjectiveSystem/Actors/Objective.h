@@ -15,7 +15,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveFailureDelegate, AOb
 
 
 
-UCLASS()
+UCLASS(Blueprintable)
 class OBJECTIVESYSTEM_API AObjective : public AInfo
 {
 	GENERATED_BODY()

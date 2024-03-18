@@ -52,10 +52,22 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 		}
 
+		//set up and begin any pre-match objectives
 		for (UObjectiveInfoCollection* Collection : PreMatchPlayerObjectiveCollections)
 		{
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(PlayerState, Collection, Assignees);
 			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(PlayerState, Collection);
+		}
+
+		//set up post match objectives
+		for (UObjectiveInfoCollection* Collection : PostMatchObjectiveCollections)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees);
+		}
+
+		for (UObjectiveInfoCollection* Collection : PostMatchPlayerObjectiveCollections)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(PlayerState, Collection, Assignees);
 		}
 
 		//bind the events for the ready check objectives
@@ -141,6 +153,33 @@ void ASOCGameMode_Elimination::HandleMatchHasEnded()
 	Super::HandleMatchHasEnded();
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Match Has Ended");
+	
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//begin any post match objectives
+	for (UObjectiveInfoCollection* Collection : PostMatchObjectiveCollections)
+	{
+		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
+	}
+
+	//begin any post match objectives for each player
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		for (UObjectiveInfoCollection* Collection : PostMatchPlayerObjectiveCollections)
+		{
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
+		}
+	}
 }
 #pragma endregion
 
