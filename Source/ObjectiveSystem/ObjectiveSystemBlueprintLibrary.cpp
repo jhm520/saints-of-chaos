@@ -5,12 +5,13 @@
 
 #include "ObjectiveSubsystem.h"
 #include "Actors/Objective.h"
+#include "Actors/ObjectiveGroup.h"
 #include "Components/ObjectiveAssigneeComponent.h"
 #include "Components/ObjectiveTrackerComponent.h"
 #include "Interfaces/ObjectiveAssigneeInterface.h"
 #include "Interfaces/ObjectiveTrackerInterface.h"
 
-void UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, TArray<AActor*> Assignees)
+void UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, TArray<AActor*> Assignees, TArray<AObjective*>& OutObjectives)
 {
 	if (!ObjectiveTracker || !ObjectiveCollection)
 	{
@@ -31,7 +32,7 @@ void UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(AActo
 		return;
 	}
 
-	ObjectiveTrackerComponent->SetupObjectivesByCollection(ObjectiveCollection, Assignees);
+	ObjectiveTrackerComponent->SetupObjectivesByCollection(ObjectiveCollection, Assignees, OutObjectives);
 	
 }
 
@@ -202,5 +203,29 @@ bool UObjectiveSystemBlueprintLibrary::HaveAllAssigneesCompletedObjectivesByTags
 	OutAssignees = LocalAssignees;
 
 	return OutAssignees.Num() > 0;
+}
+
+//assigns the input objectives to the specified ObjectiveGroup
+void UObjectiveSystemBlueprintLibrary::AddObjectivesToObjectiveGroup(UObject* WorldContextObject, const TArray<AObjective*> Objectives, AObjectiveGroup* ObjectiveGroup)
+{
+	if (!WorldContextObject)
+	{
+		return;
+	}
+	
+	if (!ObjectiveGroup)
+	{
+		return;
+	}
+	
+	for (AObjective* Objective : Objectives)
+	{
+		if (!Objective)
+		{
+			continue;
+		}
+
+		ObjectiveGroup->AddSubObjective(Objective);
+	}
 }
 	

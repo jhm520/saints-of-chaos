@@ -135,7 +135,7 @@ void UObjectiveSubsystem::GetObjectivesByTags(const FGameplayTagContainer& Objec
 			continue;
 		}
 
-		if (Objective->GetObjectiveTags().HasAny(ObjectiveTags))
+		if (ObjectiveTags.IsEmpty() || Objective->GetObjectiveTags().HasAny(ObjectiveTags))
 		{
 			OutObjectives.Add(Objective);
 		}

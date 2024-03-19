@@ -63,15 +63,15 @@ void UObjectiveTrackerComponent::TickComponent(float DeltaTime, ELevelTick TickT
 #pragma region Objective System
 
 //sets up all the objectives available on this tracker
-void UObjectiveTrackerComponent::SetupAllObjectives(TArray<AActor*> Assignees)
+void UObjectiveTrackerComponent::SetupAllObjectives(TArray<AActor*> Assignees, TArray<AObjective*>& OutObjectives)
 {
 	for (UObjectiveInfoCollection* Collection : ObjectiveInfoCollections)
 	{
-		SetupObjectivesByCollection(Collection, Assignees);
+		SetupObjectivesByCollection(Collection, Assignees, OutObjectives);
 	}
 }
 
-void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, TArray<AActor*> Assignees, const FGameplayTagContainer& OptionalTags)
+void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, TArray<AActor*> Assignees, TArray<AObjective*>& OutObjectives, const FGameplayTagContainer& OptionalTags)
 {
 	if (!GetOwner()->HasAuthority())
 	{
@@ -115,21 +115,21 @@ void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoColle
 }
 
 //sets up the objectives for this tracker
-void UObjectiveTrackerComponent::SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags, TArray<AActor*> Assignees)
+void UObjectiveTrackerComponent::SetupObjectivesByTags(const FGameplayTagContainer& ObjectiveTags, TArray<AActor*> Assignees, TArray<AObjective*>& OutObjectives)
 {
 	for (UObjectiveInfoCollection* Collection : ObjectiveInfoCollections)
 	{
-		SetupObjectivesByCollection(Collection, Assignees, ObjectiveTags);
+		SetupObjectivesByCollection(Collection, Assignees, OutObjectives, ObjectiveTags);
 	}
 }
 
-void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveInfo, TArray<AActor*> Assignees)
+AObjective* UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveInfo, TArray<AActor*> Assignees)
 {
 	IObjectiveTrackerInterface* ObjectiveTrackerInterface = Cast<IObjectiveTrackerInterface>(GetOwner());
 
 	if (!ObjectiveTrackerInterface)
 	{
-		return;
+		return nullptr;
 	}
 
 	//find an exisiting objective of the same type if we already have one
@@ -143,7 +143,7 @@ void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveI
 
 	if (!NewObjective)
 	{
-		return;
+		return nullptr;
 	}
 	
 	for (AActor* Assignee : Assignees)
@@ -155,6 +155,8 @@ void UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& ObjectiveI
 		
 		AssignObjective(NewObjective, Assignee);
 	}
+
+	return NewObjective;
 }
 
 void UObjectiveTrackerComponent::BeginObjectivesByCollection(UObjectiveInfoCollection* InObjectiveInfoCollection, const FGameplayTagContainer& OptionalTags)

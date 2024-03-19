@@ -8,6 +8,7 @@
 
 class UObjectiveInfoCollection;
 class ASOCBuilding;
+class AObjective;
 /**
  * 
  */
@@ -66,13 +67,22 @@ protected:
 #pragma region Ready Check
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
-	FGameplayTagContainer ReadyCheckObjectiveTags;
+	FGameplayTagContainer AllPlayersReadyCheckObjectiveTags;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	FGameplayTagContainer PlayerReadyCheckObjectiveTags;
 	
 	UFUNCTION()
 	void OnReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 
 	UFUNCTION()
 	void OnReadyCheckObjectiveFailure(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+	
+	UFUNCTION()
+	void OnAllPlayersReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+
+	UFUNCTION()
+	void OnAllPlayersReadyCheckObjectiveFailed(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 
 	UPROPERTY()
 	FTimerHandle TimerHandle_StartMatch;

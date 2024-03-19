@@ -2,9 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
+#include "GameplayTagContainer.h"
 #include "ObjectiveSubsystem.generated.h"
 
 class UObjectiveComponent;
+class AObjective;
+class UObjectiveTrackerComponent;
 UCLASS()
 class OBJECTIVESYSTEM_API UObjectiveSubsystem : public UWorldSubsystem
 {

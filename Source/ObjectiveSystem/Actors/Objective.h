@@ -158,6 +158,7 @@ public:
 	int32 GetFailureCount() const {return FailedCount;}
 
 	const FGameplayTagContainer& GetObjectiveTags() const {return ObjectiveTags;}
+	
 
 	UPROPERTY(BlueprintAssignable, Category = "Objective System")
 	FOnObjectiveSuccessDelegate OnObjectiveSuccess;
