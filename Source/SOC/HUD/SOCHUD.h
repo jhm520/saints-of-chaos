@@ -41,5 +41,20 @@ public:
 	UReadyCheckWidget* GetReadyCheckWidget() const {return ReadyCheckWidget;}
 
 #pragma endregion
+
+
+#pragma region Rematch Check
+protected:
+	UPROPERTY(Transient, BlueprintReadWrite, Category = "Box Select")
+	UReadyCheckWidget* RematchCheckWidget;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Box Select")
+	void SetRematchCheckWidget(UReadyCheckWidget* NewRematchCheckWidget) {RematchCheckWidget = NewRematchCheckWidget;}
+
+	UFUNCTION(BlueprintCallable, Category = "Box Select")
+	UReadyCheckWidget* GetRematchCheckWidget() const {return RematchCheckWidget;}
+
+#pragma endregion
 	
 };

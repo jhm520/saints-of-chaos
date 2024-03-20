@@ -19,6 +19,7 @@ ASOCGameMode_Elimination::ASOCGameMode_Elimination()
 {
 	bDelayedStart = true;
 	StartMatchTimerDuration = 5.0f;
+	RematchTimerDuration = 15.0f;
 }
 
 #pragma endregion
@@ -252,6 +253,16 @@ void ASOCGameMode_Elimination::Timer_StartMatch()
 	SetMatchState(MatchState::InProgress);
 }
 
+#pragma endregion
+
+	
+#pragma region Rematch Check
+
+void ASOCGameMode_Elimination::Timer_Rematch()
+{
+	
+}
+	
 #pragma endregion
 
 #pragma region Buildings

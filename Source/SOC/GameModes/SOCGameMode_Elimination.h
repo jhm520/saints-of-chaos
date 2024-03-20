@@ -94,6 +94,20 @@ protected:
 	float StartMatchTimerDuration;
 	
 #pragma endregion
+
+	
+#pragma region Rematch Check
+	
+	UPROPERTY()
+	FTimerHandle TimerHandle_Rematch;
+	
+	UFUNCTION()
+	void Timer_Rematch();
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	float RematchTimerDuration;
+	
+#pragma endregion
 	
 #pragma region Buildings
 	
