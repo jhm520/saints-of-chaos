@@ -122,26 +122,14 @@ void AObjectiveGroup::AddSubObjective(AObjective* SubObjective)
 	}
 	
 	SubObjectives.AddUnique(SubObjective);
-
-	if (!SubObjective->OnObjectiveSuccess.IsAlreadyBound(this, &AObjectiveGroup::OnSubObjectiveSuccess))
-	{
-		SubObjective->OnObjectiveSuccess.AddDynamic(this, &AObjectiveGroup::OnSubObjectiveSuccess);
-	}
 	
-	if (!SubObjective->OnObjectiveFailure.IsAlreadyBound(this, &AObjectiveGroup::OnSubObjectiveFailure))
-	{
-		SubObjective->OnObjectiveFailure.AddDynamic(this, &AObjectiveGroup::OnSubObjectiveFailure);
-	}
-
-	if (!SubObjective->OnObjectiveComplete.IsAlreadyBound(this, &AObjectiveGroup::OnSubObjectiveComplete))
-	{
-		SubObjective->OnObjectiveComplete.AddDynamic(this, &AObjectiveGroup::OnSubObjectiveComplete);
-	}
-
-	if (!SubObjective->OnObjectiveFailed.IsAlreadyBound(this, &AObjectiveGroup::OnSubObjectiveFailed))
-	{
-		SubObjective->OnObjectiveFailed.AddDynamic(this, &AObjectiveGroup::OnSubObjectiveFailed);
-	}
+	SubObjective->OnObjectiveSuccess.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveSuccess);
+	
+	SubObjective->OnObjectiveFailure.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveFailure);
+	
+	SubObjective->OnObjectiveComplete.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveComplete);
+	
+	SubObjective->OnObjectiveFailed.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveFailed);
 }
 
 void AObjectiveGroup::RemoveSubObjective(AObjective* SubObjective)

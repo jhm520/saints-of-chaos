@@ -76,56 +76,10 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 			TArray<AObjective*> PostMatchPlayerObjectives;
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(PlayerState, Collection, Assignees, PostMatchPlayerObjectives);
 		}
-
-		//bind the events for the ready check objectives
-		TArray<AObjective*> AllPlayersReadyCheckObjectives;
-		UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, AllPlayersReadyCheckObjectiveTags, AllPlayersReadyCheckObjectives);
-
-		//bind the events for the ready check objectives
-		TArray<AObjective*> PlayerReadyCheckObjectives;
-		UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, PlayerReadyCheckObjectiveTags, PlayerReadyCheckObjectives);
-
-
-		//set up All Players Ready objective group
-		for (AObjective* Objective : AllPlayersReadyCheckObjectives)
-		{
-			if (!Objective)
-			{
-				continue;
-			}
-
-			AObjectiveGroup* ObjectiveGroup = Cast<AObjectiveGroup>(Objective);
-
-			if (!ObjectiveGroup)
-			{
-				continue;
-			}
-			
-			UObjectiveSystemBlueprintLibrary::AddObjectivesToObjectiveGroup(this, PlayerReadyCheckObjectives, ObjectiveGroup);
-
-			if (!ObjectiveGroup->OnObjectiveComplete.IsAlreadyBound(this, &ASOCGameMode_Elimination::OnAllPlayersReadyCheckObjectiveComplete))
-			{
-				ObjectiveGroup->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersReadyCheckObjectiveComplete);
-			}
-
-			if (!ObjectiveGroup->OnObjectiveFailed.IsAlreadyBound(this, &ASOCGameMode_Elimination::OnAllPlayersReadyCheckObjectiveFailed))
-			{
-				ObjectiveGroup->OnObjectiveFailed.AddDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersReadyCheckObjectiveFailed);
-			}
-		}
 		
-		for (AObjective* Objective : PlayerReadyCheckObjectives)
-		{
-			if (!Objective->OnObjectiveComplete.IsAlreadyBound(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete))
-			{
-				Objective->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete);
-			}
+		SetupReadyCheckObjectives();
 
-			if (!Objective->OnObjectiveFailure.IsAlreadyBound(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveFailure))
-			{
-				Objective->OnObjectiveFailure.AddDynamic(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveFailure);
-			}
-		}
+		SetupRematchObjectives();
 
 		//set up the objectives for the match
 		for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
@@ -133,6 +87,7 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 			TArray<AObjective*> MatchObjectives;
 			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, MatchObjectives);
 		}
+		
 	}
 	else if (GetMatchState() == MatchState::InProgress)
 	{
@@ -223,10 +178,42 @@ void ASOCGameMode_Elimination::HandleMatchHasEnded()
 			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
 		}
 	}
+	
+	//set the rematch timer
+	GetWorldTimerManager().SetTimer(TimerHandle_Rematch, this, &ASOCGameMode_Elimination::Timer_Rematch, RematchTimerDuration, false);
 }
 #pragma endregion
 
 #pragma region Ready Check
+
+void ASOCGameMode_Elimination::SetupReadyCheckObjectives()
+{
+	//bind the events for the ready check objectives
+	TArray<AObjective*> AllPlayersReadyCheckObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, AllPlayersReadyCheckObjectiveTags, AllPlayersReadyCheckObjectives);
+
+	//bind the events for the ready check objectives
+	TArray<AObjective*> PlayerReadyCheckObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, PlayerReadyCheckObjectiveTags, PlayerReadyCheckObjectives);
+		
+	if (AllPlayersReadyCheckObjectives.IsValidIndex(0))
+	{
+		AllPlayersReadyObjectiveGroup = Cast<AObjectiveGroup>(AllPlayersReadyCheckObjectives[0]);
+	}
+	//set up All Players Ready objective group
+	if (AllPlayersReadyObjectiveGroup)
+	{
+		UObjectiveSystemBlueprintLibrary::AddObjectivesToObjectiveGroup(this, PlayerReadyCheckObjectives, AllPlayersReadyObjectiveGroup);
+		AllPlayersReadyObjectiveGroup->OnObjectiveComplete.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersReadyCheckObjectiveComplete);
+		AllPlayersReadyObjectiveGroup->OnObjectiveFailed.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersReadyCheckObjectiveFailed);
+	}
+		
+	for (AObjective* Objective : PlayerReadyCheckObjectives)
+	{
+		Objective->OnObjectiveComplete.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete);
+		Objective->OnObjectiveFailure.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnReadyCheckObjectiveFailure);
+	}
+}
 
 void ASOCGameMode_Elimination::OnReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
 {
@@ -258,9 +245,72 @@ void ASOCGameMode_Elimination::Timer_StartMatch()
 	
 #pragma region Rematch Check
 
-void ASOCGameMode_Elimination::Timer_Rematch()
+void ASOCGameMode_Elimination::SetupRematchObjectives()
+{
+	//bind the events for the rematch objectives
+	TArray<AObjective*> AllPlayersRematchObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, AllPlayersRematchObjectiveTags, AllPlayersRematchObjectives);
+
+	//bind the events for the rematch objectives
+	TArray<AObjective*> PlayerRematchObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, PlayerRematchObjectiveTags, PlayerRematchObjectives);
+
+	if (AllPlayersRematchObjectives.IsValidIndex(0))
+	{
+		AllPlayersRematchObjectiveGroup = Cast<AObjectiveGroup>(AllPlayersRematchObjectives[0]);
+	}
+	//set up All Players Ready objective group
+	if (AllPlayersRematchObjectiveGroup)
+	{
+		UObjectiveSystemBlueprintLibrary::AddObjectivesToObjectiveGroup(this, PlayerRematchObjectives, AllPlayersRematchObjectiveGroup);
+		AllPlayersRematchObjectiveGroup->OnObjectiveComplete.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveComplete);
+		AllPlayersRematchObjectiveGroup->OnObjectiveFailed.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveFailed);
+	}
+		
+	for (AObjective* Objective : PlayerRematchObjectives)
+	{
+		Objective->OnObjectiveComplete.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnRematchObjectiveComplete);
+		Objective->OnObjectiveFailure.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnRematchObjectiveFailure);
+	}
+}
+
+void ASOCGameMode_Elimination::OnRematchObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
 {
 	
+}
+
+void ASOCGameMode_Elimination::OnRematchObjectiveFailure(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
+{
+	
+}
+	
+void ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
+{
+	
+}
+
+void ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveFailed(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
+{
+	
+}
+
+void ASOCGameMode_Elimination::Timer_Rematch()
+{
+	if (!AllPlayersRematchObjectiveGroup)
+	{
+		return;
+	}
+
+	if (AllPlayersRematchObjectiveGroup->IsObjectiveGroupComplete())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Rematch");
+		//rematch
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Match ended, return to main menu");
+		//end the match
+	}
 }
 	
 #pragma endregion

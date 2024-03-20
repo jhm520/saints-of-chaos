@@ -9,6 +9,7 @@
 class UObjectiveInfoCollection;
 class ASOCBuilding;
 class AObjective;
+class AObjectiveGroup;
 /**
  * 
  */
@@ -66,11 +67,16 @@ protected:
 	
 #pragma region Ready Check
 
+	virtual void SetupReadyCheckObjectives();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	FGameplayTagContainer AllPlayersReadyCheckObjectiveTags;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	FGameplayTagContainer PlayerReadyCheckObjectiveTags;
+
+	UPROPERTY()
+	TObjectPtr<AObjectiveGroup> AllPlayersReadyObjectiveGroup;
 	
 	UFUNCTION()
 	void OnReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
@@ -97,6 +103,30 @@ protected:
 
 	
 #pragma region Rematch Check
+
+	virtual void SetupRematchObjectives();
+
+	UPROPERTY()
+	TObjectPtr<AObjectiveGroup> AllPlayersRematchObjectiveGroup;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	FGameplayTagContainer AllPlayersRematchObjectiveTags;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	FGameplayTagContainer PlayerRematchObjectiveTags;
+	
+	UFUNCTION()
+	void OnRematchObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+
+	UFUNCTION()
+	void OnRematchObjectiveFailure(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+	
+	UFUNCTION()
+	void OnAllPlayersRematchObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+
+	UFUNCTION()
+	void OnAllPlayersRematchObjectiveFailed(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+
 	
 	UPROPERTY()
 	FTimerHandle TimerHandle_Rematch;
