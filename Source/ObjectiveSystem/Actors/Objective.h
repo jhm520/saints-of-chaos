@@ -91,7 +91,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Objective Failed"), Category = "Objective System")
 	void K2_Failed(AActor* Assignee, AActor* InInstigator);
 
-	void OnBegin(AActor* Assignee);
+	virtual void OnSetup();
+	
+	virtual void OnBegin(AActor* Assignee);
 	
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Begin Objective"), Category = "Objective System")
 	void K2_Begin(const AActor* Assignee);
@@ -139,7 +141,7 @@ public:
 	TArray<AActor*> GetAssignees() const;
 
 	//begin this objective, and indicate to the assignee that they should start working on completing the objective
-	void Begin(const AActor* Assignee);
+	virtual void Begin(const AActor* Assignee);
 	
 	//begin this objective, and indicate to all assignees that they should start working on completing the objective
 	void BeginAllAssignees();

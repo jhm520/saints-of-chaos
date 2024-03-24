@@ -8,7 +8,7 @@
 #include "ObjectiveSystem/ObjectiveSystemBlueprintLibrary.h"
 
 
-
+#pragma region Framework
 void AObjectiveGroup::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -17,15 +17,68 @@ void AObjectiveGroup::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 }
 #pragma endregion
 
+#pragma region Objective
+
 void AObjectiveGroup::OnRegistered()
 {
 	Super::OnRegistered();
-	
+
 }
 
 void AObjectiveGroup::OnUnregistered()
 {
 	Super::OnUnregistered();
+}
+
+void AObjectiveGroup::OnSetup()
+{
+	Super::OnSetup();
+	
+	SetupSubObjectives();
+}
+
+void AObjectiveGroup::OnBegin(AActor* Assignee)
+{
+	Super::OnBegin(Assignee);
+}
+
+void AObjectiveGroup::Begin(const AActor* Assignee)
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+	
+	for (AObjective* SubObjective : SubObjectives)
+	{
+		if (!SubObjective)
+		{
+			continue;
+		}
+		SubObjective->OnObjectiveSuccess.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveSuccess);
+		SubObjective->OnObjectiveFailure.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveFailure);
+		SubObjective->OnObjectiveComplete.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveComplete);
+		SubObjective->OnObjectiveFailed.AddUniqueDynamic(this, &AObjectiveGroup::OnSubObjectiveFailed);
+		
+		SubObjective->BeginAllAssignees();
+	}
+	
+}
+
+#pragma endregion
+
+#pragma region Objective Group
+
+void AObjectiveGroup::SetupSubObjectives_Implementation()
+{
+	//left blank, needed to be implemented in blueprint or subclass
+	return;
+}
+
+void AObjectiveGroup::GetObjectiveGroupAssignees_Implementation(TArray<AActor*>& OutAssignees)
+{
+	//implement in blueprint or subclass
+	return;
 }
 
 void AObjectiveGroup::OnRep_SubObjectives()
@@ -50,6 +103,8 @@ void AObjectiveGroup::OnSubObjectiveFailure(AObjective* Objective, AActor* Assig
 
 void AObjectiveGroup::OnSubObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
 {
+	OnSubObjectiveCompleteDelegate.Broadcast(this, Objective, Assignee, InInstigator);
+	
 	const bool bObjectiveGroupComplete = IsObjectiveGroupComplete();
 	
 	if(bObjectiveGroupComplete)
@@ -60,6 +115,8 @@ void AObjectiveGroup::OnSubObjectiveComplete(AObjective* Objective, AActor* Assi
 
 void AObjectiveGroup::OnSubObjectiveFailed(AObjective* Objective, AActor* Assignee, AActor* InInstigator)
 {
+	OnSubObjectiveFailedDelegate.Broadcast(this, Objective, Assignee, InInstigator);
+	
 	const bool bIsObjectiveGroupFailed = IsObjectiveGroupFailed();
 
 
@@ -141,3 +198,5 @@ void AObjectiveGroup::RemoveSubObjective(AObjective* SubObjective)
 
 	SubObjectives.Remove(SubObjective);
 }
+
+#pragma endregion

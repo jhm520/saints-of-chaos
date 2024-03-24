@@ -85,12 +85,14 @@ void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoColle
 
 	TArray<FObjectiveInfo> ObjectiveInfos = InObjectiveInfoCollection->GetObjectiveInfos();
 
+	AObjective* NewObjective = nullptr;
+
 	for (const FObjectiveInfo& ObjectiveInfo : ObjectiveInfos)
 	{
 		//if we didn't specify any tags, then we just setup the objective
 		if (OptionalTags.IsEmpty())
 		{
-			SetupObjective(ObjectiveInfo, Assignees);
+			NewObjective = SetupObjective(ObjectiveInfo, Assignees);
 			continue;
 		}
 
@@ -109,7 +111,12 @@ void UObjectiveTrackerComponent::SetupObjectivesByCollection(UObjectiveInfoColle
 		//if the objective has any of the optional tags, then we setup the objective
 		if (DefaultObjectiveObject->ObjectiveTags.HasAny(OptionalTags))
 		{
-			SetupObjective(ObjectiveInfo,Assignees);
+			NewObjective = SetupObjective(ObjectiveInfo,Assignees);
+		}
+
+		if (NewObjective)
+		{
+			OutObjectives.Add(NewObjective);
 		}
 	}
 }
@@ -155,6 +162,8 @@ AObjective* UObjectiveTrackerComponent::SetupObjective(const FObjectiveInfo& Obj
 		
 		AssignObjective(NewObjective, Assignee);
 	}
+
+	NewObjective->OnSetup();
 
 	return NewObjective;
 }

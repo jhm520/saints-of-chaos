@@ -33,7 +33,30 @@ void UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(AActo
 	}
 
 	ObjectiveTrackerComponent->SetupObjectivesByCollection(ObjectiveCollection, Assignees, OutObjectives);
-	
+}
+
+void UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByTags(AActor* ObjectiveTracker, FGameplayTagContainer ObjectiveTags, TArray<AActor*> Assignees, TArray<AObjective*>& OutObjectives)
+{
+	if (!ObjectiveTracker)
+	{
+		return;
+	}
+
+	IObjectiveTrackerInterface* ObjectiveTrackerInterface = Cast<IObjectiveTrackerInterface>(ObjectiveTracker);
+
+	if (!ObjectiveTrackerInterface)
+	{
+		return;
+	}
+
+	UObjectiveTrackerComponent* ObjectiveTrackerComponent = ObjectiveTrackerInterface->GetObjectiveTrackerComponent();
+
+	if (!ObjectiveTrackerComponent)
+	{
+		return;
+	}
+
+	ObjectiveTrackerComponent->SetupObjectivesByTags(ObjectiveTags, Assignees, OutObjectives);
 }
 
 void UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(AActor* ObjectiveTracker, UObjectiveInfoCollection* ObjectiveCollection, const FGameplayTagContainer& OptionalTags)

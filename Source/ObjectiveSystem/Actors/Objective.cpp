@@ -314,12 +314,17 @@ void AObjective::Begin(const AActor* Assignee)
 	
 	FObjectiveStatus* FoundAssignee = ObjectiveStatusMap.Find(Assignee);
 	
-	if (FoundAssignee)
+	if (FoundAssignee/* && !FoundAssignee->bHasBegun*/)
 	{
 		FoundAssignee->bHasBegun = true;
 	}
 	
 	ReplicateObjectiveStatuses();
+}
+
+void AObjective::OnSetup()
+{
+	
 }
 
 void AObjective::OnBegin(AActor* Assignee)

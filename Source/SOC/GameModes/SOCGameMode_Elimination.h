@@ -79,10 +79,10 @@ protected:
 	TObjectPtr<AObjectiveGroup> AllPlayersReadyObjectiveGroup;
 	
 	UFUNCTION()
-	void OnReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+	void OnReadyCheckObjectiveComplete(AObjectiveGroup* ObjectiveGroup, AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 
 	UFUNCTION()
-	void OnReadyCheckObjectiveFailure(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
+	void OnReadyCheckObjectiveFailed(AObjectiveGroup* ObjectiveGroup, AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 	
 	UFUNCTION()
 	void OnAllPlayersReadyCheckObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
