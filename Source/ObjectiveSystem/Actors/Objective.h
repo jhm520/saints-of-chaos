@@ -12,6 +12,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveSuccessDelegate, AOb
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveFailedDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveCompleteDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams( FOnObjectiveFailureDelegate, AObjective*, Objective, AActor*, Assignee, AActor*, Instigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnObjectiveBeginDelegate, AObjective*, Objective, AActor*, Assignee);
+
 
 
 
@@ -173,6 +175,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Objective System")
 	FOnObjectiveFailedDelegate OnObjectiveFailed;
+
+	UPROPERTY(BlueprintAssignable, Category = "Objective System")
+	FOnObjectiveBeginDelegate OnObjectiveBegin;
 
 #pragma endregion
 

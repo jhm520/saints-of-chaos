@@ -317,6 +317,7 @@ void AObjective::Begin(const AActor* Assignee)
 	if (FoundAssignee/* && !FoundAssignee->bHasBegun*/)
 	{
 		FoundAssignee->bHasBegun = true;
+		OnObjectiveBegin.Broadcast(this, FoundAssignee->Assignee);
 	}
 	
 	ReplicateObjectiveStatuses();
@@ -330,6 +331,8 @@ void AObjective::OnSetup()
 void AObjective::OnBegin(AActor* Assignee)
 {
 	K2_Begin(Assignee);
+
+	OnObjectiveBegin.Broadcast(this, Assignee);
 }
 
 //begin this objective, and indicate to the assignee that they should start working on completing the objective

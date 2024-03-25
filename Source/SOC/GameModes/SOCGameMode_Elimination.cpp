@@ -178,9 +178,6 @@ void ASOCGameMode_Elimination::HandleMatchHasEnded()
 			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
 		}
 	}
-	
-	//set the rematch timer
-	GetWorldTimerManager().SetTimer(TimerHandle_Rematch, this, &ASOCGameMode_Elimination::Timer_Rematch, RematchTimerDuration, false);
 }
 #pragma endregion
 
@@ -242,6 +239,7 @@ void ASOCGameMode_Elimination::SetupRematchObjectives()
 	if (AllPlayersRematchObjectives.IsValidIndex(0))
 	{
 		AllPlayersRematchObjectiveGroup = Cast<AObjectiveGroup>(AllPlayersRematchObjectives[0]);
+		AllPlayersRematchObjectiveGroup->OnObjectiveBegin.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnRematchObjectiveBegin);
 		AllPlayersRematchObjectiveGroup->OnObjectiveComplete.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveComplete);
 		AllPlayersRematchObjectiveGroup->OnObjectiveFailed.AddUniqueDynamic(this, &ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveFailed);
 	}
@@ -267,13 +265,19 @@ void ASOCGameMode_Elimination::OnAllPlayersRematchObjectiveFailed(AObjective* Ob
 	
 }
 
+void ASOCGameMode_Elimination::OnRematchObjectiveBegin(AObjective* Objective, AActor* Assignee)
+{
+	//set the rematch timer
+	GetWorldTimerManager().SetTimer(TimerHandle_Rematch, this, &ASOCGameMode_Elimination::Timer_Rematch, RematchTimerDuration, false);
+}
+
 void ASOCGameMode_Elimination::Timer_Rematch()
 {
 	if (!AllPlayersRematchObjectiveGroup)
 	{
 		return;
 	}
-
+	
 	if (AllPlayersRematchObjectiveGroup->IsObjectiveGroupComplete())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Rematch");

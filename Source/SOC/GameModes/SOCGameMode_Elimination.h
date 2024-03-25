@@ -72,9 +72,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	FGameplayTagContainer AllPlayersReadyCheckObjectiveTags;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
-	FGameplayTagContainer PlayerReadyCheckObjectiveTags;
-
 	UPROPERTY()
 	TObjectPtr<AObjectiveGroup> AllPlayersReadyObjectiveGroup;
 	
@@ -112,9 +109,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	FGameplayTagContainer AllPlayersRematchObjectiveTags;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
-	FGameplayTagContainer PlayerRematchObjectiveTags;
-	
 	UFUNCTION()
 	void OnRematchObjectiveComplete(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 
@@ -127,6 +121,8 @@ protected:
 	UFUNCTION()
 	void OnAllPlayersRematchObjectiveFailed(AObjective* Objective, AActor* Assignee, AActor* InInstigator);
 
+	UFUNCTION()
+	void OnRematchObjectiveBegin(AObjective* Objective, AActor* Assignee);
 	
 	UPROPERTY()
 	FTimerHandle TimerHandle_Rematch;

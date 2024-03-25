@@ -44,6 +44,8 @@ void AObjectiveGroup::OnBegin(AActor* Assignee)
 
 void AObjectiveGroup::Begin(const AActor* Assignee)
 {
+	Super::Begin(Assignee);
+	
 	if (!HasAuthority())
 	{
 		return;
