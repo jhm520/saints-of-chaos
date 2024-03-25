@@ -136,6 +136,7 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted()
 		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
 	}
 
+	//TODO: Make an ObjectiveGroup_Competitive class that inherits from ObjectiveGroup and implements the SetupSubObjectives_Implementation function, use that to set up the DestroyEnemyBuildings objective
 	TArray<AObjective*> DestroyEnemyBuildingsObjectives;
 	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, DestroyBuildingsObjectiveTags, DestroyEnemyBuildingsObjectives);
 
