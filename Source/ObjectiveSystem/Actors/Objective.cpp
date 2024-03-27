@@ -25,14 +25,14 @@ AObjective::AObjective()
 // Called when the game starts or when spawned
 void AObjective::BeginPlay()
 {
-	Super::BeginPlay();
-
 	UObjectiveSubsystem* ObjectiveSubsystem = UObjectiveSubsystem::Get(this);
 
 	if (ObjectiveSubsystem)
 	{
 		ObjectiveSubsystem->RegisterObjective(this);
 	}
+	
+	Super::BeginPlay();
 }
 
 /** Overridable function called whenever this actor is being removed from a level */

@@ -81,7 +81,7 @@ protected:
 	void AssignObjective(AObjective* Objective, AActor* Assignee);
 
 	UPROPERTY()
-	TArray<AObjective*> Objectives;
+	TArray<TObjectPtr<AObjective>> Objectives;
 #pragma endregion
 		
 };

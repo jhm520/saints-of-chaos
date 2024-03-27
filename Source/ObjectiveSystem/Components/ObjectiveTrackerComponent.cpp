@@ -184,6 +184,11 @@ void UObjectiveTrackerComponent::BeginObjectivesByCollection(UObjectiveInfoColle
 
 	for (AObjective* Objective : Objectives)
 	{
+		if (!IsValid(Objective))
+		{
+			continue;
+		}
+		
 		if (Objective->ObjectiveTags.HasAny(AllObjectiveTags))
 		{
 			if (OptionalTags.IsEmpty())
@@ -213,7 +218,7 @@ void UObjectiveTrackerComponent::BeginObjectivesByTags(const FGameplayTagContain
 {
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
@@ -227,7 +232,7 @@ void UObjectiveTrackerComponent::BeginObjectivesByTags(const FGameplayTagContain
 	
 void UObjectiveTrackerComponent::BeginObjective(AObjective* Objective)
 {
-	if (!Objective)
+	if (!IsValid(Objective))
 	{
 		return;
 	}
@@ -245,7 +250,7 @@ void UObjectiveTrackerComponent::ProgressObjectives(AActor* Assignee, AActor* In
 	
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
@@ -285,7 +290,7 @@ AObjective* UObjectiveTrackerComponent::FindObjective(const FObjectiveInfo& Obje
 {
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}

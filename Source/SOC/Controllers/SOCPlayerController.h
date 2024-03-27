@@ -28,6 +28,9 @@ public:
 	ASOCPlayerController();
 
 	virtual void PostInitializeComponents() override;
+
+	virtual void ClientRestart_Implementation(APawn* NewPawn) override;
+
 #pragma endregion
 
 #pragma region Auto Ownership

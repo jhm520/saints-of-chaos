@@ -24,6 +24,7 @@ class OBJECTIVESYSTEM_API AObjective : public AInfo
 
 	friend class UObjectiveSubsystem;
 	friend class UObjectiveTrackerComponent;
+	friend class UObjectiveAssigneeComponent;
 	friend struct FObjectiveReplicator;
 	friend struct FObjectiveReplicatorItem;
 #pragma region Objective System

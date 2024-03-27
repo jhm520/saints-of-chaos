@@ -20,7 +20,13 @@ UCLASS()
 class OBJECTIVESYSTEM_API AObjectiveGroup : public AObjective
 {
 	GENERATED_BODY()
+
+#pragma region Framework
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	
+#pragma endregion
 
 #pragma region Objective
 protected:

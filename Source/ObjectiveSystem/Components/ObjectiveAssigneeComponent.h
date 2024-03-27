@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "ObjectiveAssigneeComponent.generated.h"
 
+class AObjective;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class OBJECTIVESYSTEM_API UObjectiveAssigneeComponent : public UActorComponent
 {
@@ -37,5 +39,11 @@ public:
 	void Server_ProgressObjectivesForAssigneeByTags(AActor* Assignee, const FGameplayTagContainer& ObjectiveTags, bool bSuccess);
 
 #pragma endregion
-	
+
+#pragma region Replication
+
+	void ReplicateAssigneeObjectiveStatuses(AObjective* Objective);
+
+#pragma endregion
+
 };

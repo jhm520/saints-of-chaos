@@ -13,6 +13,12 @@ UCLASS()
 class SOC_API ASOCHUD : public AHUD
 {
 	GENERATED_BODY()
+friend class ASOCPlayerController;
+#pragma region Framework
+
+	virtual void Reset() override;
+
+#pragma endregion
 
 #pragma region Box Select
 protected:

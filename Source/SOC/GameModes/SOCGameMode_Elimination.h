@@ -21,11 +21,35 @@ class SOC_API ASOCGameMode_Elimination : public ASOCGameModeBase
 #pragma region Framework
 protected:
 	ASOCGameMode_Elimination();
+
+	virtual void ResetLevel() override;
 	
 #pragma endregion
 
 
 #pragma region Objectives
+
+	//pre match
+	virtual void SetupPreMatchObjectives();
+	virtual void BeginPreMatchObjectives();
+
+	//match
+	virtual void SetupMatchObjectives();
+	virtual void BeginMatchObjectives();
+
+	//post match
+	virtual void SetupPostMatchObjectives();
+	virtual void BeginPostMatchObjectives();
+
+	/** Called when the state transitions to WaitingToStart */
+	virtual void HandleMatchIsWaitingToStart_Objectives();
+
+	/** Called when the state transitions to InProgress */
+	virtual void HandleMatchHasStarted_Objectives();
+
+	/** Called when the state transitions to WaitingPostMatch */
+	virtual void HandleMatchHasEnded_Objectives();
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	TArray<UObjectiveInfoCollection*> PreMatchObjectiveCollections;
@@ -36,6 +60,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	TArray<UObjectiveInfoCollection*> MatchObjectiveCollections;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	TArray<UObjectiveInfoCollection*> MatchPlayerObjectiveCollections;
+
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	TArray<UObjectiveInfoCollection*> PostMatchObjectiveCollections;
 
@@ -56,6 +84,9 @@ protected:
 	
 	/** Overridable virtual function to dispatch the appropriate transition functions before GameState and Blueprints get SetMatchState calls. */
 	virtual void OnMatchStateSet() override;
+
+	/** Called when the state transitions to WaitingToStart */
+	virtual void HandleMatchIsWaitingToStart() override;
 	
 	/** Called when the state transitions to InProgress */
 	virtual void HandleMatchHasStarted() override;
@@ -99,7 +130,7 @@ protected:
 #pragma endregion
 
 	
-#pragma region Rematch Check
+#pragma region Rematch
 
 	virtual void SetupRematchObjectives();
 
@@ -132,13 +163,24 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	float RematchTimerDuration;
+
+	UFUNCTION()
+	virtual void Rematch();
+	
+	UFUNCTION()
+	virtual void ExitMatch();
 	
 #pragma endregion
 	
 #pragma region Buildings
+
+	void SetupDestroyEnemyBuildingsObjectives();
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	FGameplayTagContainer DestroyBuildingsObjectiveTags;
+
+	UPROPERTY(Transient)
+	TObjectPtr<AObjective> DestroyEnemyBuildingsObjective;
 
 	void OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator);
 

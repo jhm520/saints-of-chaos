@@ -15,6 +15,22 @@ void AObjectiveGroup::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(AObjectiveGroup, SubObjectives, COND_None, REPNOTIFY_Always);
 }
+
+void AObjectiveGroup::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	for (AObjective* SubObjective : SubObjectives)
+	{
+		if (!SubObjective)
+		{
+			continue;
+		}
+
+		SubObjective->Destroy();
+	}
+	
+	Super::EndPlay(EndPlayReason);
+}
+
 #pragma endregion
 
 #pragma region Objective

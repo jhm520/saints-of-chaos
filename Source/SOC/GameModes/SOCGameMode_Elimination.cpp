@@ -22,6 +22,270 @@ ASOCGameMode_Elimination::ASOCGameMode_Elimination()
 	RematchTimerDuration = 15.0f;
 }
 
+void ASOCGameMode_Elimination::ResetLevel()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Reset Level" + MatchState.ToString());
+
+	TArray<AObjective*> AllObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, FGameplayTagContainer(), AllObjectives);
+
+	for (AObjective* Objective : AllObjectives)
+	{
+		if (!IsValid(Objective))
+		{
+			continue;
+		}
+
+		Objective->Destroy();
+	}
+	
+	Super::ResetLevel();
+
+	// Restart all players
+	for (FConstControllerIterator Iterator = GetWorld()->GetControllerIterator(); Iterator; ++Iterator)
+	{
+		AController* Controller = Iterator->Get();
+		APlayerController* PlayerController = Cast<APlayerController>(Controller);
+		if (PlayerController)
+		{
+			RestartPlayer(PlayerController);
+		}
+	}
+
+	SetMatchState(MatchState::WaitingToStart);
+}
+
+
+#pragma endregion
+
+#pragma region Objectives
+
+void ASOCGameMode_Elimination::SetupPreMatchObjectives()
+{
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PreMatchObjectiveCollections)
+	{
+		TArray<AObjective*> PreMatchObjectives;
+		UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, PreMatchObjectives);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PreMatchPlayerObjectiveCollections)
+	{
+		TArray<AObjective*> PreMatchPlayerObjectives;
+
+		for (APlayerState* Player : GameState->PlayerArray)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(Player, Collection, Assignees, PreMatchPlayerObjectives);
+		}
+	}
+}
+
+void ASOCGameMode_Elimination::BeginPreMatchObjectives()
+{
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PreMatchObjectiveCollections)
+	{
+		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PreMatchPlayerObjectiveCollections)
+	{
+		for (APlayerState* Player : GameState->PlayerArray)
+		{
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
+		}
+	}
+}
+
+void ASOCGameMode_Elimination::SetupMatchObjectives()
+{
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
+	{
+		TArray<AObjective*> PreMatchObjectives;
+		UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, PreMatchObjectives);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : MatchPlayerObjectiveCollections)
+	{
+		TArray<AObjective*> MatchPlayerObjectives;
+
+		for (APlayerState* Player : GameState->PlayerArray)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(Player, Collection, Assignees, MatchPlayerObjectives);
+		}
+	}
+}
+
+void ASOCGameMode_Elimination::BeginMatchObjectives()
+{
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
+	{
+		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : MatchPlayerObjectiveCollections)
+	{
+		for (APlayerState* Player : GameState->PlayerArray)
+		{
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
+		}
+	}
+}
+
+void ASOCGameMode_Elimination::SetupPostMatchObjectives()
+{
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PostMatchObjectiveCollections)
+	{
+		TArray<AObjective*> PostMatchObjectives;
+		UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, PostMatchObjectives);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PostMatchPlayerObjectiveCollections)
+	{
+		TArray<AObjective*> PostMatchPlayerObjectives;
+
+		for (APlayerState* Player : GameState->PlayerArray)
+		{
+			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(Player, Collection, Assignees, PostMatchPlayerObjectives);
+		}
+	}
+}
+
+void ASOCGameMode_Elimination::BeginPostMatchObjectives()
+{
+	if (!GameState)
+	{
+		return;
+	}
+	
+	TArray<AActor*> Assignees;
+
+	for (APlayerState* Player : GameState->PlayerArray)
+	{
+		Assignees.Add(Player);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PostMatchObjectiveCollections)
+	{
+		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
+	}
+
+	//set up and begin any pre-match objectives
+	for (UObjectiveInfoCollection* Collection : PostMatchPlayerObjectiveCollections)
+	{
+		for (APlayerState* Player : GameState->PlayerArray)
+		{
+			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
+		}
+	}
+}
+
+/** Called when the state transitions to WaitingToStart */
+void ASOCGameMode_Elimination::HandleMatchIsWaitingToStart_Objectives()
+{
+	//pre match, setup and begin
+	SetupPreMatchObjectives();
+	BeginPreMatchObjectives();
+
+	//post match, setup
+	SetupPostMatchObjectives();
+
+	//match, setup
+	SetupMatchObjectives();
+
+	//setup ready check specific objectives
+	SetupReadyCheckObjectives();
+
+	//setup rematch specific objectives
+	SetupRematchObjectives();
+}
+
+/** Called when the state transitions to InProgress */
+void ASOCGameMode_Elimination::HandleMatchHasStarted_Objectives()
+{
+	SetupMatchObjectives();
+	BeginMatchObjectives();
+	SetupPostMatchObjectives();
+		
+	//setup rematch specific objectives
+	SetupRematchObjectives();
+}
+
+/** Called when the state transitions to WaitingPostMatch */
+void ASOCGameMode_Elimination::HandleMatchHasEnded_Objectives()
+{
+	BeginPostMatchObjectives();
+}
+
 #pragma endregion
 
 #pragma region Player
@@ -30,73 +294,13 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 {
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 
-	if (!NewPlayer)
-	{
-		return;
-	}
-
-	APlayerState* PlayerState = NewPlayer->PlayerState;
-
-	if (!PlayerState)
-	{
-		return;
-	}
-
-	TArray<AActor*> Assignees;
-	Assignees.Add(PlayerState);
-
 	if (GetMatchState() == MatchState::WaitingToStart)
 	{
-		//set up and begin any pre-match objectives
-		for (UObjectiveInfoCollection* Collection : PreMatchObjectiveCollections)
-		{
-			TArray<AObjective*> PreMatchObjectives;
-			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, PreMatchObjectives);
-			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
-		}
-
-		//set up and begin any pre-match objectives
-		for (UObjectiveInfoCollection* Collection : PreMatchPlayerObjectiveCollections)
-		{
-			TArray<AObjective*> PreMatchPlayerObjectives;
-
-			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(PlayerState, Collection, Assignees, PreMatchPlayerObjectives);
-			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(PlayerState, Collection);
-		}
-
-		//set up post match objectives
-		for (UObjectiveInfoCollection* Collection : PostMatchObjectiveCollections)
-		{
-			TArray<AObjective*> PostMatchObjectives;
-			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees,PostMatchObjectives);
-		}
-
-		for (UObjectiveInfoCollection* Collection : PostMatchPlayerObjectiveCollections)
-		{
-			TArray<AObjective*> PostMatchPlayerObjectives;
-			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(PlayerState, Collection, Assignees, PostMatchPlayerObjectives);
-		}
-		
-		SetupReadyCheckObjectives();
-
-		SetupRematchObjectives();
-
-		//set up the objectives for the match
-		for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
-		{
-			TArray<AObjective*> MatchObjectives;
-			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, MatchObjectives);
-		}
-		
+		HandleMatchIsWaitingToStart_Objectives();
 	}
 	else if (GetMatchState() == MatchState::InProgress)
 	{
-		for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
-		{
-			TArray<AObjective*> MatchObjectives;
-			UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, MatchObjectives);
-			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
-		}
+		HandleMatchHasStarted_Objectives();
 	}
 }
 	
@@ -108,8 +312,13 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 void ASOCGameMode_Elimination::OnMatchStateSet()
 {
 	Super::OnMatchStateSet();
-	
-	
+}
+
+void ASOCGameMode_Elimination::HandleMatchIsWaitingToStart()
+{
+	Super::HandleMatchIsWaitingToStart();
+
+	HandleMatchIsWaitingToStart_Objectives();
 }
 
 /** Called when the state transitions to InProgress */
@@ -117,33 +326,9 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted()
 {
 	Super::HandleMatchHasStarted();
 	
-	if (!GameState)
-	{
-		return;
-	}
-	
-	TArray<AActor*> Assignees;
+	SetupDestroyEnemyBuildingsObjectives();
 
-	for (APlayerState* Player : GameState->PlayerArray)
-	{
-		Assignees.Add(Player);
-	}
-
-	for (UObjectiveInfoCollection* Collection : MatchObjectiveCollections)
-	{
-		TArray<AObjective*> MatchObjectives;
-		UObjectiveSystemBlueprintLibrary::SetupObjectivesForActorByCollection(GameState, Collection, Assignees, MatchObjectives);
-		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
-	}
-
-	//TODO: Make an ObjectiveGroup_Competitive class that inherits from ObjectiveGroup and implements the SetupSubObjectives_Implementation function, use that to set up the DestroyEnemyBuildings objective
-	TArray<AObjective*> DestroyEnemyBuildingsObjectives;
-	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, DestroyBuildingsObjectiveTags, DestroyEnemyBuildingsObjectives);
-
-	for (AObjective* Objective : DestroyEnemyBuildingsObjectives)
-	{
-		Objective->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnDestroyEnemyBuildingsObjectiveComplete);
-	}
+	BeginMatchObjectives();
 }
 
 /** Called when the map transitions to WaitingPostMatch */
@@ -151,34 +336,9 @@ void ASOCGameMode_Elimination::HandleMatchHasEnded()
 {
 	Super::HandleMatchHasEnded();
 
+	HandleMatchHasEnded_Objectives();
+
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Match Has Ended");
-	
-	if (!GameState)
-	{
-		return;
-	}
-	
-	TArray<AActor*> Assignees;
-
-	for (APlayerState* Player : GameState->PlayerArray)
-	{
-		Assignees.Add(Player);
-	}
-
-	//begin any post match objectives
-	for (UObjectiveInfoCollection* Collection : PostMatchObjectiveCollections)
-	{
-		UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(GameState, Collection);
-	}
-
-	//begin any post match objectives for each player
-	for (APlayerState* Player : GameState->PlayerArray)
-	{
-		for (UObjectiveInfoCollection* Collection : PostMatchPlayerObjectiveCollections)
-		{
-			UObjectiveSystemBlueprintLibrary::BeginObjectivesForActorByCollection(Player, Collection);
-		}
-	}
 }
 #pragma endregion
 
@@ -282,18 +442,45 @@ void ASOCGameMode_Elimination::Timer_Rematch()
 	if (AllPlayersRematchObjectiveGroup->IsObjectiveGroupComplete())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Rematch");
+
+		Rematch();
 		//rematch
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Match ended, return to main menu");
+
+		ExitMatch();
 		//end the match
 	}
+}
+
+void ASOCGameMode_Elimination::Rematch()
+{
+	ResetLevel();
+}
+
+void ASOCGameMode_Elimination::ExitMatch()
+{
+	
 }
 	
 #pragma endregion
 
 #pragma region Buildings
+
+void ASOCGameMode_Elimination::SetupDestroyEnemyBuildingsObjectives()
+{
+	//TODO: Make an ObjectiveGroup_Competitive class that inherits from ObjectiveGroup and implements the SetupSubObjectives_Implementation function, use that to set up the DestroyEnemyBuildings objective
+	TArray<AObjective*> DestroyEnemyBuildingsObjectives;
+	UObjectiveSystemBlueprintLibrary::GetObjectivesByTags(this, DestroyBuildingsObjectiveTags, DestroyEnemyBuildingsObjectives);
+
+	if (DestroyEnemyBuildingsObjectives.IsValidIndex(0))
+	{
+		DestroyEnemyBuildingsObjective = DestroyEnemyBuildingsObjectives[0];
+		DestroyEnemyBuildingsObjective->OnObjectiveComplete.AddDynamic(this, &ASOCGameMode_Elimination::OnDestroyEnemyBuildingsObjectiveComplete);
+	}
+}
 
 void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim, AActor* Attacker, AController* ControllerInstigator)
 {

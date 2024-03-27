@@ -13,7 +13,11 @@
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "GameFramework/PlayerState.h"
+#include "ObjectiveSystem/ObjectiveSystemBlueprintLibrary.h"
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
+#include "SOC/HUD/SOCHUD.h"
+#include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
+#include "ObjectiveSystem/Components/ObjectiveAssigneeComponent.h"
 
 static TAutoConsoleVariable<bool> CVarEnableGameDebugCommands(
 	TEXT("Game.EnableDebugCommands"),
@@ -44,6 +48,42 @@ void ASOCPlayerController::PostInitializeComponents()
 
 			LocalPlayerState->SetPlayerIndex(PlayerIndex);
 		}
+	}
+}
+
+void ASOCPlayerController::ClientRestart_Implementation(APawn* NewPawn)
+{
+	Super::ClientRestart_Implementation(NewPawn);
+
+	ASOCHUD* HUD = Cast<ASOCHUD>(GetHUD());
+
+	if (IsValid(HUD))
+	{
+		HUD->Reset();
+	}
+
+	APlayerState* LocalPlayerState = GetPlayerState<APlayerState>();
+
+	IObjectiveAssigneeInterface* AssigneeInterface = Cast<IObjectiveAssigneeInterface>(LocalPlayerState);
+
+	if (!AssigneeInterface)
+	{
+		return;
+	}
+
+	UObjectiveAssigneeComponent* AssigneeComponent = AssigneeInterface->GetObjectiveAssigneeComponent();
+
+	if (!AssigneeComponent)
+	{
+		return;
+	}
+	
+	TArray<TObjectPtr<AObjective>> AssignedObjectives;
+	UObjectiveSystemBlueprintLibrary::GetAssignedObjectives(this, LocalPlayerState, AssignedObjectives);
+
+	for (AObjective* AssignedObjective : AssignedObjectives)
+	{
+		AssigneeComponent->ReplicateAssigneeObjectiveStatuses(AssignedObjective);
 	}
 }
 

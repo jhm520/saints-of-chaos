@@ -5,7 +5,7 @@
 #include "Components/ObjectiveTrackerComponent.h"
 #include "Actors/Objective.h"
 #include "Interfaces/ObjectiveInterface.h"
-
+UE_DISABLE_OPTIMIZATION
 UObjectiveSubsystem::UObjectiveSubsystem()
 {
 	
@@ -130,7 +130,7 @@ void UObjectiveSubsystem::GetObjectivesByTags(const FGameplayTagContainer& Objec
 {
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
@@ -143,3 +143,4 @@ void UObjectiveSubsystem::GetObjectivesByTags(const FGameplayTagContainer& Objec
 }
 
 
+UE_ENABLE_OPTIMIZATION

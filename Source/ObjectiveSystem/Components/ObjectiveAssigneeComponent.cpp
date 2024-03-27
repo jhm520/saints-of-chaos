@@ -70,3 +70,17 @@ void UObjectiveAssigneeComponent::Server_ProgressObjectivesForAssigneeByTags_Imp
 
 #pragma endregion
 
+#pragma region Replication
+
+void UObjectiveAssigneeComponent::ReplicateAssigneeObjectiveStatuses(AObjective* Objective)
+{
+	if (!IsValid(Objective))
+	{
+		return;
+	}
+
+	Objective->ReplicateObjectiveStatuses();
+}
+
+#pragma endregion
+

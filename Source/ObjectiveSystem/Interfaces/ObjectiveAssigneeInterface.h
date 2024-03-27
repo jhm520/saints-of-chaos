@@ -28,4 +28,5 @@ public:
 	// Getter function for the ObjectiveAssigneeComponent variable
 	UFUNCTION()
 	virtual AActor* GetAssignee() = 0;
+	
 };

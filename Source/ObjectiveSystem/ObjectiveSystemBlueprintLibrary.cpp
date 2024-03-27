@@ -132,7 +132,7 @@ bool UObjectiveSystemBlueprintLibrary::GetAssignedObjectives(UObject* WorldConte
 
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
@@ -164,7 +164,7 @@ bool UObjectiveSystemBlueprintLibrary::GetObjectiveAssigneesByTags(UObject* Worl
 
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
@@ -200,7 +200,7 @@ bool UObjectiveSystemBlueprintLibrary::HaveAllAssigneesCompletedObjectivesByTags
 	
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
@@ -243,7 +243,7 @@ void UObjectiveSystemBlueprintLibrary::AddObjectivesToObjectiveGroup(UObject* Wo
 	
 	for (AObjective* Objective : Objectives)
 	{
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}

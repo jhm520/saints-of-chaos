@@ -19,7 +19,7 @@ const FGameplayTagContainer UObjectiveInfoCollection::GetAllObjectiveTags() cons
 
 		AObjective* Objective = ObjectiveInfo.ObjectiveClass.GetDefaultObject();
 
-		if (!Objective)
+		if (!IsValid(Objective))
 		{
 			continue;
 		}
