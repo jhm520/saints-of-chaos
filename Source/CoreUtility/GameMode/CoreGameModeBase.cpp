@@ -6,7 +6,22 @@
 #include "CoreUtility/PlayerStart/Interfaces/PlayerStartInterface.h"
 #include "Engine/PlayerStartPIE.h"
 #include "GameFramework/PlayerStart.h"
+#include "Interfaces/CoreGameModeActorInterface.h"
 
+#pragma region Reset
+
+bool ACoreGameModeBase::ShouldReset_Implementation(AActor* ActorToReset)
+{
+	ICoreGameModeActorInterface* CoreGameModeActorInterface = Cast<ICoreGameModeActorInterface>(ActorToReset);
+
+	if (CoreGameModeActorInterface)
+	{
+		return CoreGameModeActorInterface->ShouldReset(ActorToReset);
+	}
+
+	return Super::ShouldReset_Implementation(ActorToReset);
+}
+#pragma endregion
 
 #pragma region Player Start
 

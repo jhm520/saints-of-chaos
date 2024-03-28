@@ -8,6 +8,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameplayTagContainer.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
+#include "CoreUtility/GameMode/Interfaces/CoreGameModeActorInterface.h"
 #include "SOC/Attributes/Damage/DamageInterface.h"
 #include "SOC/Attributes/Health/HealthInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
@@ -21,7 +22,7 @@ class UWidgetComponent;
 class UCapsuleComponent;
 
 UCLASS()
-class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface, public IHealthInterface, public IDamageInterface
+class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface, public IHealthInterface, public IDamageInterface, public ICoreGameModeActorInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -40,6 +41,7 @@ protected:
 
 	virtual void SetOwner( AActor* NewOwner ) override;
 
+	virtual void Reset() override;
 
 public:	
 	// Called every frame
@@ -193,6 +195,12 @@ protected:
 	
 public:
 	virtual void OnDamaged_Implementation(float Damage, float PreviousDamageTotal, AActor* DamageCauser, AController* InstigatorController) override;
+
+#pragma endregion
+
+#pragma region Core Game Mode Actor Interface
+
+	virtual bool ShouldReset(AActor* Actor) const override;
 
 #pragma endregion
 

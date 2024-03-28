@@ -14,6 +14,12 @@ class COREUTILITY_API ACoreGameModeBase : public AGameMode
 {
 	GENERATED_BODY()
 
+#pragma region Reset
+
+	virtual bool ShouldReset_Implementation(AActor* ActorToReset) override;
+#pragma endregion
+
+
 #pragma region Player Start
 	
 protected:

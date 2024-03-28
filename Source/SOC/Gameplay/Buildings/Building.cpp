@@ -99,6 +99,11 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 	}
 }
 
+void ASOCBuilding::Reset()
+{
+	Super::Reset();
+}
+
 void ASOCBuilding::OnRep_Owner()
 {
 	Super::OnRep_Owner();
@@ -523,6 +528,15 @@ void ASOCBuilding::OnDamaged_Implementation(float Damage, float PreviousDamageTo
 			Die(DamageCauser, InstigatorController);
 		}
 	}
+}
+
+#pragma endregion
+
+#pragma region Core Game Mode Actor Interface
+
+bool ASOCBuilding::ShouldReset(AActor* Actor) const
+{
+	return false;
 }
 
 #pragma endregion
