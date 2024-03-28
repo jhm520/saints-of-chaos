@@ -43,6 +43,41 @@ void UAutoOwnershipComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 #pragma region Auto Ownership
 
+TArray<AActor*> UAutoOwnershipComponent::GetAutoOwnedActors(TSubclassOf<AActor> ActorClassFilter) const
+{
+	if (!IsValid(ActorClassFilter))
+	{
+		return AutoOwnedActors;
+	}
+
+	TArray<AActor*> FilteredActors;
+
+	for (AActor* AutoOwnedActor : AutoOwnedActors)
+	{
+		if (!IsValid(AutoOwnedActor))
+		{
+			continue;
+		}
+
+		if (AutoOwnedActor->IsA(ActorClassFilter))
+		{
+			FilteredActors.Add(AutoOwnedActor);
+		}
+	}
+
+	return FilteredActors;
+}
+
+void UAutoOwnershipComponent::OnAutoOwnedActorDestroyed(AActor* DestroyedActor)
+{
+	if (!DestroyedActor)
+	{
+		return;
+	}
+
+	AutoOwnedActors.Remove(DestroyedActor);
+}
+
 void UAutoOwnershipComponent::AutoTakeOwnership()
 {
 	if (!GetOwner()->HasAuthority())
@@ -68,6 +103,10 @@ void UAutoOwnershipComponent::AutoTakeOwnership()
 		}
 		
 		Actor->SetOwner(GetOwner());
+		
+		AutoOwnedActors.AddUnique(Actor);
+
+		Actor->OnDestroyed.AddDynamic(this, &UAutoOwnershipComponent::OnAutoOwnedActorDestroyed);
 	}
 }
 

@@ -79,6 +79,13 @@ void ASOCAICharacter::SpawnDefaultController()
 	LocalBehaviorComponent->SetDirector(LocalDirectorController->GetPawn());
 }
 
+void ASOCAICharacter::Reset()
+{
+	Super::Reset();
+
+	Destroy();
+}
+
 // Called every frame
 void ASOCAICharacter::Tick(float DeltaTime)
 {

@@ -93,7 +93,7 @@ void ASOCBuilding::SetOwner( AActor* NewOwner )
 			return;
 		}
 		
-		ControllerDirector->OnPossessedPawnChanged.AddDynamic(this, &ASOCBuilding::OnDirectorPossessedPawnChanged);
+		ControllerDirector->OnPossessedPawnChanged.AddUniqueDynamic(this, &ASOCBuilding::OnDirectorPossessedPawnChanged);
 	
 		BehaviorComponent->InitBehaviorSystem(ControllerDirector->GetPawn());
 	}
@@ -134,6 +134,30 @@ void ASOCBuilding::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+/** Allow actors to initialize themselves on the C++ side after all of their components have been initialized, only called during gameplay */
+void ASOCBuilding::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (GetOwner())
+	{
+		InitAbilitySystem();
+		
+		BindGameModeEvents();
+		
+		AController* ControllerDirector = Cast<AController>(GetOwner());
+
+		if (!ControllerDirector)
+		{
+			return;
+		}
+		
+		ControllerDirector->OnPossessedPawnChanged.AddUniqueDynamic(this, &ASOCBuilding::OnDirectorPossessedPawnChanged);
+	
+		BehaviorComponent->InitBehaviorSystem(ControllerDirector->GetPawn());
+	}
+}
+
 #pragma endregion
 
  #pragma region Gameplay Abilities
@@ -141,6 +165,11 @@ void ASOCBuilding::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ASOCBuilding::InitAbilitySystem()
 {
 	if(!AbilitySystemComponent)
+	{
+		return;
+	}
+	
+	if (!AbilitySystemComponent->AbilityActorInfo.IsValid())
 	{
 		return;
 	}

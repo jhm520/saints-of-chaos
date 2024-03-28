@@ -4,6 +4,7 @@
 #include "SOCGameMode_Elimination.h"
 
 #include "SOCGameState.h"
+#include "CoreUtility/AutoOwnership/Interfaces/AutoOwnerInterface.h"
 #include "ObjectiveSystem/ObjectiveSystemBlueprintLibrary.h"
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "GameFramework/GameStateBase.h"
@@ -12,6 +13,7 @@
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 #include "ObjectiveSystem/Actors/ObjectiveGroup.h"
+#include "CoreUtility/ActorSpawner/ActorSpawner.h"
 
 #pragma region Framework
 
@@ -296,6 +298,7 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 
 	if (GetMatchState() == MatchState::WaitingToStart)
 	{
+		SetupMatchBuildingsForPlayer(NewPlayer);
 		HandleMatchIsWaitingToStart_Objectives();
 	}
 	else if (GetMatchState() == MatchState::InProgress)
@@ -318,6 +321,7 @@ void ASOCGameMode_Elimination::HandleMatchIsWaitingToStart()
 {
 	Super::HandleMatchIsWaitingToStart();
 
+	SetupMatchBuildingsForAllPlayers();
 	HandleMatchIsWaitingToStart_Objectives();
 }
 
@@ -468,6 +472,70 @@ void ASOCGameMode_Elimination::ExitMatch()
 #pragma endregion
 
 #pragma region Buildings
+
+void ASOCGameMode_Elimination::SetupMatchBuildingsForAllPlayers()
+{
+	if (!GameState)
+	{
+		return;
+	}
+
+	TArray<APlayerState*> PlayerStates = GameState->PlayerArray;
+
+	for (APlayerState* PlayerState : PlayerStates)
+	{
+		if (!IsValid(PlayerState))
+		{
+			continue;
+		}
+		
+		APlayerController* PlayerController = PlayerState->GetOwner<APlayerController>();
+
+		if (!PlayerController)
+		{
+			continue;
+		}
+
+		SetupMatchBuildingsForPlayer(PlayerController);
+	}
+}
+
+void ASOCGameMode_Elimination::SetupMatchBuildingsForPlayer(APlayerController* Controller)
+{
+	if (!Controller)
+	{
+		return;
+	}
+
+	IAutoOwnerInterface* AutoOwnerInterface = Cast<IAutoOwnerInterface>(Controller);
+
+	if (!AutoOwnerInterface)
+	{
+		return;
+	}
+	
+	UAutoOwnershipComponent* AutoOwnershipComponent = AutoOwnerInterface->GetAutoOwnershipComponent();
+
+	if (!AutoOwnershipComponent)
+	{
+		return;
+	}
+
+	TArray<AActor*> AutoOwnedBuildingSpawnerActors = AutoOwnershipComponent->GetAutoOwnedActors(BuildingSpawnerClass);
+
+	for (AActor* AutoOwnedActor : AutoOwnedBuildingSpawnerActors)
+	{
+		AActorSpawner* BuildingSpawner = Cast<AActorSpawner>(AutoOwnedActor);
+
+		if (!IsValid(BuildingSpawner))
+		{
+			continue;
+		}
+
+		BuildingSpawner->SpawnActor();
+	}
+}
+
 
 void ASOCGameMode_Elimination::SetupDestroyEnemyBuildingsObjectives()
 {

@@ -87,6 +87,14 @@ void ASOCPlayerController::ClientRestart_Implementation(APawn* NewPawn)
 	}
 }
 
+#pragma endregion
+
+#pragma region Auto Ownership
+
+UAutoOwnershipComponent* ASOCPlayerController::GetAutoOwnershipComponent() const
+{
+	return AutoOwnershipComponent;
+}
 
 #pragma endregion
 

@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
+#include "CoreUtility/AutoOwnership/Interfaces/AutoOwnerInterface.h"
 #include "CoreUtility/Clicking/Interfaces/ClickingInterface.h"
 #include "GameFramework/PlayerController.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
@@ -19,7 +20,7 @@ class UAutoOwnershipComponent;
  */
 
 UCLASS()
-class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface, public IClickingInterface, public IObjectiveAssigneeInterface
+class SOC_API ASOCPlayerController : public APlayerController, public IAttitudeInterface, public ISelectorInterface, public IAbilitySystemInterface, public IClickingInterface, public IObjectiveAssigneeInterface, public IAutoOwnerInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -34,6 +35,9 @@ public:
 #pragma endregion
 
 #pragma region Auto Ownership
+
+public:
+	virtual UAutoOwnershipComponent* GetAutoOwnershipComponent() const override;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")

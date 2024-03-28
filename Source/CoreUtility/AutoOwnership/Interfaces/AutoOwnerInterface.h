@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "CoreGameModeActorInterface.generated.h"
+#include "CoreUtility/AutoOwnership/Components/AutoOwnershipComponent.h"
+#include "AutoOwnerInterface.generated.h"
 
 UINTERFACE(MinimalAPI)
-class UCoreGameModeActorInterface : public UInterface
+class UAutoOwnerInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -15,7 +16,7 @@ class UCoreGameModeActorInterface : public UInterface
 /** Actors that implement this interface will indicate to any existing AutoOwnershipComponents that they are candidates for ownership
  * 
  */
-class COREUTILITY_API ICoreGameModeActorInterface
+class COREUTILITY_API IAutoOwnerInterface
 {
 	GENERATED_BODY()
 
@@ -23,5 +24,5 @@ class COREUTILITY_API ICoreGameModeActorInterface
 public:
 
 	UFUNCTION()
-	virtual bool ShouldReset(AActor* Actor) const { return true;};
+	virtual UAutoOwnershipComponent* GetAutoOwnershipComponent() const = 0;
 };

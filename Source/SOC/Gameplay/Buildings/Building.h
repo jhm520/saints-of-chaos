@@ -7,6 +7,7 @@
 #include "CoreUtility/AutoOwnership/Interfaces/AutoOwnershipInterface.h"
 #include "GameFramework/Pawn.h"
 #include "GameplayTagContainer.h"
+#include "CoreUtility/ActorSpawner/Interfaces/SpawnedActorInterface.h"
 #include "CoreUtility/Attitude/AttitudeInterface.h"
 #include "CoreUtility/GameMode/Interfaces/CoreGameModeActorInterface.h"
 #include "SOC/Attributes/Damage/DamageInterface.h"
@@ -22,7 +23,7 @@ class UWidgetComponent;
 class UCapsuleComponent;
 
 UCLASS()
-class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface, public IHealthInterface, public IDamageInterface, public ICoreGameModeActorInterface
+class SOC_API ASOCBuilding : public APawn, public IAbilitySystemInterface, public IAutoOwnershipInterface, public IAttitudeInterface, public ISOCAIBehaviorInterface, public IHealthInterface, public IDamageInterface, public ICoreGameModeActorInterface, public ISpawnedActorInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
@@ -49,6 +50,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/** Allow actors to initialize themselves on the C++ side after all of their components have been initialized, only called during gameplay */
+	virtual void PostInitializeComponents() override;
 #pragma endregion
 
 #pragma region Capsule
@@ -89,7 +93,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<TObjectPtr<UGameplayAbilityCollection>> AbilityCollections;
 #pragma endregion
 

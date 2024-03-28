@@ -27,10 +27,24 @@ public:
 #pragma endregion
 
 #pragma region Auto Ownership
+
 public:
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Auto Ownership")
+	TArray<AActor*> GetAutoOwnedActors(TSubclassOf<AActor> ActorClassFilter = nullptr) const;
+
+protected:
+	
+	//Actors that this component has automatically taken ownership of
+	UPROPERTY(Transient)
+	TArray<TObjectPtr<AActor>> AutoOwnedActors;
+	
 	// Automatically takes ownership of designated actors at begin play
 	UFUNCTION()
 	void AutoTakeOwnership();
+	
+	UFUNCTION()
+	void OnAutoOwnedActorDestroyed(AActor* DestroyedActor);
 #pragma endregion
 
 };

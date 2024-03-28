@@ -32,6 +32,8 @@ protected:
 
 	virtual void SpawnDefaultController() override;
 
+	virtual void Reset() override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -10,6 +10,7 @@ class UObjectiveInfoCollection;
 class ASOCBuilding;
 class AObjective;
 class AObjectiveGroup;
+class AActorSpawner;
 /**
  * 
  */
@@ -174,9 +175,16 @@ protected:
 	
 #pragma region Buildings
 
+	void SetupMatchBuildingsForAllPlayers();
+
+	void SetupMatchBuildingsForPlayer(APlayerController* Controller);
+
 	void SetupDestroyEnemyBuildingsObjectives();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Buildings")
+	TSubclassOf<AActor> BuildingSpawnerClass;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Buildings")
 	FGameplayTagContainer DestroyBuildingsObjectiveTags;
 
 	UPROPERTY(Transient)
