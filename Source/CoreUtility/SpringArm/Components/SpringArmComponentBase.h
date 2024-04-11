@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType, meta=(BlueprintSpawnableComponent))
 class COREUTILITY_API USpringArmComponentBase : public USpringArmComponent
 {
 	GENERATED_BODY()

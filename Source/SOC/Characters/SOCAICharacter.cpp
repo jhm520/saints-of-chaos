@@ -26,7 +26,7 @@ ASOCAICharacter::ASOCAICharacter()
 
 // Called when the game starts or when spawned
 void ASOCAICharacter::BeginPlay()
-{
+{ 
 	Super::BeginPlay();
 	
 }
