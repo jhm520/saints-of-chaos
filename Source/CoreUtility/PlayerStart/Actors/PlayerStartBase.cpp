@@ -15,7 +15,7 @@ APlayerStartBase::APlayerStartBase(const FObjectInitializer& ObjectInitializer) 
 
 #pragma region Player Start Interface
 
-bool APlayerStartBase::CanPlayerSpawnAt(APlayerController* PlayerController) const
+bool APlayerStartBase::CanPlayerSpawnAt(AController* PlayerController) const
 {
 	if (!PlayerController)
 	{

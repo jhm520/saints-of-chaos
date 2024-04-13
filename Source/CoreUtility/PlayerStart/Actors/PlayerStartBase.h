@@ -32,7 +32,7 @@ protected:
 
 #pragma region Player Start Interface
 
-	virtual bool CanPlayerSpawnAt(APlayerController* PlayerController) const override;
+	virtual bool CanPlayerSpawnAt(AController* PlayerController) const override;
 
 #pragma endregion
 

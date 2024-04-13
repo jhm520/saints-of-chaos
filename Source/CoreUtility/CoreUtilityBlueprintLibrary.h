@@ -18,6 +18,6 @@ public:
 	//returns -1 if the player controller is not found
 	//must be called on the server
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, meta = (WorldContext = "WorldContextObject"), Category = "CoreUtility|Controller")
-	static int32 GetAuthPlayerControllerId(const UObject* WorldContextObject, APlayerController* PlayerController);
+	static int32 GetAuthPlayerControllerId(const UObject* WorldContextObject, AController* PlayerController);
 	
 };

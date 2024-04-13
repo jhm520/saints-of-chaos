@@ -26,12 +26,6 @@ bool ACoreGameModeBase::ShouldReset_Implementation(AActor* ActorToReset)
 
 AActor* ACoreGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 {
-	APlayerController* PlayerController = Cast<APlayerController>(Player);
-
-	if (!PlayerController)
-	{
-		return Super::ChoosePlayerStart_Implementation(Player);
-	}
 	
 	// Choose a player start
 	UWorld* World = GetWorld();
@@ -57,7 +51,7 @@ AActor* ACoreGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 			continue;
 		}
 
-		if (PlayerStartInterface->CanPlayerSpawnAt(PlayerController))
+		if (PlayerStartInterface->CanPlayerSpawnAt(Player))
 		{
 			return PlayerStart;
 		}

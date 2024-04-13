@@ -23,5 +23,5 @@ class COREUTILITY_API IPlayerStartInterface
 public:
 	
 	//Returns true if the player can spawn at this player start
-	virtual bool CanPlayerSpawnAt(APlayerController* PlayerController) const = 0;
+	virtual bool CanPlayerSpawnAt(AController* Controller) const = 0;
 };

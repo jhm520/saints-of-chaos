@@ -3,6 +3,10 @@
 
 #include "SOCGameModeBase.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "SOC/Controllers/SOCAIPlayerController.h"
+#include "SOC/Gameplay/PlayerStart/SOCPlayerStartBase.h"
+
 #pragma region Framework
 
 ASOCGameModeBase::ASOCGameModeBase()
@@ -108,17 +112,32 @@ void ASOCGameModeBase::HandleStartingSoloPlay()
 	{
 		return;
 	}
+
+	TArray<AActor*> PlayerStartActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASOCPlayerStartBase::StaticClass(), PlayerStartActors);
 	
-	// //if we are in a solo play mode, add AI players
-	// if (NumStandaloneAIPlayers > 0)
-	// {
-	// 	//add AI players
-	// 	for (int32 i = 0; i < NumStandaloneAIPlayers; i++)
-	// 	{
-	// 		//spawn an AI player
-	// 		HandleStartingNewPlayer(nullptr);
-	// 	}
-	// }
+	//add AI players
+	for (int32 i = 0; i < NumStandaloneAIPlayers; i++)
+	{
+		ASOCAIPlayerController* NewAIPC = GetWorld()->SpawnActor<ASOCAIPlayerController>(AIPlayerControllerClass);
+
+		if (NewAIPC)
+		{
+			//spawn an AI player
+			RestartPlayer(NewAIPC);
+		}
+	}
 }
+
+UClass* ASOCGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
+{
+	if (InController && InController->IsA<ASOCAIPlayerController>())
+	{
+		return AIPlayerPawnClass;
+	}
+	
+	return Super::GetDefaultPawnClassForController_Implementation(InController);
+}
+
 
 #pragma endregion

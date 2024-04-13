@@ -4,7 +4,7 @@
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 UE_DISABLE_OPTIMIZATION
-int32 UCoreUtilityBlueprintLibrary::GetAuthPlayerControllerId(const UObject* WorldContextObject, APlayerController* PlayerController)
+int32 UCoreUtilityBlueprintLibrary::GetAuthPlayerControllerId(const UObject* WorldContextObject, AController* PlayerController)
 {
 	if (!WorldContextObject || !WorldContextObject->GetWorld())
 	{

@@ -53,6 +53,15 @@ protected:
 
 	void HandleStartingSoloPlay();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Solo Play")
+	TSubclassOf<APawn> AIPlayerPawnClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Solo Play")
+	TSubclassOf<AController> AIPlayerControllerClass;
+
+	/** Returns default pawn class for given controller */
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
 #pragma endregion
 
 };
