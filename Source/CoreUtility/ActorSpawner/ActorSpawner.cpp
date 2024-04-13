@@ -124,14 +124,14 @@ bool AActorSpawner::CanTakeOwnership(AActor* InOwner) const
 		return false;
 	}
 
-	APlayerController* PlayerController = Cast<APlayerController>(InOwner);
+	AController* Controller = Cast<AController>(InOwner);
 	
-	if (!PlayerController)
+	if (!Controller)
 	{
 		return false;
 	}
 
-	const int32 ControllerId = UCoreUtilityBlueprintLibrary::GetAuthPlayerControllerId(this, PlayerController);
+	const int32 ControllerId = UCoreUtilityBlueprintLibrary::GetAuthPlayerControllerId(this, Controller);
 	
 	if (ControllerId != OwningControllerId)
 	{

@@ -78,6 +78,12 @@ protected:
 
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 	
+#pragma endregion
+
+#pragma region AI Player
+
+	virtual void HandleStartingNewAIPlayer(AController* NewPlayer) override;
+	
 #pragma endregion 
 
 
@@ -177,7 +183,7 @@ protected:
 
 	void SetupMatchBuildingsForAllPlayers();
 
-	void SetupMatchBuildingsForPlayer(APlayerController* Controller);
+	void SetupMatchBuildingsForPlayer(AController* Controller);
 
 	void SetupDestroyEnemyBuildingsObjectives();
 

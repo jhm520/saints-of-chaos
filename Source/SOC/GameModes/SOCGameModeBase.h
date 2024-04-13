@@ -53,6 +53,8 @@ protected:
 
 	void HandleStartingSoloPlay();
 
+	virtual void HandleStartingNewAIPlayer(AController* NewPlayer);
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Solo Play")
 	TSubclassOf<APawn> AIPlayerPawnClass;
 

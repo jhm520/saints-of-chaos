@@ -123,11 +123,17 @@ void ASOCGameModeBase::HandleStartingSoloPlay()
 
 		if (NewAIPC)
 		{
-			//spawn an AI player
-			RestartPlayer(NewAIPC);
+			HandleStartingNewAIPlayer(NewAIPC);
 		}
 	}
 }
+
+void ASOCGameModeBase::HandleStartingNewAIPlayer(AController* NewPlayer)
+{
+	//spawn an AI player
+	RestartPlayer(NewPlayer);
+}
+
 
 UClass* ASOCGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
 {

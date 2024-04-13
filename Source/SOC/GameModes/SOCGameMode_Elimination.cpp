@@ -307,6 +307,25 @@ void ASOCGameMode_Elimination::HandleStartingNewPlayer_Implementation(APlayerCon
 	}
 }
 	
+#pragma endregion
+
+#pragma region AI Player
+
+void ASOCGameMode_Elimination::HandleStartingNewAIPlayer(AController* NewPlayer)
+{
+	Super::HandleStartingNewAIPlayer(NewPlayer);
+
+	if (GetMatchState() == MatchState::WaitingToStart)
+	{
+		SetupMatchBuildingsForPlayer(NewPlayer);
+		HandleMatchIsWaitingToStart_Objectives();
+	}
+	else if (GetMatchState() == MatchState::InProgress)
+	{
+		HandleMatchHasStarted_Objectives();
+	}
+}
+	
 #pragma endregion 
 
 #pragma region Match State
@@ -489,18 +508,18 @@ void ASOCGameMode_Elimination::SetupMatchBuildingsForAllPlayers()
 			continue;
 		}
 		
-		APlayerController* PlayerController = PlayerState->GetOwner<APlayerController>();
+		AController* Controller = PlayerState->GetOwner<AController>();
 
-		if (!PlayerController)
+		if (!Controller)
 		{
 			continue;
 		}
 
-		SetupMatchBuildingsForPlayer(PlayerController);
+		SetupMatchBuildingsForPlayer(Controller);
 	}
 }
 
-void ASOCGameMode_Elimination::SetupMatchBuildingsForPlayer(APlayerController* Controller)
+void ASOCGameMode_Elimination::SetupMatchBuildingsForPlayer(AController* Controller)
 {
 	if (!Controller)
 	{
