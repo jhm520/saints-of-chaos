@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2024 John Henry Miller (jhm520@gmail.com), All rights reserved.
 
 #pragma once
 

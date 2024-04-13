@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// © 2024 John Henry Miller. All rights reserved
 
 #include "SOCGameState.h"
 #include "ObjectiveSystem/Components/ObjectiveTrackerComponent.h"

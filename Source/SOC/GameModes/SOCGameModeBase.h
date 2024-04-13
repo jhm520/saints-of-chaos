@@ -46,4 +46,13 @@ public:
 
 #pragma endregion
 
+#pragma region Solo Play Mode
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Solo Play")
+	int32 NumStandaloneAIPlayers = 1;
+
+	void HandleStartingSoloPlay();
+
+#pragma endregion
+
 };

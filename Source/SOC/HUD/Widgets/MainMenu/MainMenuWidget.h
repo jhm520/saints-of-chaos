@@ -1,16 +1,17 @@
-// © 2024 John Henry Miller. All rights reserved
+// Copyright (c) 2024 John Henry Miller (jhm520@gmail.com) All rights reserved
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
 #include "GameplayTagContainer.h"
-#include "ReadyCheckWidget.generated.h"
+#include "MainMenuWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SOC_API UReadyCheckWidget : public UCommonUserWidget
+class SOC_API UMainMenuWidget : public UCommonUserWidget
 {
 	GENERATED_BODY()
 

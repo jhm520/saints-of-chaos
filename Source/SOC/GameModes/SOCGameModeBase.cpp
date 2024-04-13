@@ -44,6 +44,10 @@ void ASOCGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 			}
 		}
 	}
+	
+	//if we are in a solo play mode, handle it
+
+	HandleStartingSoloPlay();
 }
 
 
@@ -90,6 +94,31 @@ void ASOCGameModeBase::OnMatchStateSet()
 void ASOCGameModeBase::OnActorKilled(AActor* Victim, AActor* Attacker, AController* ControllerInstigator)
 {
 	
+}
+
+#pragma endregion
+
+#pragma region Character Death
+
+void ASOCGameModeBase::HandleStartingSoloPlay()
+{
+	ENetMode NetMode = GetNetMode();
+
+	if (NetMode != NM_Standalone)
+	{
+		return;
+	}
+	
+	// //if we are in a solo play mode, add AI players
+	// if (NumStandaloneAIPlayers > 0)
+	// {
+	// 	//add AI players
+	// 	for (int32 i = 0; i < NumStandaloneAIPlayers; i++)
+	// 	{
+	// 		//spawn an AI player
+	// 		HandleStartingNewPlayer(nullptr);
+	// 	}
+	// }
 }
 
 #pragma endregion

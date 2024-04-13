@@ -1,12 +1,12 @@
 // © 2024 John Henry Miller. All rights reserved
 
-#include "ReadyCheckWidget.h"
+#include "MainMenuWidget.h"
 
 #include "ObjectiveSystem/ObjectiveSystemBlueprintLibrary.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
 
 #pragma region Ready Check
-void UReadyCheckWidget::OnSetReady(bool bIsReady)
+void UMainMenuWidget::OnSetReady(bool bIsReady)
 {
 	IObjectiveAssigneeInterface* ObjectiveAssigneeInterface = Cast<IObjectiveAssigneeInterface>(GetOwningPlayer());
 

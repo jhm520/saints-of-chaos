@@ -16,7 +16,8 @@
 				"CommonUI",
 				"CoreUtility",
 				"RTSUtility",
-				"CommandSystem"
+				"CommandSystem",
+				"AIModule"
 			]
 		},
 		{

@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-#pragma region Include
+// © 2024 John Henry Miller. All rights reserved#pragma region Include
 
 #pragma once
 
