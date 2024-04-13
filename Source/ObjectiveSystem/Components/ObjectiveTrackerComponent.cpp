@@ -59,7 +59,7 @@ void UObjectiveTrackerComponent::TickComponent(float DeltaTime, ELevelTick TickT
 }
 
 #pragma endregion
-
+UE_DISABLE_OPTIMIZATION
 #pragma region Objective System
 
 //sets up all the objectives available on this tracker
@@ -345,3 +345,4 @@ void UObjectiveTrackerComponent::AssignObjective(AObjective* Objective, AActor* 
 #pragma endregion
 
 
+UE_ENABLE_OPTIMIZATION

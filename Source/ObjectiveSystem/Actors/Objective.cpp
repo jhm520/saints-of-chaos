@@ -175,9 +175,10 @@ void AObjective::Failed(AActor* Assignee, AActor* InInstigator)
 
 void AObjective::ReplicateObjectiveStatuses()
 {
+	const TArray<FObjectiveStatus> PreviousObjectiveStatuses = ObjectiveStatuses;
 	ObjectiveStatusMap.GenerateValueArray(ObjectiveStatuses);
 
-	OnRep_ObjectiveStatuses(ObjectiveStatuses);
+	OnRep_ObjectiveStatuses(PreviousObjectiveStatuses);
 }
 
 void AObjective::OnRep_ObjectiveStatuses(const TArray<FObjectiveStatus>& PreviousObjectiveStatuses)
