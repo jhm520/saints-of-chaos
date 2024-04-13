@@ -14,6 +14,8 @@
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 #include "ObjectiveSystem/Actors/ObjectiveGroup.h"
 #include "CoreUtility/ActorSpawner/ActorSpawner.h"
+#include "Kismet/GameplayStatics.h"
+#include "SOC/Controllers/SOCAIPlayerController.h"
 
 #pragma region Framework
 
@@ -47,10 +49,23 @@ void ASOCGameMode_Elimination::ResetLevel()
 	for (FConstControllerIterator Iterator = GetWorld()->GetControllerIterator(); Iterator; ++Iterator)
 	{
 		AController* Controller = Iterator->Get();
+
+		ASOCAIPlayerController* AIPlayerController = Cast<ASOCAIPlayerController>(Controller);
+
+		if (AIPlayerController)
+		{
+			if (AIPlayerController->GetPawn())
+			{
+				AIPlayerController->GetPawn()->Destroy();
+			}
+			
+			AIPlayerController->Destroy();
+		}
+
 		APlayerController* PlayerController = Cast<APlayerController>(Controller);
 		if (PlayerController)
 		{
-			RestartPlayer(PlayerController);
+			RestartPlayer(Controller);
 		}
 	}
 
@@ -269,6 +284,26 @@ void ASOCGameMode_Elimination::HandleMatchIsWaitingToStart_Objectives()
 
 	//setup rematch specific objectives
 	SetupRematchObjectives();
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(this, AIPlayerControllerClass, Actors);
+
+	for (AActor* Actor : Actors)
+	{
+		AController* Controller = Cast<AController>(Actor);
+
+		if (!Controller)
+		{
+			continue;
+		}
+
+		if (!Controller->PlayerState)
+		{
+			continue;
+		}
+
+		UObjectiveSystemBlueprintLibrary::ProgressObjectivesForAssigneeByTags(Controller->PlayerState, PlayerReadyCheckObjectiveTags, true);
+	}
 }
 
 /** Called when the state transitions to InProgress */
@@ -286,6 +321,26 @@ void ASOCGameMode_Elimination::HandleMatchHasStarted_Objectives()
 void ASOCGameMode_Elimination::HandleMatchHasEnded_Objectives()
 {
 	BeginPostMatchObjectives();
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(this, AIPlayerControllerClass, Actors);
+
+	for (AActor* Actor : Actors)
+	{
+		AController* Controller = Cast<AController>(Actor);
+
+		if (!Controller)
+		{
+			continue;
+		}
+
+		if (!Controller->PlayerState)
+		{
+			continue;
+		}
+
+		UObjectiveSystemBlueprintLibrary::ProgressObjectivesForAssigneeByTags(Controller->PlayerState, PlayerRematchObjectiveTags, true);
+	}
 }
 
 #pragma endregion

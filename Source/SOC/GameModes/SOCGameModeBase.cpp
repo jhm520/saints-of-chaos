@@ -48,10 +48,6 @@ void ASOCGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 			}
 		}
 	}
-	
-	//if we are in a solo play mode, handle it
-
-	HandleStartingSoloPlay();
 }
 
 
@@ -84,6 +80,8 @@ void ASOCGameModeBase::HandleMatchIsWaitingToStart()
 			RestartPlayer(PlayerController);
 		}
 	}
+
+	HandleStartingSoloPlay();
 }
 
 /** Overridable virtual function to dispatch the appropriate transition functions before GameState and Blueprints get SetMatchState calls. */
@@ -112,9 +110,6 @@ void ASOCGameModeBase::HandleStartingSoloPlay()
 	{
 		return;
 	}
-
-	TArray<AActor*> PlayerStartActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASOCPlayerStartBase::StaticClass(), PlayerStartActors);
 	
 	//add AI players
 	for (int32 i = 0; i < NumStandaloneAIPlayers; i++)
