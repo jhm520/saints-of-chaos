@@ -26,6 +26,8 @@ public class SelectionSystemPlugin : ModuleRules
 			new string[]
 			{
 				"Core",
+				"SelectionSystem",
+				"GameplayAbilities"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

@@ -21,7 +21,6 @@ public class SelectionSystem : ModuleRules
             "HTTP",
             "Slate",
             "SlateCore",
-            "PlatformCrypto",
             "DeveloperSettings",
             "UMG",
             "AudioExtensions",
@@ -35,10 +34,7 @@ public class SelectionSystem : ModuleRules
 		*/
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
-			"GameplayAbilities",
-			"GameplayTags", 
-			"GameplayTasks",
-			"EnhancedInput"
+			"GameplayTags"
 		});
 		
 		//PublicIncludePaths.Add("CoreUtility");
