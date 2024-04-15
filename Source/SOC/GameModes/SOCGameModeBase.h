@@ -17,6 +17,8 @@ class SOC_API ASOCGameModeBase : public ACoreGameModeBase
 #pragma region Framework
 protected:
 	ASOCGameModeBase();
+
+	virtual void BeginPlay() override;
 #pragma endregion
 
 #pragma region Restart Player

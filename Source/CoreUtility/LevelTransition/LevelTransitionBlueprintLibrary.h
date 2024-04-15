@@ -11,7 +11,8 @@ enum class ELevelNetworkingType : uint8
 {
 	Standalone,
 	DedicatedServer,
-	ListenServer
+	ListenServer,
+	Client
 };
 
 /**
@@ -24,5 +25,5 @@ class COREUTILITY_API ULevelTransitionBlueprintLibrary : public UBlueprintFuncti
 public:
 
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "Level Transition")
-	static void TransitionLevel(UObject* WorldContextObject, const FName& InLevelName, TSubclassOf<AGameModeBase> InGameMode, ELevelNetworkingType InLevelNetworkingType, const FGameplayTagContainer LevelTransitionTags, const FString& InOptions = "");
+	static void TransitionLevel(UObject* WorldContextObject, const FName& InLevelName, TSubclassOf<AGameModeBase> InGameMode, ELevelNetworkingType InLevelNetworkingType, const FGameplayTagContainer LevelTransitionTags, const FString& InAdditionalOptions = "");
 };

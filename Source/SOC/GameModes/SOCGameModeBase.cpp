@@ -14,6 +14,12 @@ ASOCGameModeBase::ASOCGameModeBase()
 	bDelayedStart = true;
 }
 
+void ASOCGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+
 #pragma endregion
 
 #pragma region Restart Player

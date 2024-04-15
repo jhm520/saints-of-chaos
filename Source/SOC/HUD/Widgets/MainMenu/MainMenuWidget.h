@@ -15,12 +15,15 @@ class SOC_API UMainMenuWidget : public UCommonUserWidget
 {
 	GENERATED_BODY()
 
-#pragma region Ready Check
-protected:
+#pragma region Solo Play Button
+public:
 	UFUNCTION(BlueprintCallable, Category = "Ready Check")
-	void OnSetReady(bool bIsReady);
+	void OnPressedSoloPlay();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ready Check")
-	FGameplayTagContainer ReadyCheckTags;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ready Check")
+	TSubclassOf<AGameModeBase> SoloGameMode;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ready Check")
+	FName SoloGameMap;
 #pragma endregion
 };
