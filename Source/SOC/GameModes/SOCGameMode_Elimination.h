@@ -180,11 +180,21 @@ protected:
 	UFUNCTION()
 	virtual void Rematch();
 	
+#pragma endregion
+
+#pragma region Exit Match
+
 	UFUNCTION()
 	virtual void ExitMatch();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	FName ExitMatchLevelName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
+	TSubclassOf<AGameModeBase> ExitMatchGameMode;
 	
 #pragma endregion
-	
+
 #pragma region Buildings
 
 	void SetupMatchBuildingsForAllPlayers();

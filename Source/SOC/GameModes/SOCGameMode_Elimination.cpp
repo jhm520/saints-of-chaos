@@ -14,6 +14,7 @@
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 #include "ObjectiveSystem/Actors/ObjectiveGroup.h"
 #include "CoreUtility/ActorSpawner/ActorSpawner.h"
+#include "CoreUtility/LevelTransition/LevelTransitionBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "SOC/Controllers/SOCAIPlayerController.h"
 
@@ -540,7 +541,7 @@ void ASOCGameMode_Elimination::Rematch()
 
 void ASOCGameMode_Elimination::ExitMatch()
 {
-	
+	ULevelTransitionBlueprintLibrary::TransitionLevel(this, ExitMatchLevelName, ExitMatchGameMode, ELevelNetworkingType::Standalone);
 }
 	
 #pragma endregion

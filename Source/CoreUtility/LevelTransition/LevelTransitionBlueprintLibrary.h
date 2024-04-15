@@ -25,5 +25,5 @@ class COREUTILITY_API ULevelTransitionBlueprintLibrary : public UBlueprintFuncti
 public:
 
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "Level Transition")
-	static void TransitionLevel(UObject* WorldContextObject, const FName& InLevelName, TSubclassOf<AGameModeBase> InGameMode, ELevelNetworkingType InLevelNetworkingType, const FGameplayTagContainer LevelTransitionTags, const FString& InAdditionalOptions = "");
+	static void TransitionLevel(UObject* WorldContextObject, const FName& InLevelName, TSubclassOf<AGameModeBase> InGameMode, ELevelNetworkingType InLevelNetworkingType, const FGameplayTagContainer LevelTransitionTags = FGameplayTagContainer(), const FString& InAdditionalOptions = "");
 };
