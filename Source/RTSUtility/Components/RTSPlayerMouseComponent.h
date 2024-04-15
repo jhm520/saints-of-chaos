@@ -49,6 +49,9 @@ protected:
 	UFUNCTION(BlueprintPure, Category = "Controller")
 	APlayerController* GetMouseController() const;
 
+	UFUNCTION()
+	void OnControllerChanged(APawn* Pawn, AController* OldController, AController* NewController);
+
 #pragma endregion
 
 #pragma region Scrolling

@@ -30,8 +30,21 @@ void URTSPlayerMouseComponent::BeginPlay()
 	// ...
 
 	SetRTSMouseEnabled(bRTSMouseEnabledByDefault);
+
+	APawn* OwningPawn = Cast<APawn>(GetOwner());
+
+	if (!OwningPawn)
+	{
+		return;
+	}
+
+	OwningPawn->ReceiveControllerChangedDelegate.AddDynamic(this, &URTSPlayerMouseComponent::OnControllerChanged);
 }
 
+void URTSPlayerMouseComponent::OnControllerChanged(APawn* Pawn, AController* OldController, AController* NewController)
+{
+	SetRTSMouseEnabled(bRTSMouseEnabledByDefault);
+}
 
 // Called every frame
 void URTSPlayerMouseComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
