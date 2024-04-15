@@ -47,7 +47,9 @@ void UCommandInfo::OnCommandFinished(const UCommandableComponent* Commandable, c
 void UCommandInfo::ContinueCommand(float DeltaSeconds, const UCommandableComponent* Commandable, const FCommandInstance& Command) const
 {
 	//GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Red, TEXT("ContinueCommand") + Command.CommandInfo->GetName());
-	
+	//TODO: End the conflict between the Behavior system and the Command system. Make the Behavior system use the Command system to issue commands during behavior
+	// so that we don't need to update the command here each tick
+	OnBegin_AnimInstances(Commandable, Command);
 	OnCommandBegin_GameplayAbilities(Commandable, Command);
 }
 
@@ -87,7 +89,10 @@ void UCommandInfo::OnBegin_AnimInstances(const UCommandableComponent* Commandabl
 	{
 		if (LocalAnimInstance.ActivationMode == ECommandTriggerMode::OnBegin)
 		{
-			AvatarCharacter->GetMesh()->GetAnimInstance()->LinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+			if (!AvatarCharacter->GetMesh()->GetAnimInstance()->GetLinkedAnimLayerInstanceByClass(LocalAnimInstance.AnimInstanceClass))
+			{
+				AvatarCharacter->GetMesh()->GetAnimInstance()->LinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+			}
 		}
 
 		if (LocalAnimInstance.DeactivationMode == ECommandTriggerMode::OnBegin)
@@ -126,7 +131,10 @@ void UCommandInfo::OnComplete_AnimInstances(const UCommandableComponent* Command
 	{
 		if (LocalAnimInstance.ActivationMode == ECommandTriggerMode::OnComplete)
 		{
-			AvatarCharacter->GetMesh()->GetAnimInstance()->LinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+			if (!AvatarCharacter->GetMesh()->GetAnimInstance()->GetLinkedAnimLayerInstanceByClass(LocalAnimInstance.AnimInstanceClass))
+			{
+				AvatarCharacter->GetMesh()->GetAnimInstance()->LinkAnimClassLayers(LocalAnimInstance.AnimInstanceClass);
+			}
 		}
 
 		if (LocalAnimInstance.DeactivationMode == ECommandTriggerMode::OnComplete)
