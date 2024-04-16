@@ -53,3 +53,5 @@ TODO: Single player mode (vs AI director)
 TODO: Continue working on single player mode, make sure the Destroy Building objective is completed and the rematch timer comes up
 TODO: Single player level transition
 TODO: resolve conflict between Behavior and Commands. Command is executed, linking anim instance, then Behavior is exited, unlinking anim instance
+TODO: Implement multiplayer host "listen server"
+TODO: Implement multiplayer join with IP in text box
