@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS( meta = (Category = "Common UI", DisableNativeTick))
 class SOC_API UCharacterInfoWidget : public UCommonUserWidget
 {
 	GENERATED_BODY()
