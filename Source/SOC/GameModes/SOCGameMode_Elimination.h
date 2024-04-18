@@ -185,7 +185,7 @@ protected:
 #pragma region Exit Match
 
 	UFUNCTION()
-	virtual void ExitMatch();
+	virtual void  ExitMatch();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Objective System")
 	FName ExitMatchLevelName;

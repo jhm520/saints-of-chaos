@@ -26,4 +26,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ready Check")
 	FName SoloGameMap;
 #pragma endregion
+
+#pragma region Host Game Button
+	UFUNCTION(BlueprintCallable, Category = "Ready Check")
+	void OnPressedHostGame();
+
+#pragma endregion
+
+#pragma region Join Game Button
+	UFUNCTION(BlueprintCallable, Category = "Ready Check")
+	void OnPressedJoinGame();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Ready Check")
+	FString GetJoinGameIP();
+
+#pragma endregion
+
 };

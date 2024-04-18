@@ -3,9 +3,11 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "WhatsMyPublicIP.h"
 #include "SOCGameInstance.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameStateHasBegunPlayDelegate, AGameStateBase* /*MatchState*/, GameState);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FIPDelegate, FString, IP );
 
 /**
  * 
@@ -25,8 +27,11 @@ public:
 #pragma region Public IP
 
 public:
+	UPROPERTY(BlueprintReadWrite, Category = "Networking")
 	TObjectPtr<UWhatsMyPublicIP> PublicIPObject = nullptr;
 
+	UPROPERTY(BlueprintAssignable, Category = "Networking")
+	FIPDelegate OnIPAddressReceived;
 
 	UFUNCTION()
 	void OnReceievedPublicIP(FString InPublicIP);

@@ -2,7 +2,6 @@
 
 #include "SOCGameInstance.h"
 
-#include "WhatsMyPublicIP.h"
 
 void USOCGameInstance::Init()
 {
@@ -21,6 +20,8 @@ void USOCGameInstance::Init()
 void USOCGameInstance::OnReceievedPublicIP(FString InPublicIP)
 {
 	PublicIPAddress = InPublicIP;
+
+	OnIPAddressReceived.Broadcast(InPublicIP);
 }
 
 #pragma region Game State
