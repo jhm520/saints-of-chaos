@@ -7,6 +7,7 @@
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "CommandSystem/Components/CommandComponent.h"
+#include "MinimapSystem/Components/MinimapViewComponent.h"
 
 #pragma region Framework
 
@@ -21,6 +22,8 @@ ASOCRTSPlayerPawn::ASOCRTSPlayerPawn()
 	SelectorComponent = CreateDefaultSubobject<USelectorComponent>(TEXT("SelectorComponent"));
 
 	CommandComponent = CreateDefaultSubobject<UCommandComponent>(TEXT("CommandComponent"));
+
+	MinimapViewComponent = CreateDefaultSubobject<UMinimapViewComponent>(TEXT("MinimapViewComponent"));
 }
 
 // Called when the game starts or when spawned

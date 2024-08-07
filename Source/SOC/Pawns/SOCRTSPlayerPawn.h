@@ -11,6 +11,7 @@
 class USelectorComponent;
 class UGameplayAbilityCollection;
 class UCOmmandComponent;
+class UMinimapViewComponent;
 /**
  * 
  */
@@ -83,4 +84,13 @@ public:
 	virtual UCommandComponent* GetCommandComponent() const override {return CommandComponent;};
 
 #pragma endregion
+
+
+#pragma region Minimap
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Minimap")
+	UMinimapViewComponent* MinimapViewComponent;
+	
+#pragma endregion
+
 };
