@@ -38,7 +38,8 @@ public class SOC : ModuleRules
 			"RTSUtility",
 			"SelectionSystem",
 			"CommandSystem",
-			"ObjectiveSystem"
+			"ObjectiveSystem",
+			"MinimapSystem"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });

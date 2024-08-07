@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{CF87A2F8-44BC-3636-5D3B-7585D451FDAE}",
+	"EngineAssociation": "5.2",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -92,6 +92,16 @@
 				"Engine",
 				"GameplayAbilities"
 			]
+		},
+		{
+			"Name": "MinimapSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"GameplayAbilities",
+				"UMG"
+			]
 		}
 	],
 	"Plugins": [
@@ -112,6 +122,10 @@
 		},
 		{
 			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "ApexDestruction",
 			"Enabled": true
 		}
 	]
