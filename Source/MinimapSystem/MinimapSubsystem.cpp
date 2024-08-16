@@ -23,9 +23,14 @@ UMinimapSubsystem* UMinimapSubsystem::Get(const UObject* WorldContext)
 void UMinimapSubsystem::RegisterMinimapItem(UMinimapItemComponent* MinimapItemComponent)
 {
 	MinimapItems.Add(MinimapItemComponent);
+
+	OnMinimapItemRegistered.Broadcast(MinimapItemComponent);
+	
 }
 
 void UMinimapSubsystem::UnregisterMinimapItem(UMinimapItemComponent* MinimapItemComponent)
 {
 	MinimapItems.Remove(MinimapItemComponent);
+
+	OnMinimapItemUnregistered.Broadcast(MinimapItemComponent);
 }
