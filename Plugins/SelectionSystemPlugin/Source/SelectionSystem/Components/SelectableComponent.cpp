@@ -1,4 +1,4 @@
-// © 2024 John Henry Miller. All rights reserved
+// © 2024 Jade Miller. All rights reserved
 
 #include "SelectableComponent.h"
 

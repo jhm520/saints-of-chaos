@@ -1,4 +1,4 @@
-// Copyright (c) 2024 John Henry Miller (jhm520@gmail.com), All rights reserved.
+// Copyright (c) 2024 Jade Miller (jhm520@gmail.com), All rights reserved.
 
 #pragma once
 

@@ -1,4 +1,4 @@
-// © 2024 John Henry Miller. All rights reserved#pragma region Include
+// © 2024 Jade Miller. All rights reserved#pragma region Include
 
 #pragma once
 
