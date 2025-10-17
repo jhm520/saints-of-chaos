@@ -6,6 +6,8 @@
 #include "InputAction.h"
 #include "EnhancedInputActionBindingCollection.generated.h"
 
+class UInputMappingContext;
+
 UENUM(BlueprintType)
 enum class EInputActionBinding : uint8
 {

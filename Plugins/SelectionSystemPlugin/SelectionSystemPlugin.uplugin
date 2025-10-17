@@ -18,12 +18,10 @@
 		{
 			"Name": "SelectionSystemPlugin",
 			"Type": "Runtime",
-			"LoadingPhase": "PreLoadingScreen"
-		},
-		{
-			"Name": "SelectionSystem",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "PreLoadingScreen",
+            "AdditionalDependencies": [
+				"SelectionSystem"
+			]
 		}
 	],
 	"Plugins": [

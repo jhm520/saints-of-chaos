@@ -77,7 +77,7 @@ void ASOCPlayerController::ClientRestart_Implementation(APawn* NewPawn)
 		return;
 	}
 	
-	TArray<TObjectPtr<AObjective>> AssignedObjectives;
+	TArray<AObjective*> AssignedObjectives;
 	UObjectiveSystemBlueprintLibrary::GetAssignedObjectives(this, LocalPlayerState, AssignedObjectives);
 
 	for (AObjective* AssignedObjective : AssignedObjectives)
