@@ -23,9 +23,9 @@ public:
 
 	// Called when the actor spawn is deferred and before it is finished spawning
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Spawned Actor Interface")
-	bool PreActorSpawnFinished(AActorSpawner* Spawner) const;
+	bool PreActorSpawnFinished(ACoreActorSpawner* Spawner) const;
 
 	// Called when the actor spawn is finished
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Spawned Actor Interface")
-	bool PostActorSpawnFinished(AActorSpawner* Spawner) const;
+	bool PostActorSpawnFinished(ACoreActorSpawner* Spawner) const;
 };

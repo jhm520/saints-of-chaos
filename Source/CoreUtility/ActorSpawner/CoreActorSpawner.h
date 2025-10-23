@@ -4,19 +4,19 @@
 #include "CoreMinimal.h"
 #include "CoreUtility/AutoOwnership/Interfaces/AutoOwnershipInterface.h"
 #include "GameFramework/Actor.h"
-#include "ActorSpawner.generated.h"
+#include "CoreActorSpawner.generated.h"
 
 class UCapsuleComponent;
 
 //this is an actor that can be placed in levels and will spawn other actors
 UCLASS()
-class COREUTILITY_API AActorSpawner : public AActor, public IAutoOwnershipInterface
+class COREUTILITY_API ACoreActorSpawner : public AActor, public IAutoOwnershipInterface
 {
 	GENERATED_BODY()
 #pragma region Framework
 public:	
 	// Sets default values for this actor's properties
-	AActorSpawner();
+	ACoreActorSpawner();
 
 protected:
 	// Called when the game starts or when spawned
