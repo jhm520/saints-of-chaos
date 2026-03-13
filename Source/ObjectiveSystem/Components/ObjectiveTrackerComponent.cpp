@@ -3,6 +3,7 @@
 
 #include "ObjectiveTrackerComponent.h"
 
+#include "Engine/World.h"
 #include "ObjectiveSystem/Actors/Objective.h"
 #include "GameFramework/GameStateBase.h"
 #include "ObjectiveSystem/ObjectiveSubsystem.h"

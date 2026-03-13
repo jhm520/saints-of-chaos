@@ -13,11 +13,15 @@
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 #include "ObjectiveSystem/Actors/ObjectiveGroup.h"
-#include "CoreUtility/ActorSpawner/ActorSpawner.h"
-#include "CoreUtility/ActorSpawner/JadeActorSpawner.h"
+#include "CoreUtility/ActorSpawner/CoreActorSpawner.h"
 #include "CoreUtility/LevelTransition/LevelTransitionBlueprintLibrary.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "SOC/Controllers/SOCAIPlayerController.h"
+#include "Engine/TimerHandle.h"
+#include "TimerManager.h"
+
 
 #pragma region Framework
 
@@ -542,7 +546,7 @@ void ASOCGameMode_Elimination::Rematch()
 
 void ASOCGameMode_Elimination::ExitMatch()
 {
-	ULevelTransitionBlueprintLibrary::TransitionLevel(this, ExitMatchLevelName, ExitMatchGameMode, ELevelNetworkingType::Standalone);
+	ULevelTransitionBlueprintLibrary::TransitionLevel(this, ExitMatchGameMode, ELevelNetworkingType::Standalone, ExitMatchLevelName);
 }
 	
 #pragma endregion
@@ -601,7 +605,7 @@ void ASOCGameMode_Elimination::SetupMatchBuildingsForPlayer(AController* Control
 
 	for (AActor* AutoOwnedActor : AutoOwnedBuildingSpawnerActors)
 	{
-		AJadeActorSpawner* BuildingSpawner = Cast<AJadeActorSpawner>(AutoOwnedActor);
+		ACoreActorSpawner* BuildingSpawner = Cast<ACoreActorSpawner>(AutoOwnedActor);
 
 		if (!IsValid(BuildingSpawner))
 		{

@@ -4,8 +4,10 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "../SOCAIGameplayTags.h"
+#include "Templates/SubclassOf.h"
 #include "SOCAIBehavior.generated.h"
 
+class UAnimInstance;
 class UGameplayAbility;
 
 

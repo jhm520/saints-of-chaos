@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "CoreUtility/EnhancedInput/EnhancedInputActionBindingCollection.h"
 #include "CoreUtility/SpringArm/Components/SpringArmComponentBase.h"
+#include "Engine/LocalPlayer.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "RTSUtility/Components/RTSPlayerMouseComponent.h"
 

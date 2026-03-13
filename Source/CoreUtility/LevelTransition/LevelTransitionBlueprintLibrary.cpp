@@ -1,10 +1,9 @@
-// © 2024 Jade Miller. All rights reserved
 
 #include "LevelTransitionBlueprintLibrary.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
-void ULevelTransitionBlueprintLibrary::TransitionLevel(UObject* WorldContextObject, const FName& InLevelName, TSubclassOf<AGameModeBase> InGameMode, ELevelNetworkingType InLevelNetworkingType, const FGameplayTagContainer LevelTransitionTags, const FString& OptionalIPAddress, int OptionalPort, FString InAdditionalOptions)
+void ULevelTransitionBlueprintLibrary::TransitionLevel(UObject* WorldContextObject, TSubclassOf<AGameModeBase> InGameMode, ELevelNetworkingType InLevelNetworkingType, const FName& InLevelName, const FGameplayTagContainer LevelTransitionTags, const FString& OptionalIPAddress, int OptionalPort, FString InAdditionalOptions)
 {
 	if (!WorldContextObject)
 	{

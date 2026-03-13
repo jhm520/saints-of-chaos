@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameplayTagContainer.h"
+#include "Engine/NetSerialization.h"
 #include "CommandSystemBlueprintLibrary.generated.h"
 
 class UCommandInfo;

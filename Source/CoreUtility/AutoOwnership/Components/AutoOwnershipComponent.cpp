@@ -3,6 +3,7 @@
 #include "AutoOwnershipComponent.h"
 
 #include "CoreUtility/AutoOwnership/Interfaces/AutoOwnershipInterface.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 
 #pragma region Framework

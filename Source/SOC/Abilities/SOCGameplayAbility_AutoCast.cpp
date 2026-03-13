@@ -4,6 +4,8 @@
 #include "GASUtilityHelperLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Abilities/Tasks/AbilityTask_WaitDelay.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 #pragma region Framework
 /** Actually activate ability, do not call this directly */

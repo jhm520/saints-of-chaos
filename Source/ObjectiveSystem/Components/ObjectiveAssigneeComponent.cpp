@@ -3,6 +3,7 @@
 
 #include "ObjectiveAssigneeComponent.h"
 
+#include "Engine/World.h"
 #include "ObjectiveSystem/ObjectiveSubsystem.h"
 #include "ObjectiveSystem/Actors/Objective.h"
 

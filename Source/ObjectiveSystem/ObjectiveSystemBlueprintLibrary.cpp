@@ -7,6 +7,7 @@
 #include "Actors/ObjectiveGroup.h"
 #include "Components/ObjectiveAssigneeComponent.h"
 #include "Components/ObjectiveTrackerComponent.h"
+#include "Engine/World.h"
 #include "Interfaces/ObjectiveAssigneeInterface.h"
 #include "Interfaces/ObjectiveTrackerInterface.h"
 

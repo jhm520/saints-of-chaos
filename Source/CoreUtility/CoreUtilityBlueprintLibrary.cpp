@@ -1,6 +1,8 @@
 // © 2024 Jade Miller. All rights reserved
 
 #include "CoreUtilityBlueprintLibrary.h"
+
+#include "Engine/World.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 UE_DISABLE_OPTIMIZATION

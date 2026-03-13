@@ -1,6 +1,8 @@
 // © 2024 Jade Miller. All rights reserved
 
 #include "TimerHelper.h"
+#include "TimerManager.h"
+#include "Engine/World.h"
 
 UTimerHelper* UTimerHelper::CreateTimerHelper(UObject* WorldContextObject, float Time, FGameplayTag Tag, FOnTimerHelperFinishedDelegate TimerHelperDelegate, bool bDestroyWhenFinished)
 {

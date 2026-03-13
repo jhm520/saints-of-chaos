@@ -10,7 +10,7 @@ class UObjectiveInfoCollection;
 class ASOCBuilding;
 class AObjective;
 class AObjectiveGroup;
-class AJadeActorSpawner;
+class ACoreActorSpawner;
 /**
  * 
  */

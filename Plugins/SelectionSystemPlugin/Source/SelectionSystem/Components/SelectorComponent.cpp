@@ -2,6 +2,7 @@
 
 #include "SelectorComponent.h"
 #include "SelectableComponent.h"
+#include "GameFramework/Actor.h"
 #include "Net/UnrealNetwork.h"
 
 #pragma region Framework

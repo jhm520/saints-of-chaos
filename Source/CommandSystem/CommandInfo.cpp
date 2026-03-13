@@ -5,9 +5,12 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "CommandSubsystem.h"
+#include "Animation/AnimInstance.h"
 #include "Components/CommandableComponent.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/CommandableInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/SkeletalMeshComponent.h"
 
 #pragma region Framework
 

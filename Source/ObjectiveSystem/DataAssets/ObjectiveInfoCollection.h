@@ -1,10 +1,11 @@
 //
+// Created by David Bowie on 08/10/2023.
+//
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "GameplayTags/Classes/GameplayTagContainer.h"
 #include "GameplayTagContainer.h"
 #include "ObjectiveInfoCollection.generated.h"
 

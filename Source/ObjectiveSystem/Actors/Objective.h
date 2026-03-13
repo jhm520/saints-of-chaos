@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Info.h"
-#include "GameplayTags/Classes/GameplayTagContainer.h"
+#include "GameplayTagContainer.h"
 #include "ObjectiveSystem/DataAssets/ObjectiveInfoCollection.h"
 #include "Objective.generated.h"
 

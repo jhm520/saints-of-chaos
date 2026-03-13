@@ -4,6 +4,8 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Animation/AnimInstance.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "SOCAI/Components/SOCAIBehaviorComponent.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
