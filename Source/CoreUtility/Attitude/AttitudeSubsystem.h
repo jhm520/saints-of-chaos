@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "AttitudeInterface.h"
+#include "Subsystems/WorldSubsystem.h"
 
 #include "AttitudeSubsystem.generated.h"
 

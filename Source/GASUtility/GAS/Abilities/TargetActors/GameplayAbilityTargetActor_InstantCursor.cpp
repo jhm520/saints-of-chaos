@@ -5,6 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayAbilityTargetActorInterface.h"
 #include "Abilities/GameplayAbility.h"
+#include "GameFramework/PlayerController.h"
 
 AGameplayAbilityTargetActor_InstantCursor::AGameplayAbilityTargetActor_InstantCursor()
 {

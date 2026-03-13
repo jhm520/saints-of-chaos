@@ -4,6 +4,7 @@
 #include "Components/ObjectiveComponent.h"
 #include "Components/ObjectiveTrackerComponent.h"
 #include "Actors/Objective.h"
+#include "Engine/World.h"
 #include "Interfaces/ObjectiveInterface.h"
 UE_DISABLE_OPTIMIZATION
 UObjectiveSubsystem::UObjectiveSubsystem()

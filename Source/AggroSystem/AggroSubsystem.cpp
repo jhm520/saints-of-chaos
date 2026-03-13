@@ -1,5 +1,7 @@
 #include "AggroSubsystem.h"
 
+#include "Engine/World.h"
+
 UAggroSubsystem::UAggroSubsystem()
 {
 }

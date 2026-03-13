@@ -3,6 +3,8 @@
 #include "AggroSystemComponent.h"
 
 #include "AggroSystem/Interfaces/AggroInterface.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 #pragma region Framework

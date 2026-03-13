@@ -3,6 +3,8 @@
 #include "RTSPlayerMouseComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "GameFramework/Pawn.h"
+#include "GameFramework/PlayerController.h"
 
 #pragma region Framework
 

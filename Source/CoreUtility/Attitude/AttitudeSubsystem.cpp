@@ -1,5 +1,7 @@
 #include "AttitudeSubsystem.h"
 
+#include "Engine/World.h"
+
 UAttitudeSubsystem::UAttitudeSubsystem()
 {
 }

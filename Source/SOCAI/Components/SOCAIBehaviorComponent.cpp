@@ -2,6 +2,7 @@
 
 #include "SOCAIBehaviorComponent.h"
 
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "SOCAI/Behavior/SOCAIBehavior.h"

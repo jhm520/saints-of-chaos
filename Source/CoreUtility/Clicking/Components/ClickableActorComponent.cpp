@@ -9,6 +9,8 @@
 #include "CoreUtility/Clicking/Interfaces/ClickingInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "ClickingComponent.h"
+#include "Components/PrimitiveComponent.h"
+#include "Engine/World.h"
 
 #pragma region Framework
 

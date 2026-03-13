@@ -2,6 +2,7 @@
 
 #include "CommandSubsystem.h"
 #include "CommandInfo.h"
+#include "Engine/World.h"
 
 UCommandSubsystem* UCommandSubsystem::Get(const UObject* WorldContext)
 {

@@ -3,6 +3,7 @@
 #include "SelectableComponent.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "GameFramework/Actor.h"
 #include "SelectionSystem/Interfaces/SelectionInterface.h"
 
 #pragma region Framework

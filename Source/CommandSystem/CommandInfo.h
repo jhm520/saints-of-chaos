@@ -8,6 +8,7 @@
 
 class UCommandableComponent;
 class UGameplayAbility;
+class UAnimInstance;
 
 UENUM(BlueprintType)
 enum class ECommandTriggerMode : uint8

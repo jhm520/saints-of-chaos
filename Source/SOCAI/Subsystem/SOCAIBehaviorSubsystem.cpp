@@ -1,6 +1,8 @@
 // © 2024 Jade Miller. All rights reserved
 
 #include "SOCAIBehaviorSubsystem.h"
+
+#include "Engine/World.h"
 #include "SOCAI/Behavior/SOCAIBehaviorManager.h"
 
 #pragma region Framework

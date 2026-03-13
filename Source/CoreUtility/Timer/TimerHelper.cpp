@@ -2,6 +2,8 @@
 
 #include "TimerHelper.h"
 
+#include "Engine/World.h"
+
 UTimerHelper* UTimerHelper::CreateTimerHelper(UObject* WorldContextObject, float Time, FGameplayTag Tag, FOnTimerHelperFinishedDelegate TimerHelperDelegate, bool bDestroyWhenFinished)
 {
 	if (!WorldContextObject)

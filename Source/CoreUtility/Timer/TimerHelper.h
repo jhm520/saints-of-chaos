@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "GameplayTagContainer.h"
+#include "Engine/TimerHandle.h"
 #include "TimerHelper.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimerHelperFinishedDelegate, UTimerHelper*, TimerHelper);

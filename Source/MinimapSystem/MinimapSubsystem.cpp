@@ -1,5 +1,7 @@
 #include "MinimapSubsystem.h"
 
+#include "Engine/World.h"
+
 UMinimapSubsystem::UMinimapSubsystem()
 {
 	

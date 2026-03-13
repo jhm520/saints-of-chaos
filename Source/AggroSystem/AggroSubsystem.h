@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Subsystems/WorldSubsystem.h"
 
 #include "AggroSubsystem.generated.h"
 

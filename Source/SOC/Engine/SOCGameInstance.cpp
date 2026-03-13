@@ -2,6 +2,8 @@
 
 #include "SOCGameInstance.h"
 
+#include "SocketSubsystem.h"
+
 
 void USOCGameInstance::Init()
 {
