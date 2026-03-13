@@ -5,6 +5,8 @@
 #include "UObject/Interface.h"
 #include "SpawnedActorInterface.generated.h"
 
+class AJadeActorSpawner;
+
 UINTERFACE(MinimalAPI)
 class USpawnedActorInterface : public UInterface
 {
@@ -23,9 +25,9 @@ public:
 
 	// Called when the actor spawn is deferred and before it is finished spawning
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Spawned Actor Interface")
-	bool PreActorSpawnFinished(AActorSpawner* Spawner) const;
+	bool PreActorSpawnFinished(AJadeActorSpawner* Spawner) const;
 
 	// Called when the actor spawn is finished
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Spawned Actor Interface")
-	bool PostActorSpawnFinished(AActorSpawner* Spawner) const;
+	bool PostActorSpawnFinished(AJadeActorSpawner* Spawner) const;
 };

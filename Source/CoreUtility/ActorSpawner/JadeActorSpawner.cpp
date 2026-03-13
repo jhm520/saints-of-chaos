@@ -1,6 +1,6 @@
 // © 2024 Jade Miller. All rights reserved
 
-#include "ActorSpawner.h"
+#include "JadeActorSpawner.h"
 
 #include "CoreUtility/CoreUtilityBlueprintLibrary.h"
 #include "GameFramework/PlayerController.h"
@@ -9,7 +9,7 @@
 #pragma region Framework
 
 // Sets default values
-AActorSpawner::AActorSpawner()
+AJadeActorSpawner::AJadeActorSpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,20 +24,20 @@ AActorSpawner::AActorSpawner()
 }
 
 // Called when the game starts or when spawned
-void AActorSpawner::BeginPlay()
+void AJadeActorSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AActorSpawner::Tick(float DeltaTime)
+void AJadeActorSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void AActorSpawner::Reset()
+void AJadeActorSpawner::Reset()
 {
 	Super::Reset();
 
@@ -58,12 +58,12 @@ void AActorSpawner::Reset()
 
 #pragma region ActorSpawner
 
-void AActorSpawner::OnSpawnedActorDestroyed(AActor* DestroyedActor)
+void AJadeActorSpawner::OnSpawnedActorDestroyed(AActor* DestroyedActor)
 {
 	SpawnedActors.Remove(DestroyedActor);
 }
 
-AActor* AActorSpawner::SpawnActor()
+AActor* AJadeActorSpawner::SpawnActor()
 {
 	if (!HasAuthority())
 	{
@@ -112,7 +112,7 @@ AActor* AActorSpawner::SpawnActor()
 
 #pragma region Auto Ownership
 
-bool AActorSpawner::CanTakeOwnership(AActor* InOwner) const
+bool AJadeActorSpawner::CanTakeOwnership(AActor* InOwner) const
 {
 	if (!InOwner || !InOwner->HasAuthority())
 	{
