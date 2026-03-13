@@ -2,10 +2,10 @@
 
 #include "SOCAIBehavior_MoveToEnemyBase.h"
 
-#include "SOC/Gameplay/Buildings/Building.h"
+#include "SOC/Gameplay/Buildings/SOCBuilding.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "EngineUtils.h"
-#include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
+#include "SOC/Gameplay/Buildings/SOCBuildingSubsystem.h"
 
 #pragma region Framework
 USOCAIBehavior_MoveToEnemyBase::USOCAIBehavior_MoveToEnemyBase()
@@ -81,7 +81,7 @@ bool USOCAIBehavior_MoveToEnemyBase::GetEnemyBaseLocation(const AActor* InActor,
 		return false;
 	}
 
-	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(Director);
+	USOCBuildingSubsystem* BuildingSubsystem = USOCBuildingSubsystem::Get(Director);
 
 	if (!BuildingSubsystem)
 	{

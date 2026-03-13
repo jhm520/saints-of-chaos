@@ -8,12 +8,12 @@
 #include "CoreUtility/CoreUtilityBlueprintLibrary.h"
 #include "CoreUtility/Clicking/Components/ClickingComponent.h"
 #include "GameFramework/GameMode.h"
-#include "SOC/Gameplay/Buildings/Building.h"
+#include "SOC/Gameplay/Buildings/SOCBuilding.h"
 #include "SOCAI/SOCAIFunctionLibrary.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
 #include "GameFramework/PlayerState.h"
 #include "ObjectiveSystem/ObjectiveSystemBlueprintLibrary.h"
-#include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
+#include "SOC/Gameplay/Buildings/SOCBuildingSubsystem.h"
 #include "SOC/HUD/SOCHUD.h"
 #include "ObjectiveSystem/Interfaces/ObjectiveAssigneeInterface.h"
 #include "ObjectiveSystem/Components/ObjectiveAssigneeComponent.h"
@@ -153,7 +153,7 @@ void ASOCPlayerController::DebugStartSpawningMobs()
 		return;
 	}
 
-	UBuildingSubsystem* BuildingSubsystem = GetWorld()->GetSubsystem<UBuildingSubsystem>();
+	USOCBuildingSubsystem* BuildingSubsystem = GetWorld()->GetSubsystem<USOCBuildingSubsystem>();
 
 	if (!BuildingSubsystem)
 	{
@@ -204,7 +204,7 @@ void ASOCPlayerController::DebugStopSpawningMobs()
 		return;
 	}
 
-	UBuildingSubsystem* BuildingSubsystem = GetWorld()->GetSubsystem<UBuildingSubsystem>();
+	USOCBuildingSubsystem* BuildingSubsystem = GetWorld()->GetSubsystem<USOCBuildingSubsystem>();
 
 	if (!BuildingSubsystem)
 	{

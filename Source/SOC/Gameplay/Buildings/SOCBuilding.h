@@ -12,7 +12,7 @@
 #include "SOC/Attributes/Damage/DamageInterface.h"
 #include "SOC/Attributes/Health/HealthInterface.h"
 #include "SOCAI/Interfaces/SOCAIBehaviorInterface.h"
-#include "Building.generated.h"
+#include "SOCBuilding.generated.h"
 
 class UGameplayAbilityCollection;
 class UAbilitySystemComponent;

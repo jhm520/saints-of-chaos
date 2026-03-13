@@ -1,10 +1,10 @@
 // © 2024 Jade Miller. All rights reserved
 
-#include "Building.h"
+#include "SOCBuilding.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"	
-#include "BuildingSubsystem.h"
+#include "SOCBuildingSubsystem.h"
 #include "GameplayAbilityCollection.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "GASUtilityHelperLibrary.h"
@@ -49,7 +49,7 @@ ASOCBuilding::ASOCBuilding()
 // Called when the game starts or when spawned
 void ASOCBuilding::BeginPlay()
 {
-	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(this);
+	USOCBuildingSubsystem* BuildingSubsystem = USOCBuildingSubsystem::Get(this);
 
 	if (BuildingSubsystem)
 	{
@@ -65,7 +65,7 @@ void ASOCBuilding::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	StopSpawningMobs();
 
-	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(this);
+	USOCBuildingSubsystem* BuildingSubsystem = USOCBuildingSubsystem::Get(this);
 
 	if (BuildingSubsystem)
 	{

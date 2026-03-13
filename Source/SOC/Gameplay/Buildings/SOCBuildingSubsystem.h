@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
-#include "BuildingSubsystem.generated.h"
+#include "SOCBuildingSubsystem.generated.h"
 
 class ASOCBuilding;
 
@@ -11,19 +11,19 @@ class ASOCBuilding;
  * 
  */
 UCLASS()
-class SOC_API UBuildingSubsystem : public UWorldSubsystem
+class SOC_API USOCBuildingSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
 #pragma region Framework
 public:
-	UBuildingSubsystem();
+	USOCBuildingSubsystem();
 	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintPure, Category = "Attitude")
-	static UBuildingSubsystem* Get(const UObject* WorldContext);
+	static USOCBuildingSubsystem* Get(const UObject* WorldContext);
 #pragma endregion
 
 #pragma region Building Subsystem

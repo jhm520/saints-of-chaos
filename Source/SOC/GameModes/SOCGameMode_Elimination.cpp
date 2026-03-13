@@ -10,8 +10,8 @@
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/PlayerState.h"
 #include "ObjectiveSystem/Actors/Objective.h"
-#include "SOC/Gameplay/Buildings/Building.h"
-#include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
+#include "SOC/Gameplay/Buildings/SOCBuilding.h"
+#include "SOC/Gameplay/Buildings/SOCBuildingSubsystem.h"
 #include "ObjectiveSystem/Actors/ObjectiveGroup.h"
 #include "CoreUtility/ActorSpawner/JadeActorSpawner.h"
 #include "CoreUtility/LevelTransition/LevelTransitionBlueprintLibrary.h"
@@ -639,7 +639,7 @@ void ASOCGameMode_Elimination::OnBuildingDestroyed(ASOCBuilding* BuildingVictim,
 
 	//GEngine->AddOnScreenDebugMessage(-1 , 5.f, FColor::Red, "Building Destroyed");
 
-	UBuildingSubsystem* BuildingSubsystem = UBuildingSubsystem::Get(this);
+	USOCBuildingSubsystem* BuildingSubsystem = USOCBuildingSubsystem::Get(this);
 
 	if (!BuildingSubsystem)
 	{

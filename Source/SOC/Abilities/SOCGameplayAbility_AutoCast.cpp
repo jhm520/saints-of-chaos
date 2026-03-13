@@ -87,8 +87,7 @@ void USOCGameplayAbility_AutoCast::QueueAbility()
 	
 	float TimeRemaining = 0.0f;
 	float Duration = 0.0f;
-	FGameplayTagContainer TagContainer;
-	CooldownGameplayEffect->GetOwnedGameplayTags(TagContainer);
+	FGameplayTagContainer TagContainer = CooldownGameplayEffect->GetGrantedTags();
 	
 	UGASUtilityHelperLibrary::GetCooldownRemainingForTag(GetAbilitySystemComponentFromActorInfo(), TagContainer, TimeRemaining, Duration);
 
