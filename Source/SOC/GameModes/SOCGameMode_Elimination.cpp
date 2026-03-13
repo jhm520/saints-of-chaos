@@ -13,7 +13,7 @@
 #include "SOC/Gameplay/Buildings/Building.h"
 #include "SOC/Gameplay/Buildings/BuildingSubsystem.h"
 #include "ObjectiveSystem/Actors/ObjectiveGroup.h"
-#include "CoreUtility/ActorSpawner/CoreActorSpawner.h"
+#include "CoreUtility/ActorSpawner/JadeActorSpawner.h"
 #include "CoreUtility/LevelTransition/LevelTransitionBlueprintLibrary.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
@@ -605,7 +605,7 @@ void ASOCGameMode_Elimination::SetupMatchBuildingsForPlayer(AController* Control
 
 	for (AActor* AutoOwnedActor : AutoOwnedBuildingSpawnerActors)
 	{
-		ACoreActorSpawner* BuildingSpawner = Cast<ACoreActorSpawner>(AutoOwnedActor);
+		AJadeActorSpawner* BuildingSpawner = Cast<AJadeActorSpawner>(AutoOwnedActor);
 
 		if (!IsValid(BuildingSpawner))
 		{

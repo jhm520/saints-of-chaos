@@ -4,31 +4,21 @@
 #include "CoreMinimal.h"
 #include "CoreUtility/AutoOwnership/Interfaces/AutoOwnershipInterface.h"
 #include "GameFramework/Actor.h"
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.h
 #include "JadeActorSpawner.generated.h"
-========
-#include "CoreActorSpawner.generated.h"
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.h
 
 class UCapsuleComponent;
 
 //this is an actor that can be placed in levels and will spawn other actors
 UCLASS()
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.h
 class COREUTILITY_API AJadeActorSpawner : public AActor, public IAutoOwnershipInterface
-========
-class COREUTILITY_API ACoreActorSpawner : public AActor, public IAutoOwnershipInterface
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.h
+
 {
 	GENERATED_BODY()
 #pragma region Framework
 public:	
 	// Sets default values for this actor's properties
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.h
 	AJadeActorSpawner();
-========
-	ACoreActorSpawner();
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.h
+
 
 protected:
 	// Called when the game starts or when spawned

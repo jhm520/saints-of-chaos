@@ -1,11 +1,6 @@
 // © 2024 Jade Miller. All rights reserved
 
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 #include "JadeActorSpawner.h"
-========
-#include "CoreActorSpawner.h"
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
-
 #include "CoreUtility/CoreUtilityBlueprintLibrary.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/CapsuleComponent.h"
@@ -14,11 +9,7 @@
 #pragma region Framework
 
 // Sets default values
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 AJadeActorSpawner::AJadeActorSpawner()
-========
-ACoreActorSpawner::ACoreActorSpawner()
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -33,32 +24,20 @@ ACoreActorSpawner::ACoreActorSpawner()
 }
 
 // Called when the game starts or when spawned
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 void AJadeActorSpawner::BeginPlay()
-========
-void ACoreActorSpawner::BeginPlay()
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 void AJadeActorSpawner::Tick(float DeltaTime)
-========
-void ACoreActorSpawner::Tick(float DeltaTime)
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
 	Super::Tick(DeltaTime);
 
 }
 
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 void AJadeActorSpawner::Reset()
-========
-void ACoreActorSpawner::Reset()
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
 	Super::Reset();
 
@@ -79,20 +58,12 @@ void ACoreActorSpawner::Reset()
 
 #pragma region ActorSpawner
 
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 void AJadeActorSpawner::OnSpawnedActorDestroyed(AActor* DestroyedActor)
-========
-void ACoreActorSpawner::OnSpawnedActorDestroyed(AActor* DestroyedActor)
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
 	SpawnedActors.Remove(DestroyedActor);
 }
 
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 AActor* AJadeActorSpawner::SpawnActor()
-========
-AActor* ACoreActorSpawner::SpawnActor()
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
 	if (!HasAuthority())
 	{
@@ -132,7 +103,7 @@ AActor* ACoreActorSpawner::SpawnActor()
 
 	SpawnedActors.AddUnique(NewActor);
 	
-	NewActor->OnDestroyed.AddDynamic(this, &ACoreActorSpawner::OnSpawnedActorDestroyed);
+	NewActor->OnDestroyed.AddDynamic(this, &AJadeActorSpawner::OnSpawnedActorDestroyed);
 
 	return NewActor;
 }
@@ -141,11 +112,7 @@ AActor* ACoreActorSpawner::SpawnActor()
 
 #pragma region Auto Ownership
 
-<<<<<<<< HEAD:Source/CoreUtility/ActorSpawner/JadeActorSpawner.cpp
 bool AJadeActorSpawner::CanTakeOwnership(AActor* InOwner) const
-========
-bool ACoreActorSpawner::CanTakeOwnership(AActor* InOwner) const
->>>>>>>> main:Source/CoreUtility/ActorSpawner/CoreActorSpawner.cpp
 {
 	if (!InOwner || !InOwner->HasAuthority())
 	{
