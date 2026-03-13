@@ -8,8 +8,8 @@ public class SOCEditorTarget : TargetRules
 	public SOCEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		DefaultBuildSettings = BuildSettingsVersion.V5;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
 		ExtraModuleNames.AddRange( new string[] { "SOC" } );
-		bOverrideBuildEnvironment = true;
 	}
 }

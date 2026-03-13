@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "Interfaces/SpawnedActorInterface.h"
+#include "Engine/World.h"
 #pragma region Framework
 
 // Sets default values

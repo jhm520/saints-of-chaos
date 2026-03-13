@@ -11,14 +11,14 @@
 #pragma region Solo Play Button
 void UMainMenuWidget::OnPressedSoloPlay()
 {
-	ULevelTransitionBlueprintLibrary::TransitionLevel(this, SoloGameMap, SoloGameMode, ELevelNetworkingType::Standalone, FGameplayTagContainer(), FString());
+	ULevelTransitionBlueprintLibrary::TransitionLevel(this, SoloGameMode, ELevelNetworkingType::Standalone, SoloGameMap, FGameplayTagContainer(), FString());
 }
 #pragma endregion
 
 #pragma region Host Game Button
 void UMainMenuWidget::OnPressedHostGame()
 {
-	ULevelTransitionBlueprintLibrary::TransitionLevel(this, SoloGameMap, SoloGameMode, ELevelNetworkingType::ListenServer, FGameplayTagContainer(), FString());
+	ULevelTransitionBlueprintLibrary::TransitionLevel(this, SoloGameMode, ELevelNetworkingType::ListenServer, SoloGameMap,FGameplayTagContainer(), FString());
 }
 
 #pragma endregion
@@ -34,7 +34,7 @@ void UMainMenuWidget::OnPressedJoinGame()
 	// }
 	//
 	 const FString& IPAddress = GetJoinGameIP();
-	ULevelTransitionBlueprintLibrary::TransitionLevel(this, SoloGameMap, SoloGameMode, ELevelNetworkingType::Client, FGameplayTagContainer(), IPAddress, 7777, FString());
+	ULevelTransitionBlueprintLibrary::TransitionLevel(this, SoloGameMode, ELevelNetworkingType::Client, SoloGameMap, FGameplayTagContainer(), IPAddress, 7777, FString());
 }
 
 #pragma endregion

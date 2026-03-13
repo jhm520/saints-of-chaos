@@ -1,6 +1,8 @@
 // © 2024 Jade Miller. All rights reserved
 
 #include "ObjectiveGroup_Cooperative.h"
+
+#include "Engine/World.h"
 #include "GameFramework/GameState.h"
 #include "GameFramework/PlayerState.h"
 #include "ObjectiveSystem/ObjectiveSystemBlueprintLibrary.h"
